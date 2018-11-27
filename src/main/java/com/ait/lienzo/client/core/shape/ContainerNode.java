@@ -31,8 +31,8 @@ import com.ait.lienzo.client.core.shape.storage.IStorageEngine;
 import com.ait.lienzo.client.core.types.BoundingBox;
 import com.ait.lienzo.client.core.types.BoundingPoints;
 import com.ait.lienzo.shared.core.types.NodeType;
-import com.ait.tooling.common.api.java.util.function.Predicate;
-import com.ait.tooling.nativetools.client.collection.NFastArrayList;
+import com.ait.lienzo.tools.client.collection.NFastArrayList;
+import com.ait.lienzo.tools.common.api.java.util.function.Predicate;
 import com.google.gwt.json.client.JSONObject;
 
 /**
@@ -40,7 +40,7 @@ import com.google.gwt.json.client.JSONObject;
  * 
  * <ul>
  * <li>A ContainerNode may contain {@link Layer} or {@link Group}.</li>
- * <li>A Container handles collection operations such as add, remove and removeAll.</li>
+ * <li>A Container handles collection operations such as addBoundingBox, remove and removeAll.</li>
  * </ul>
  * 
  * @param <T>
@@ -143,7 +143,7 @@ public abstract class ContainerNode<M extends IDrawable<?>, T extends ContainerN
      * <p>
      * It should be noted that this operation will not have an apparent effect for an already rendered (drawn) Container.
      * In other words, if the Container has already been drawn and a new primitive is added, you'll need to invoke draw() on the
-     * Container. This is done to enhance performance, otherwise, for every add we would have draws impacting performance.
+     * Container. This is done to enhance performance, otherwise, for every addBoundingBox we would have draws impacting performance.
      */
     @Override
     public T add(final M child)
@@ -162,7 +162,7 @@ public abstract class ContainerNode<M extends IDrawable<?>, T extends ContainerN
      * <p>
      * It should be noted that this operation will not have an apparent effect for an already rendered (drawn) Container.
      * In other words, if the Container has already been drawn and a new primitive is added, you'll need to invoke draw() on the
-     * Container. This is done to enhance performance, otherwise, for every add we would have draws impacting performance.
+     * Container. This is done to enhance performance, otherwise, for every addBoundingBox we would have draws impacting performance.
      */
     @Override
     public T remove(final M child)
@@ -181,7 +181,7 @@ public abstract class ContainerNode<M extends IDrawable<?>, T extends ContainerN
      * <p>
      * It should be noted that this operation will not have an apparent effect for an already rendered (drawn) Container.
      * In other words, if the Container has already been drawn and a new primitive is added, you'll need to invoke draw() on the
-     * Container. This is done to enhance performance, otherwise, for every add we would have draws impacting performance.
+     * Container. This is done to enhance performance, otherwise, for every addBoundingBox we would have draws impacting performance.
      */
     @Override
     public T removeAll()
@@ -205,7 +205,7 @@ public abstract class ContainerNode<M extends IDrawable<?>, T extends ContainerN
         {
             return;
         }
-        alpha = alpha * getAttributes().getAlpha();
+        alpha = alpha * getAlpha();
 
         if (alpha <= 0)
         {
@@ -259,7 +259,7 @@ public abstract class ContainerNode<M extends IDrawable<?>, T extends ContainerN
 
             if (null != bpts)
             {
-                bbox.add(bpts.getArray());
+                bbox.addPoint2DArray(bpts.getArray());
             }
         }
         return bbox;
@@ -335,7 +335,7 @@ public abstract class ContainerNode<M extends IDrawable<?>, T extends ContainerN
                 {
                     return false;
                 }
-                String id = node.getAttributes().getID();
+                String id = node.getID();
 
                 if ((null != id) && (false == (id = id.trim()).isEmpty()))
                 {

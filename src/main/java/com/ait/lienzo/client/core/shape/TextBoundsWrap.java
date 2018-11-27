@@ -109,9 +109,9 @@ public class TextBoundsWrap extends TextNoWrap {
 
     @Override
     public void drawString(final Context2D context,
-                           final Attributes attr,
+                           final String text,
                            final IDrawString drawCommand) {
-        final String[] words = attr.getText().split("\\s");
+        final String[] words = text.split("\\s");
 
         if (words.length < 1) {
             return;

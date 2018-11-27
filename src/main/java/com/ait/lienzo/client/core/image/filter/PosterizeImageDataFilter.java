@@ -22,6 +22,8 @@ import com.ait.lienzo.client.core.shape.json.validators.ValidationException;
 import com.ait.lienzo.shared.core.types.ImageFilterType;
 import com.google.gwt.json.client.JSONObject;
 
+import jsinterop.base.Js;
+
 public class PosterizeImageDataFilter extends AbstractValueTableImageDataFilter<PosterizeImageDataFilter>
 {
     private double           m_value = Double.NaN;
@@ -71,14 +73,16 @@ public class PosterizeImageDataFilter extends AbstractValueTableImageDataFilter<
         return m_table;
     }
 
-    private final native FilterTableArray getTable_(double value)
-    /*-{
-        var table = [];
-        for(var i = 0; i < 256; i++) {
-            table[i] = (255 * ((i * value / 256) | 0) / (value - 1)) | 0;
+    private final FilterTableArray getTable_(double value)
+    {
+        int[] table = new int[256];
+        for(int i = 0; i < 256; i++) {
+            int v = Js.coerceToInt((i * value / 256));
+            int k = Js.coerceToInt(255 * (v) / (value - 1));
+            table[i] = k;
         }
-        return table;
-    }-*/;
+        return new FilterTableArray(table);
+    };
 
     @Override
     public IFactory<PosterizeImageDataFilter> getFactory()

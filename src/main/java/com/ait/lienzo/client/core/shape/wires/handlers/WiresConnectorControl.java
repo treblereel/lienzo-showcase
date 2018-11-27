@@ -3,7 +3,7 @@ package com.ait.lienzo.client.core.shape.wires.handlers;
 import com.ait.lienzo.client.core.shape.Shape;
 import com.ait.lienzo.client.core.shape.wires.WiresConnector;
 import com.ait.lienzo.client.core.types.Point2D;
-import com.ait.tooling.common.api.java.util.function.Consumer;
+import com.ait.lienzo.tools.common.api.java.util.function.Consumer;
 
 /**
  * Connector control handler provides user interaction common functions/logic in a way that they're decoupled

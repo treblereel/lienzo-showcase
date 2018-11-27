@@ -37,13 +37,15 @@ import com.ait.lienzo.client.core.shape.json.validators.ValidationException;
 import com.ait.lienzo.shared.core.types.ImageSelectionMode;
 import com.ait.lienzo.shared.core.types.ImageSerializationMode;
 import com.ait.lienzo.shared.core.types.ShapeType;
-import com.ait.tooling.nativetools.client.collection.MetaData;
+import com.ait.lienzo.tools.client.collection.MetaData;
 import com.google.gwt.json.client.JSONArray;
 import com.google.gwt.json.client.JSONBoolean;
 import com.google.gwt.json.client.JSONObject;
 import com.google.gwt.json.client.JSONString;
 import com.google.gwt.json.client.JSONValue;
 import com.google.gwt.resources.client.ImageResource;
+
+import jsinterop.annotations.JsProperty;
 
 /**
  * Image Support for Canvas
@@ -61,6 +63,24 @@ import com.google.gwt.resources.client.ImageResource;
  */
 public class Picture extends AbstractImageShape<Picture> implements ImageDataFilterable<Picture>, IDestroyable
 {
+    @JsProperty
+    private int clippedImageStartX;
+
+    @JsProperty
+    private int clippedImageStartY;
+
+    @JsProperty
+    private int clippedImageWidth;
+
+    @JsProperty
+    private int clippedImageHeight;
+
+    @JsProperty
+    private int clippedImageDestinationWidth;
+
+    @JsProperty
+    private int clippedImageDestinationHeight;
+
     protected Picture(JSONObject node, ValidationContext ctx) throws ValidationException
     {
         super(ShapeType.PICTURE, node, ctx);
@@ -1414,7 +1434,8 @@ public class Picture extends AbstractImageShape<Picture> implements ImageDataFil
     @Override
     public JSONObject toJSONObject()
     {
-        JSONObject attr = new JSONObject(getAttributes().getJSO());
+        //JSONObject attr = new JSONObject(getAttributes().getJSO());
+        JSONObject attr = new JSONObject();
 
         if (getImageSerializationMode() == ImageSerializationMode.DATA_URL)
         {
@@ -1422,7 +1443,7 @@ public class Picture extends AbstractImageShape<Picture> implements ImageDataFil
 
             if (null == url)
             {
-                url = getAttributes().getURL();
+                url = getURL();
             }
             if (url.startsWith("data:"))
             {
@@ -1443,7 +1464,8 @@ public class Picture extends AbstractImageShape<Picture> implements ImageDataFil
 
             if (false == meta.isEmpty())
             {
-                object.put("meta", new JSONObject(meta.getJSO()));
+                // @FIXME (mdp)
+                // object.putString("meta", new JSONObject(meta.getJSO()));
             }
         }
         object.put("attributes", attr);
@@ -1483,7 +1505,7 @@ public class Picture extends AbstractImageShape<Picture> implements ImageDataFil
      * @param context
      */
     @Override
-    protected boolean prepare(Context2D context, Attributes attr, double alpha)
+    protected boolean prepare(Context2D context, double alpha)
     {
         context.save();
 
@@ -1491,9 +1513,9 @@ public class Picture extends AbstractImageShape<Picture> implements ImageDataFil
         {
             context.setGlobalAlpha(alpha);
 
-            if (attr.hasShadow())
+            if (getShadow() != null)
             {
-                doApplyShadow(context, attr);
+                doApplyShadow(context);
             }
         }
         getImageProxy().drawImage(context);
@@ -1511,7 +1533,7 @@ public class Picture extends AbstractImageShape<Picture> implements ImageDataFil
      */
     public int getClippedImageStartX()
     {
-        return getAttributes().getClippedImageStartX();
+        return this.clippedImageStartX;
     }
 
     /**
@@ -1523,7 +1545,7 @@ public class Picture extends AbstractImageShape<Picture> implements ImageDataFil
      */
     public Picture setClippedImageStartX(int sx)
     {
-        getAttributes().setClippedImageStartX(sx);
+        this.clippedImageStartX = sx;
 
         return this;
     }
@@ -1536,7 +1558,7 @@ public class Picture extends AbstractImageShape<Picture> implements ImageDataFil
      */
     public int getClippedImageStartY()
     {
-        return getAttributes().getClippedImageStartY();
+        return this.clippedImageStartY;
     }
 
     /**
@@ -1547,7 +1569,7 @@ public class Picture extends AbstractImageShape<Picture> implements ImageDataFil
      */
     public Picture setClippedImageStartY(int clippedImageStartY)
     {
-        getAttributes().setClippedImageStartY(clippedImageStartY);
+        this.clippedImageStartY = clippedImageStartY;
 
         return this;
     }
@@ -1561,7 +1583,7 @@ public class Picture extends AbstractImageShape<Picture> implements ImageDataFil
      */
     public int getClippedImageWidth()
     {
-        return getAttributes().getClippedImageWidth();
+        return this.clippedImageWidth;
     }
 
     /**
@@ -1574,7 +1596,7 @@ public class Picture extends AbstractImageShape<Picture> implements ImageDataFil
      */
     public Picture setClippedImageWidth(int clippedImageWidth)
     {
-        getAttributes().setClippedImageWidth(clippedImageWidth);
+        this.clippedImageWidth = clippedImageWidth;
 
         return this;
     }
@@ -1588,7 +1610,7 @@ public class Picture extends AbstractImageShape<Picture> implements ImageDataFil
      */
     public int getClippedImageHeight()
     {
-        return getAttributes().getClippedImageHeight();
+        return this.clippedImageHeight;
     }
 
     /**
@@ -1601,7 +1623,7 @@ public class Picture extends AbstractImageShape<Picture> implements ImageDataFil
      */
     public Picture setClippedImageHeight(int clippedImageHeight)
     {
-        getAttributes().setClippedImageHeight(clippedImageHeight);
+        this.clippedImageHeight = clippedImageHeight;
 
         return this;
     }
@@ -1614,7 +1636,7 @@ public class Picture extends AbstractImageShape<Picture> implements ImageDataFil
      */
     public int getClippedImageDestinationWidth()
     {
-        return getAttributes().getClippedImageDestinationWidth();
+        return this.clippedImageDestinationWidth;
     }
 
     /**
@@ -1626,7 +1648,7 @@ public class Picture extends AbstractImageShape<Picture> implements ImageDataFil
      */
     public Picture setClippedImageDestinationWidth(int clippedImageDestinationWidth)
     {
-        getAttributes().setClippedImageDestinationWidth(clippedImageDestinationWidth);
+        this.clippedImageDestinationWidth = clippedImageDestinationWidth;
 
         return this;
     }
@@ -1639,14 +1661,14 @@ public class Picture extends AbstractImageShape<Picture> implements ImageDataFil
      * This can be used to reduce the memory footprint of the Image
      * used in the selection layer. 
      * <p>
-     * Note that further scaling can be achieved via the <code>scale</code>
+     * Note that further scaling can be achieved via the <code>scaleWithXY</code>
      * or <code>transform</code> attributes, which apply to all Shapes.
      * 
      * @return int
      */
     public int getClippedImageDestinationHeight()
     {
-        return getAttributes().getClippedImageDestinationHeight();
+        return this.clippedImageDestinationHeight;
     }
 
     /**
@@ -1657,7 +1679,7 @@ public class Picture extends AbstractImageShape<Picture> implements ImageDataFil
      * This can be used to reduce the memory footprint of the Image
      * used in the selection layer. 
      * <p>
-     * Note that further scaling can be achieved via the <code>scale</code>
+     * Note that further scaling can be achieved via the <code>scaleWithXY</code>
      * or <code>transform</code> attributes, which apply to all Shapes.
      * 
      * @param clippedImageDestinationHeight
@@ -1665,7 +1687,7 @@ public class Picture extends AbstractImageShape<Picture> implements ImageDataFil
      */
     public Picture setClippedImageDestinationHeight(int clippedImageDestinationHeight)
     {
-        getAttributes().setClippedImageDestinationHeight(clippedImageDestinationHeight);
+        this.clippedImageDestinationHeight = clippedImageDestinationHeight;
 
         return this;
     }

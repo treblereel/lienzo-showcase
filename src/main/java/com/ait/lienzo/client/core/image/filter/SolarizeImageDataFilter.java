@@ -22,18 +22,21 @@ import com.ait.lienzo.client.core.shape.json.validators.ValidationException;
 import com.ait.lienzo.shared.core.types.ImageFilterType;
 import com.google.gwt.json.client.JSONObject;
 
+import jsinterop.base.Js;
+
 public class SolarizeImageDataFilter extends AbstractTableImageDataFilter<SolarizeImageDataFilter>
 {
     private final static FilterTableArray CONSTANT_TABLE = table();
 
-    private final static native FilterTableArray table()
-    /*-{
-        var table = [];
-        for(var i = 0; i < 256; i++) {
-            table[i] = (((i / 255 > 0.5) ? 2 * (i / 255 - 0.5) : 2 * (0.5 - i / 255)) * 255) | 0;
+    private final static FilterTableArray table()
+    {
+        int[] table = new int[256];
+        for(int i = 0; i < 256; i++) {
+            int v = Js.coerceToInt(((i / 255 > 0.5) ? 2 * (i / 255 - 0.5) : 2 * (0.5 - i / 255)) * 255);
+            table[i] = v;
         }
-        return table;
-    }-*/;
+        return new FilterTableArray(table);
+    };
 
     public SolarizeImageDataFilter()
     {

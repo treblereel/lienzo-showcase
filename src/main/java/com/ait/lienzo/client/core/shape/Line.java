@@ -28,7 +28,10 @@ import com.ait.lienzo.client.core.types.DashArray;
 import com.ait.lienzo.client.core.types.Point2D;
 import com.ait.lienzo.client.core.types.Point2DArray;
 import com.ait.lienzo.shared.core.types.ShapeType;
+import com.ait.lienzo.tools.client.NObjectJSO;
 import com.google.gwt.json.client.JSONObject;
+
+import jsinterop.annotations.JsProperty;
 
 /**
  * Line is a line segment between two points.
@@ -37,6 +40,10 @@ import com.google.gwt.json.client.JSONObject;
  */
 public class Line extends AbstractOffsetMultiPointShape<Line>
 {
+
+    @JsProperty
+    private       Point2DArray              points;
+
     /**
      * Constructor.  Creates an instance of a line of 0-pixel length, at the 0,0
      * coordinates.
@@ -63,7 +70,7 @@ public class Line extends AbstractOffsetMultiPointShape<Line>
     {
         super(ShapeType.LINE);
 
-        setPoints(new Point2DArray(p1, p2));
+        setPoints(Point2DArray.fromArrayOfPoint2D(p1, p2));
     }
 
     protected Line(final JSONObject node, final ValidationContext ctx) throws ValidationException
@@ -82,7 +89,7 @@ public class Line extends AbstractOffsetMultiPointShape<Line>
     @Override
     public BoundingBox getBoundingBox()
     {
-        return new BoundingBox(getPoints());
+        return BoundingBox.fromPoint2DArray(getPoints());
     }
 
     /**
@@ -91,17 +98,17 @@ public class Line extends AbstractOffsetMultiPointShape<Line>
      * @param context
      */
     @Override
-    protected boolean prepare(final Context2D context, final Attributes attr, final double alpha)
+    protected boolean prepare(final Context2D context, final double alpha)
     {
-        final Point2DArray list = attr.getPoints();
+        final Point2DArray list = getPoints();
 
         if ((null != list) && (list.size() == 2))
         {
-            if (attr.isDefined(Attribute.DASH_ARRAY))
+            if (getDashArray() != null)
             {
                 if (false == LienzoCore.get().isNativeLineDashSupported())
                 {
-                    DashArray dash = attr.getDashArray();
+                    DashArray dash = getDashArray();
 
                     if (dash != null)
                     {
@@ -109,7 +116,7 @@ public class Line extends AbstractOffsetMultiPointShape<Line>
 
                         if (data.length > 0)
                         {
-                            if (setStrokeParams(context, attr, alpha, false))
+                            if (setStrokeParams(context, alpha, false))
                             {
                                 Point2D p0 = list.get(0);
 
@@ -117,7 +124,7 @@ public class Line extends AbstractOffsetMultiPointShape<Line>
 
                                 context.beginPath();
 
-                                drawDashedLine(context, p0.getX(), p0.getY(), p1.getX(), p1.getY(), data, attr.getStrokeWidth() / 2);
+                                drawDashedLine(context, p0.getX(), p0.getY(), p1.getX(), p1.getY(), data, getStrokeWidth() / 2);
 
                                 context.restore();
                             }
@@ -141,8 +148,9 @@ public class Line extends AbstractOffsetMultiPointShape<Line>
         return false;
     }
 
+
     @Override
-    public boolean parse(final Attributes attr)
+    public boolean parse()
     {
         throw new UnsupportedOperationException();
     }
@@ -154,7 +162,7 @@ public class Line extends AbstractOffsetMultiPointShape<Line>
      */
     public Point2DArray getPoints()
     {
-        return getAttributes().getPoints();
+        return this.points;
     }
 
     /**
@@ -166,7 +174,7 @@ public class Line extends AbstractOffsetMultiPointShape<Line>
      */
     public Line setPoints(final Point2DArray points)
     {
-        getAttributes().setPoints(points);
+        this.points = points;
 
         return refresh();
     }
@@ -211,7 +219,7 @@ public class Line extends AbstractOffsetMultiPointShape<Line>
      * Empty implementation since we multi-purpose this class for regular and dashed lines.
      */
     @Override
-    public boolean fill(final Context2D context, final Attributes attr, final double alpha)
+    public boolean fill(final Context2D context, final double alpha)
     {
         return false;
     }

@@ -22,6 +22,8 @@ import com.ait.lienzo.client.core.shape.json.validators.ValidationException;
 import com.ait.lienzo.shared.core.types.ImageFilterType;
 import com.google.gwt.json.client.JSONObject;
 
+import jsinterop.base.Js;
+
 public class GammaImageDataFilter extends AbstractValueTableImageDataFilter<GammaImageDataFilter>
 {
     private double           m_value = Double.NaN;
@@ -71,14 +73,14 @@ public class GammaImageDataFilter extends AbstractValueTableImageDataFilter<Gamm
         return m_table;
     }
 
-    private final native FilterTableArray getTable_(double value)
-    /*-{        
-        var table = [];
-        for(var i = 0; i < 256; i++) {
-            table[i] = 255 * Math.pow(i / 255, 1 / value) + 0.5;
+    private final FilterTableArray getTable_(double value)
+    {
+        int[] table = new int[256];
+        for(int i = 0; i < 256; i++) {
+            table[i] = Js.coerceToInt(255 * Math.pow(i / 255, 1 / value) + 0.5);
         }
-        return table;
-    }-*/;
+        return new FilterTableArray(table);
+    };
 
     @Override
     public IFactory<GammaImageDataFilter> getFactory()

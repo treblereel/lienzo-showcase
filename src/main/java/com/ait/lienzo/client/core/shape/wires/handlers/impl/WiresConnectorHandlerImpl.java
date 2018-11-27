@@ -18,7 +18,7 @@ import com.ait.lienzo.client.core.types.BoundingPoints;
 import com.ait.lienzo.client.core.types.Point2D;
 import com.ait.lienzo.client.core.types.Point2DArray;
 import com.ait.lienzo.client.core.util.Geometry;
-import com.ait.tooling.common.api.java.util.function.Consumer;
+import com.ait.lienzo.tools.common.api.java.util.function.Consumer;
 import com.google.gwt.user.client.Timer;
 
 import static com.ait.lienzo.client.core.shape.AbstractMultiPointShape.DefaultMultiPointShapeHandleFactory.R1;

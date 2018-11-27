@@ -16,7 +16,7 @@
 
 package com.ait.lienzo.client.core.event;
 
-import com.ait.tooling.nativetools.client.collection.NFastStringSet;
+import com.ait.lienzo.tools.client.collection.NFastStringSet;
 
 public abstract class AbstractAccumulatingAttributesChangedBatcher implements IAttributesChangedBatcher
 {
@@ -74,7 +74,7 @@ public abstract class AbstractAccumulatingAttributesChangedBatcher implements IA
     {
         if ((null != m_manager) && (false == m_changed.isEmpty()))
         {
-            final NFastStringSet changed = new NFastStringSet(m_changed);
+            final NFastStringSet changed = NFastStringSet.makeFromSet(m_changed);
 
             m_changed = new NFastStringSet();
 

@@ -21,12 +21,17 @@ import com.ait.lienzo.client.core.shape.json.validators.ValidationContext;
 import com.ait.lienzo.client.core.shape.json.validators.ValidationException;
 import com.ait.lienzo.shared.core.types.Color;
 import com.ait.lienzo.shared.core.types.ImageFilterType;
-import com.ait.tooling.common.api.java.util.StringOps;
 import com.ait.lienzo.shared.core.types.IColor;
+import com.ait.lienzo.tools.client.StringOps;
 import com.google.gwt.json.client.JSONObject;
+
+import jsinterop.annotations.JsProperty;
 
 public abstract class AbstractRGBImageDataFilter<T extends AbstractRGBImageDataFilter<T>> extends AbstractImageDataFilter<T>
 {
+    @JsProperty
+    private String color;
+
     private int m_r;
 
     private int m_g;
@@ -120,12 +125,12 @@ public abstract class AbstractRGBImageDataFilter<T extends AbstractRGBImageDataF
 
     private final void doUpdateColorFromRGB()
     {
-        getAttributes().setColor(new Color(getR(), getG(), getB()).getColorString());
+        this.color = new Color(getR(), getG(), getB()).getColorString();
     }
 
     private final void doUpdateRGBFromColor()
     {
-        final String cstr = StringOps.toTrimOrNull(getAttributes().getColor());
+        final String cstr = StringOps.toTrimOrNull(this.color);
 
         if (null == cstr)
         {

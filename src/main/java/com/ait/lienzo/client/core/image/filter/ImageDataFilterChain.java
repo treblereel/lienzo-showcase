@@ -22,11 +22,13 @@ import com.ait.lienzo.client.core.shape.json.IFactory;
 import com.ait.lienzo.client.core.shape.json.JSONDeserializer;
 import com.ait.lienzo.client.core.shape.json.validators.ValidationContext;
 import com.ait.lienzo.client.core.shape.json.validators.ValidationException;
-import com.ait.lienzo.client.core.types.ImageData;
+import com.ait.lienzo.client.core.types.ImageDataUtil;
 import com.ait.lienzo.shared.core.types.ImageFilterType;
-import com.ait.tooling.nativetools.client.collection.NFastArrayList;
+import com.ait.lienzo.tools.client.collection.NFastArrayList;
 import com.google.gwt.json.client.JSONArray;
 import com.google.gwt.json.client.JSONObject;
+
+import elemental2.dom.ImageData;
 
 public class ImageDataFilterChain extends AbstractImageDataFilter<ImageDataFilterChain> implements ImageDataFilterable<ImageDataFilterChain>
 {
@@ -56,7 +58,7 @@ public class ImageDataFilterChain extends AbstractImageDataFilter<ImageDataFilte
 
         JSONArray filters = new JSONArray();
 
-        for (ImageDataFilter<?> filter : m_filters)
+        for (ImageDataFilter<?> filter : m_filters.asList())
         {
             if (null != filter)
             {
@@ -119,7 +121,7 @@ public class ImageDataFilterChain extends AbstractImageDataFilter<ImageDataFilte
         }
         if (copy)
         {
-            source = source.copy();
+            source = ImageDataUtil.copy(source);
         }
         int size = size();
 

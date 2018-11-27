@@ -29,9 +29,10 @@ import com.ait.lienzo.client.core.util.CursorMap;
 import com.ait.lienzo.shared.core.types.AutoScaleType;
 import com.ait.lienzo.shared.core.types.DataURLType;
 import com.ait.lienzo.shared.core.types.IColor;
-import com.ait.tooling.common.api.java.util.function.Predicate;
+import com.ait.lienzo.tools.common.api.java.util.function.Predicate;
 import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.core.client.Scheduler.ScheduledCommand;
+import com.google.gwt.dom.client.DivElement;
 import com.google.gwt.dom.client.Style;
 import com.google.gwt.dom.client.Style.Cursor;
 import com.google.gwt.user.client.Window;
@@ -39,6 +40,8 @@ import com.google.gwt.user.client.ui.FocusPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.ProvidesResize;
 import com.google.gwt.user.client.ui.RequiresResize;
+
+import jsinterop.base.Js;
 
 /**
  * LienzoPanel acts as a Container for a {@link Viewport}.
@@ -127,7 +130,9 @@ public class LienzoPanel extends FocusPanel implements RequiresResize, ProvidesR
 
         if (LienzoCore.IS_CANVAS_SUPPORTED)
         {
-            getElement().appendChild(m_view.getElement());
+
+            DivElement divElement = Js.<DivElement>uncheckedCast(m_view.getElement());
+            getElement().appendChild(divElement);
 
             setPixelSize(wide, high);
 
@@ -507,7 +512,7 @@ public class LienzoPanel extends FocusPanel implements RequiresResize, ProvidesR
 
     /**
      * Returns the {@link Mediators} for this panels {@link Viewport}.
-     * Mediators can be used to e.g. to add zoom operations.
+     * Mediators can be used to e.g. to addBoundingBox zoom operations.
      *
      * @return Mediators
      */
@@ -520,7 +525,7 @@ public class LienzoPanel extends FocusPanel implements RequiresResize, ProvidesR
      * Add a mediator to the stack of {@link Mediators} for this panels {@link Viewport}.
      * The one that is added last, will be called first.
      *
-     * Mediators can be used to e.g. to add zoom operations.
+     * Mediators can be used to e.g. to addBoundingBox zoom operations.
      *
      * @param mediator IMediator
      */
@@ -531,10 +536,11 @@ public class LienzoPanel extends FocusPanel implements RequiresResize, ProvidesR
         return this;
     }
 
-    public static native void enableWindowMouseWheelScroll(boolean enabled)
-    /*-{
-		$wnd.mousewheel = function() {
-			return enabled;
-		}
-    }-*/;
+    // @FIXME I don't think this does anything, so ignoring. Delete later. (mdp)
+    public static void enableWindowMouseWheelScroll(boolean enabled)
+    {
+//		$wnd.mousewheel = function() {
+//			return enabled;
+//		}
+    };
 }

@@ -25,9 +25,9 @@ import com.ait.lienzo.client.core.shape.Group;
 import com.ait.lienzo.client.core.shape.IPrimitive;
 import com.ait.lienzo.client.core.types.BoundingBox;
 import com.ait.lienzo.client.core.types.Point2D;
-import com.ait.tooling.common.api.java.util.UUID;
-import com.ait.tooling.nativetools.client.collection.NFastArrayList;
-import com.ait.tooling.nativetools.client.event.HandlerRegistrationManager;
+import com.ait.lienzo.tools.common.api.java.util.UUID;
+import com.ait.lienzo.tools.client.collection.NFastArrayList;
+import com.ait.lienzo.tools.client.event.HandlerRegistrationManager;
 import com.google.gwt.event.shared.HandlerRegistration;
 
 /**
@@ -138,11 +138,12 @@ public class WiresLayoutContainer implements LayoutContainer
 
             final ChildEntry entry = new ChildEntry(child.getID(), layout);
             children.add(entry);
-            for (Attribute attribute : child.getTransformingAttributes()) {
-                HandlerRegistration reg = child.addAttributesChangedHandler(attribute, shapeAttributesChangedHandler);
-                registrations.put(new ObjectAttribute(child,attribute), reg);
-                attrHandlerRegs.register(reg);
-            }
+// disabling attribute change handler (mdp) (roger)
+//            for (Attribute attribute : child.getTransformingAttributes()) {
+//                HandlerRegistration reg = child.addAttributesChangedHandler(attribute, shapeAttributesChangedHandler);
+//                registrations.put(new ObjectAttribute(child,attribute), reg);
+//                attrHandlerRegs.register(reg);
+//            }
 
             doPositionChild(child, true);
 
@@ -178,8 +179,10 @@ public class WiresLayoutContainer implements LayoutContainer
 
     public LayoutContainer execute()
     {
-        for (IPrimitive<?> child : group.getChildNodes())
+        NFastArrayList<IPrimitive<?>> nodes = group.getChildNodes();
+        for (int i = 0, size = nodes.size(); i < size; i++ )
         {
+            IPrimitive<?> child = nodes.get(i);
             doPositionChild(child, false);
         }
 
@@ -195,8 +198,10 @@ public class WiresLayoutContainer implements LayoutContainer
 
     public LayoutContainer refresh()
     {
-        for (final ChildEntry entry : children)
+
+        for (int i = 0, size = children.size(); i < size; i++)
         {
+            ChildEntry entry = children.get(i);
             entry.refresh();
         }
         return this;
@@ -223,8 +228,9 @@ public class WiresLayoutContainer implements LayoutContainer
 
     private ChildEntry getChildEntry(final String key)
     {
-        for (final ChildEntry entry : children)
+        for (int i = 0, size = children.size(); i < size; i++)
         {
+            ChildEntry entry = children.get(i);
             if (entry.uuid.equals(key))
             {
                 return entry;

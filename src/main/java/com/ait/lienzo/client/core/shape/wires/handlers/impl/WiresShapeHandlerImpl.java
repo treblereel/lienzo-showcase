@@ -13,7 +13,8 @@ import com.ait.lienzo.client.core.shape.wires.handlers.WiresShapeControl;
 import com.ait.lienzo.client.core.shape.wires.handlers.WiresShapeHighlight;
 import com.ait.lienzo.client.core.types.Point2D;
 import com.ait.lienzo.client.widget.DragContext;
-import com.ait.tooling.common.api.java.util.function.Consumer;
+import com.ait.lienzo.tools.common.api.java.util.function.Consumer;
+import com.ait.lienzo.tools.client.Console;
 
 /**
  * This handler's goals are:
@@ -83,8 +84,7 @@ public class WiresShapeHandlerImpl extends WiresManager.WiresDragHandler impleme
 
         boolean adjusted = false;
         // Delegate drag adjustments to shape control.
-        if (getControl().onMove(dxy.getX(),
-                           dxy.getY())) {
+        if (getControl().onMove(dxy.getX(), dxy.getY())) {
             dxy.set(getControl().getAdjust());
             adjusted = true;
         }

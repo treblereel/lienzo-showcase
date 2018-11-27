@@ -21,7 +21,7 @@ import java.util.Iterator;
 import com.ait.lienzo.client.core.shape.Viewport;
 import com.ait.lienzo.client.core.types.NFastArrayListIterator;
 import com.ait.lienzo.client.widget.LienzoPanel;
-import com.ait.tooling.nativetools.client.collection.NFastArrayList;
+import com.ait.lienzo.tools.client.collection.NFastArrayList;
 import com.google.gwt.event.shared.GwtEvent;
 
 /**
@@ -35,7 +35,7 @@ import com.google.gwt.event.shared.GwtEvent;
  * To insert a new mediator into the start of the list (at position 0), 
  * use the {@link #push(IMediator) push} method.
  * To remove the first one, use the {@link #pop() pop} method.
- * The {@link #add(int, IMediator) add} and {@link #remove(IMediator) remove} methods can be used for more finer grained control.
+ * The {@link #add(int, IMediator) addBoundingBox} and {@link #remove(IMediator) remove} methods can be used for more finer grained control.
  * <p>
  * Each IMediator must implement two methods:
  * <ul>

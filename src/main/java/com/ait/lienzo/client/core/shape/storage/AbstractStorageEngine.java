@@ -24,9 +24,8 @@ import com.ait.lienzo.client.core.shape.json.validators.ValidationContext;
 import com.ait.lienzo.client.core.shape.json.validators.ValidationException;
 import com.ait.lienzo.client.core.types.BoundingBox;
 import com.ait.lienzo.client.core.types.NFastArrayListIterator;
-import com.ait.tooling.nativetools.client.NObjectJSO;
-import com.ait.tooling.nativetools.client.collection.MetaData;
-import com.ait.tooling.nativetools.client.collection.NFastArrayList;
+import com.ait.lienzo.tools.client.collection.MetaData;
+import com.ait.lienzo.tools.client.collection.NFastArrayList;
 import com.google.gwt.core.client.JavaScriptObject;
 import com.google.gwt.json.client.JSONObject;
 import com.google.gwt.json.client.JSONString;
@@ -73,9 +72,10 @@ public abstract class AbstractStorageEngine<M> implements IStorageEngine<M>
                 }
                 else
                 {
-                    final NObjectJSO jso = mjso.cast();
-
-                    m_meta = new MetaData(jso);
+                    // @FIXME (mdp)
+                    // final NObjectJSO jso = mjso.cast();
+                    // m_meta = new MetaData(jso);
+                    m_meta = new MetaData();
                 }
             }
         }
@@ -101,7 +101,8 @@ public abstract class AbstractStorageEngine<M> implements IStorageEngine<M>
 
         if (false == getMetaData().isEmpty())
         {
-            object.put("meta", new JSONObject(getMetaData().getJSO()));
+            // @FIXME (mdp)
+            // object.putString("meta", new JSONObject(getMetaData().getJSO()));
         }
         return object;
     }

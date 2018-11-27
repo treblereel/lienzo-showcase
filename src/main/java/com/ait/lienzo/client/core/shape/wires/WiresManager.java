@@ -41,9 +41,12 @@ import com.ait.lienzo.client.core.types.OnLayerBeforeDraw;
 import com.ait.lienzo.client.core.types.Point2D;
 import com.ait.lienzo.client.widget.DragConstraintEnforcer;
 import com.ait.lienzo.client.widget.DragContext;
-import com.ait.tooling.nativetools.client.collection.NFastArrayList;
-import com.ait.tooling.nativetools.client.collection.NFastStringMap;
-import com.ait.tooling.nativetools.client.event.HandlerRegistrationManager;
+import com.ait.lienzo.tools.client.collection.NFastArrayList;
+import com.ait.lienzo.tools.client.collection.NFastStringMap;
+import com.ait.lienzo.tools.client.event.HandlerRegistrationManager;
+import com.ait.lienzo.tools.client.Console;
+
+import elemental2.core.JsArray;
 
 public final class WiresManager
 {
@@ -158,8 +161,11 @@ public final class WiresManager
             // as this is expensive it's delayed until the last minute before draw. As drawing order is not guaranteed
             // this method is used to force a parse on any line that has been refreshed. Refreshed means it's points where
             // changed and thus will be reparsed.
-            for (WiresConnector c : m_wiresManager.getConnectorList())
+            //for (WiresConnector c : )
+            NFastArrayList<WiresConnector> list = m_wiresManager.getConnectorList();
+            for (int i = 0, size = list.size(); i < size; i++)
             {
+                WiresConnector c = list.get(i);
                 if (WiresConnector.updateHeadTailForRefreshedConnector(c))
                 {
                     return false;
@@ -210,7 +216,6 @@ public final class WiresManager
 
         // Shapes added to the canvas layer by default.
         getLayer().add(shape);
-
 
         final String uuid = shape.uuid();
         m_shapesMap.put(uuid, shape);
@@ -290,8 +295,8 @@ public final class WiresManager
         m_registrationManager.register(connector.getTail().addNodeMouseClickHandler(handler));
 
         //increase the selection area
-        connector.getLine().getAttributes().setSelectionStrokeOffset(CONNECTOR_SELECTION_OFFSET);
-        connector.getLine().getAttributes().setSelectionBoundsOffset(CONNECTOR_SELECTION_OFFSET);
+        connector.getLine().asShape().setSelectionStrokeOffset(CONNECTOR_SELECTION_OFFSET);
+        connector.getLine().asShape().setSelectionBoundsOffset(CONNECTOR_SELECTION_OFFSET);
 
         getConnectorList().add(connector);
         m_shapeHandlersMap.put(uuid, m_registrationManager);
@@ -319,7 +324,7 @@ public final class WiresManager
 
     private void destroy() {
         if (!m_shapesMap.isEmpty()) {
-            final Collection<WiresShape> shapes = new ArrayList<>(m_shapesMap.values());
+            final WiresShape[] shapes = JsArray.from(m_shapesMap.values());
             for (WiresShape shape : shapes) {
                 deregister(shape);
             }
@@ -327,7 +332,7 @@ public final class WiresManager
         }
         if (!m_connectorList.isEmpty()) {
             final NFastArrayList<WiresConnector> connectors = m_connectorList.copy();
-            for (WiresConnector connector : connectors) {
+            for (WiresConnector connector : connectors.asList()) {
                 deregister(connector);
             }
             m_connectorList.clear();

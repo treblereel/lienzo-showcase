@@ -129,7 +129,7 @@ public class WiresContainmentControlImpl extends AbstractWiresParentPickerContro
             return current;
         } else {
             final Point2D trgAbsOffset = parent.getComputedLocation();
-            return current.minus(trgAbsOffset);
+            return current.sub(trgAbsOffset);
         }
     }
 

@@ -30,6 +30,8 @@ import com.ait.lienzo.client.core.util.Geometry;
 import com.ait.lienzo.shared.core.types.ShapeType;
 import com.google.gwt.json.client.JSONObject;
 
+import jsinterop.annotations.JsProperty;
+
 /**
  * A polygon is traditionally a plane figure that is bounded by a closed path, 
  * composed of a finite sequence of straight line segments.
@@ -37,6 +39,12 @@ import com.google.gwt.json.client.JSONObject;
 public class Polygon extends AbstractMultiPointShape<Polygon>
 {
     private final PathPartList m_list = new PathPartList();
+
+    @JsProperty
+    private double       cornerRadius;
+
+    @JsProperty
+    private Point2DArray points;
 
     /**
      * Constructor. Creates an instance of a polygon.
@@ -57,9 +65,9 @@ public class Polygon extends AbstractMultiPointShape<Polygon>
         setCornerRadius(corner);
     }
 
-    public Polygon(final Point2D point, final Point2D... points)
+    public Polygon(final Point2D... points)
     {
-        this(new Point2DArray(point, points));
+        this(new Point2DArray().push(points));
     }
 
     public Polygon(double... array)
@@ -75,12 +83,12 @@ public class Polygon extends AbstractMultiPointShape<Polygon>
     @Override
     public BoundingBox getBoundingBox()
     {
-        return new BoundingBox(getPoints());
+        return BoundingBox.fromPoint2DArray(getPoints());
     }
 
-    private boolean parse(final Attributes attr)
+    private boolean parse()
     {
-        Point2DArray list = attr.getPoints();
+        Point2DArray list = getPoints();
 
         if (null != list)
         {
@@ -96,17 +104,18 @@ public class Polygon extends AbstractMultiPointShape<Polygon>
 
                 final double corner = getCornerRadius();
 
-                if (corner <= 0)
+                if (corner > 0)
+                {
+                    list.push(point);
+                    Geometry.drawArcJoinedLines(m_list, list, corner);
+                }
+                else
                 {
                     for (int i = 1; i < size; i++)
                     {
                         m_list.L(list.get(i));
                     }
                     m_list.Z();
-                }
-                else
-                {
-                    Geometry.drawArcJoinedLines(m_list, list.push(point), corner);
                 }
                 return true;
             }
@@ -120,11 +129,11 @@ public class Polygon extends AbstractMultiPointShape<Polygon>
      * @param context
      */
     @Override
-    protected boolean prepare(final Context2D context, final Attributes attr, final double alpha)
+    protected boolean prepare(final Context2D context, final double alpha)
     {
         if (m_list.size() < 1)
         {
-            if (false == parse(attr))
+            if (false == parse())
             {
                 return false;
             }
@@ -140,12 +149,12 @@ public class Polygon extends AbstractMultiPointShape<Polygon>
 
     public double getCornerRadius()
     {
-        return getAttributes().getCornerRadius();
+        return this.cornerRadius;
     }
 
     public Polygon setCornerRadius(final double radius)
     {
-        getAttributes().setCornerRadius(radius);
+        this.cornerRadius = radius;
 
         return refresh();
     }
@@ -157,7 +166,7 @@ public class Polygon extends AbstractMultiPointShape<Polygon>
      */
     public Point2DArray getPoints()
     {
-        return getAttributes().getPoints();
+        return this.points;
     }
 
     /**
@@ -168,7 +177,7 @@ public class Polygon extends AbstractMultiPointShape<Polygon>
      */
     public Polygon setPoints(final Point2DArray points)
     {
-        getAttributes().setPoints(points);
+        this.points = points;
 
         return refresh();
     }

@@ -49,14 +49,20 @@ import com.ait.lienzo.client.core.shape.wires.IControlHandleFactory;
 import com.ait.lienzo.client.core.shape.wires.IControlHandleList;
 import com.ait.lienzo.client.core.types.PathPartList;
 import com.ait.lienzo.client.core.types.Point2D;
+import com.ait.lienzo.client.core.types.Point2DArray;
 import com.ait.lienzo.shared.core.types.ColorName;
 import com.ait.lienzo.shared.core.types.DragMode;
 import com.ait.lienzo.shared.core.types.ShapeType;
-import com.ait.tooling.nativetools.client.event.HandlerRegistrationManager;
+import com.ait.lienzo.tools.client.event.HandlerRegistrationManager;
 import com.google.gwt.json.client.JSONObject;
+
+import jsinterop.annotations.JsProperty;
 
 public abstract class AbstractMultiPointShape<T extends AbstractMultiPointShape<T> & IMultiPointShape<T>> extends Shape<T> implements IMultiPointShape<T>
 {
+    @JsProperty
+    private       Point2DArray controlPoints;
+
     private final PathPartList m_list = new PathPartList();
 
     protected AbstractMultiPointShape(final ShapeType type)
@@ -67,6 +73,18 @@ public abstract class AbstractMultiPointShape<T extends AbstractMultiPointShape<
     protected AbstractMultiPointShape(final ShapeType type, final JSONObject node, final ValidationContext ctx) throws ValidationException
     {
         super(type, node, ctx);
+    }
+
+    public final T setControlPoints(final Point2DArray controlPoints)
+    {
+        this.controlPoints = controlPoints;
+
+        return refresh();
+    }
+
+    public final Point2DArray getControlPoints()
+    {
+        return this.controlPoints;
     }
 
     @Override
@@ -188,7 +206,7 @@ public abstract class AbstractMultiPointShape<T extends AbstractMultiPointShape<
 
             manager.register(m_shape.addNodeDragEndHandler(shapeXoYChangedHandler));
 
-            for (Point2D point : m_shape.getPoint2DArray())
+            for (Point2D point : m_shape.getPoint2DArray().asArray())
             {
                 final Point2D p = point;
 

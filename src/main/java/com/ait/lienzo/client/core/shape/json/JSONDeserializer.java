@@ -30,7 +30,7 @@ import com.ait.lienzo.client.core.shape.IContainer;
 import com.ait.lienzo.client.core.shape.Node;
 import com.ait.lienzo.client.core.shape.json.validators.ValidationContext;
 import com.ait.lienzo.client.core.shape.json.validators.ValidationException;
-import com.ait.tooling.common.api.java.util.StringOps;
+import com.ait.lienzo.tools.client.StringOps;
 import com.google.gwt.json.client.JSONArray;
 import com.google.gwt.json.client.JSONObject;
 import com.google.gwt.json.client.JSONParser;

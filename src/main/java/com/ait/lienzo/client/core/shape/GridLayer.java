@@ -46,7 +46,7 @@ import com.google.gwt.json.client.JSONValue;
  * The strokeWidth of the lines is impervious to any transforms defined on the Layer or its Viewport,
  * i.e. a 1 pixel line will always show as a 1 pixel line, regardless of how far you zoomed in or out.
  * <p>
- * Note that the empty GridLayer constructor does not add any Lines, so you will not see a grid unless you add some Lines.
+ * Note that the empty GridLayer constructor does not addBoundingBox any Lines, so you will not see a grid unless you addBoundingBox some Lines.
  * 
  * @since 1.1
  */
@@ -68,7 +68,7 @@ public class GridLayer extends Layer
 
     private Line[]           m_lines     = new Line[4];
 
-    // NOTE: we can't put Lines in Attributes
+    // NOTE: we can't putString Lines in Attributes
 
     /**
      * Creates an empty GridLayer with no lines.
@@ -415,12 +415,12 @@ public class GridLayer extends Layer
                 {
                     double[] d = previousDashes.getNormalizedArray();
 
-                    DashArray dashes = new DashArray();
-
+                    double[] copy = new double[d.length];
                     for (int i = 0; i < d.length; i++)
                     {
-                        dashes.push(d[i] / scale);
+                        copy[i] = d[i] / scale;
                     }
+                    DashArray dashes = new DashArray(copy);
                     line.setDashArray(dashes);
                 }
                 long n1 = Math.round(min / size);

@@ -2,35 +2,37 @@ package com.ait.lienzo.client.core.image;
 
 import com.ait.lienzo.client.core.Context2D;
 import com.ait.lienzo.client.core.config.LienzoCore;
-import com.google.gwt.dom.client.ImageElement;
-import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.RootPanel;
+import com.google.gwt.user.client.ui.Image;
 
+import elemental2.dom.HTMLImageElement;
+import jsinterop.base.Js;
+
+// @FIXME need rogoer to help me understand this, before I continue (mdp)
 public class ImageElementProxy {
-
-    private com.google.gwt.user.client.ui.Image imageWidget;
-    private ImageElement imageElement;
+    private HTMLImageElement imageElement;
+    private Image imageWidget;
 
     public ImageElementProxy() {
     }
 
-    ImageElementProxy(com.google.gwt.user.client.ui.Image imageWidget,
-                             ImageElement imageElement) {
-        this.imageWidget = imageWidget;
+    ImageElementProxy(HTMLImageElement imageElement, Image imageWidget) {
         this.imageElement = imageElement;
+        this.imageWidget = imageWidget;
     }
 
     public void load(final String url,
                      final Runnable callback) {
+        assert null == imageWidget;
         assert null == imageElement;
         imageWidget = new Image();
+
         new ImageLoader(url,
-                        imageWidget) {
+                        Js.uncheckedCast(imageWidget.getElement())) {
 
             @Override
-            public void onImageElementLoad(final ImageElement imageElement) {
-                ImageElementProxy.this.imageElement = imageElement;
-                imageElement.getWidth();
+            public void onImageElementLoad(final HTMLImageElement image) {
+                ImageElementProxy.this.imageElement = image;
                 callback.run();
             }
 
@@ -67,11 +69,11 @@ public class ImageElementProxy {
     }
 
     public int getWidth() {
-        return isLoaded() ? imageElement.getWidth() : 0;
+        return isLoaded() ? imageElement.width : 0;
     }
 
     public int getHeight() {
-        return isLoaded() ? imageElement.getHeight() : 0;
+        return isLoaded() ? imageElement.height : 0;
     }
 
     public void destroy() {

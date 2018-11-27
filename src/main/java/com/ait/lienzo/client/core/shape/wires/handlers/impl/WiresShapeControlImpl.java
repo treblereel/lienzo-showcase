@@ -19,8 +19,8 @@ import com.ait.lienzo.client.core.shape.wires.picker.ColorMapBackedPicker;
 import com.ait.lienzo.client.core.types.BoundingBox;
 import com.ait.lienzo.client.core.types.Point2D;
 import com.ait.lienzo.client.core.util.Geometry;
-import com.ait.tooling.common.api.java.util.function.Consumer;
-import com.ait.tooling.nativetools.client.collection.NFastArrayList;
+import com.ait.lienzo.tools.common.api.java.util.function.Consumer;
+import com.ait.lienzo.tools.client.collection.NFastArrayList;
 
 /**
  * The default WiresShapeControl implementation.

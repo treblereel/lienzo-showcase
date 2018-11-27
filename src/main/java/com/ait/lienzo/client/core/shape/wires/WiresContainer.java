@@ -42,11 +42,14 @@ import com.ait.lienzo.client.core.shape.wires.event.WiresDragStartHandler;
 import com.ait.lienzo.client.core.shape.wires.event.WiresMoveEvent;
 import com.ait.lienzo.client.core.shape.wires.event.WiresMoveHandler;
 import com.ait.lienzo.client.core.types.Point2D;
-import com.ait.tooling.common.api.flow.Flows;
-import com.ait.tooling.nativetools.client.collection.NFastArrayList;
-import com.ait.tooling.nativetools.client.event.HandlerRegistrationManager;
+import com.ait.lienzo.tools.common.api.flow.Flows;
+import com.ait.lienzo.tools.client.collection.NFastArrayList;
+import com.ait.lienzo.tools.client.event.HandlerRegistrationManager;
 import com.google.gwt.event.shared.HandlerManager;
 import com.google.gwt.event.shared.HandlerRegistration;
+
+import elemental2.core.JsArray;
+import elemental2.core.JsIterable;
 
 import static com.ait.lienzo.client.core.AttributeOp.any;
 
@@ -177,16 +180,16 @@ public class WiresContainer
 
         m_childShapes.add(shape);
 
-        // This is needed as a workaround, due to getComputedBoundingBox needed atleast x and y set to something, else it won't work.
-        Group group = shape.getGroup();
-        if ( !group.getAttributes().isDefined(Attribute.X) )
-        {
-            group.setX(0);
-        }
-        if ( !group.getAttributes().isDefined(Attribute.Y) )
-        {
-            group.setY(0);
-        }
+//        // This is needed as a workaround, due to getComputedBoundingBox needed atleast x and y set to something, else it won't work.
+//        Group group = shape.getGroup();
+//        if ( !group.getAttributes().isDefined(Attribute.X) )
+//        {
+//            group.setX(0);
+//        }
+//        if ( !group.getAttributes().isDefined(Attribute.Y) )
+//        {
+//            group.setY(0);
+//        }
 
         m_container.add(shape.getGroup());
 
@@ -205,8 +208,10 @@ public class WiresContainer
         // Delegate to children.
         if (getChildShapes() != null && !getChildShapes().isEmpty())
         {
-            for (WiresShape child : getChildShapes())
+            NFastArrayList<WiresShape> shapes = getChildShapes();
+            for ( int i = 0, size = shapes.size(); i < size; i++)
             {
+                WiresShape child = shapes.get(i);
                 child.shapeMoved();
             }
         }
@@ -349,9 +354,16 @@ public class WiresContainer
 
     public void destroy()
     {
-        for (WiresShape shape : m_childShapes) {
+        for (WiresShape shape : m_childShapes.asList()) {
             remove(shape);
         }
+        NFastArrayList<WiresShape> shapes = m_childShapes;
+        for ( int i = 0, size = shapes.size(); i < size; i++)
+        {
+            WiresShape child = shapes.get(i);
+            child.shapeMoved();
+        }
+
         m_childShapes.clear();
         m_registrationManager.removeHandler();
         m_container.setAttributesChangedBatcher(null);

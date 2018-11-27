@@ -18,6 +18,7 @@ import com.ait.lienzo.client.core.types.PathPartList;
 import com.ait.lienzo.client.core.types.Point2D;
 import com.ait.lienzo.client.core.types.Point2DArray;
 import com.ait.lienzo.client.core.util.Geometry;
+import com.ait.lienzo.tools.client.collection.NFastArrayList;
 
 public class ShapeControlUtils {
 
@@ -47,7 +48,7 @@ public class ShapeControlUtils {
             }
         }
 
-        for (WiresShape child : shape.getChildShapes()) {
+        for (WiresShape child : shape.getChildShapes().asList()) {
             collectionSpecialConnectors(child,
                                         connectors);
         }
@@ -88,7 +89,7 @@ public class ShapeControlUtils {
         }
 
         if (shape.getChildShapes() != null) {
-            for (WiresShape child : shape.getChildShapes()) {
+            for (WiresShape child : shape.getChildShapes().asList()) {
                 //recursive call to children
                 connectors.putAll(lookupChildrenConnectorsToUpdate(child));
             }
@@ -126,7 +127,7 @@ public class ShapeControlUtils {
         }
 
         boolean accept = true;
-        for (WiresConnector c : wiresManager.getConnectorList()) {
+        for (WiresConnector c : wiresManager.getConnectorList().asList()) {
             Point2DArray linePoints = ((OrthogonalPolyLine) c.getLine()).getComputedPoint2DArray();
             MultiPath path = shape.getPath();
             Point2DArray intersectPoints = null;
@@ -149,9 +150,9 @@ public class ShapeControlUtils {
                 if (intersectPoints.size() == 1) {
                     // one arrow end is enclosed in the shape, we can only splice/connect if that connection is not already connected.
                     BoundingBox bbox = shape.getContainer().getComputedBoundingPoints().getBoundingBox();
-                    if (bbox.contains(headCon.getPoint()) && headCon.getMagnet() != null) {
+                    if (bbox.containsPoint(headCon.getPoint()) && headCon.getMagnet() != null) {
                         return accept;
-                    } else if (bbox.contains(tailCon.getPoint()) && headCon.getMagnet() != null) {
+                    } else if (bbox.containsPoint(tailCon.getPoint()) && headCon.getMagnet() != null) {
                         return accept;
                     } else {
                         throw new RuntimeException("Defensive programming: should not be possible if there is a single intersection.");
@@ -163,7 +164,7 @@ public class ShapeControlUtils {
                 Point2DArray oldPoints = c.getLine().getPoint2DArray();
                 int firstSegmentIndex = Integer.MAX_VALUE;
                 int lastSegmentIndex = 0;
-                for (Point2D p : intersectPoints) {
+                for (Point2D p : intersectPoints.asArray()) {
                     double x = p.getX() + absLoc.getX();
                     double y = p.getY() + absLoc.getY();
 
@@ -311,7 +312,9 @@ public class ShapeControlUtils {
                                                  MultiPath path,
                                                  Point2DArray intersectPoints,
                                                  Point2D absLoc) {
-        for (PathPartList pathPartList : path.getActualPathPartListArray()) {
+        NFastArrayList<PathPartList> array =  path.getActualPathPartListArray();
+        for (int i = 0, size = array.size(); i < size; i++ ) {
+            PathPartList pathPartList = array.get(i);
             intersectPoints = getPoint2Ds(linePoints,
                                           intersectPoints,
                                           absLoc,
@@ -326,7 +329,8 @@ public class ShapeControlUtils {
                                             PathPartList pathPartList) {
         Point2DArray offsetLinePoints = new Point2DArray();
 
-        for (Point2D p : linePoints) {
+        for (int i = 0, size = linePoints.size(); i < size; i++ ) {
+            Point2D p = linePoints.get(i);
             offsetLinePoints.push(p.copy().offset(-absLoc.getX(),
                                                   -absLoc.getY()));
         }
@@ -338,7 +342,9 @@ public class ShapeControlUtils {
             if (intersectPoints == null) {
                 intersectPoints = new Point2DArray();
             }
-            for (Point2D p : pathPartIntersectPoints) {
+
+            for (int i = 0, size = pathPartIntersectPoints.size(); i < size; i++ ) {
+                Point2D p = pathPartIntersectPoints.get(i);
                 intersectPoints.push(p);
             }
         }

@@ -35,7 +35,7 @@ import com.google.gwt.event.shared.GwtEvent;
  * an opacity (alpha value) of 0.5.
  * <p>
  * The dimensions of the zoom box will be adjusted to match the aspect ratio
- * of the viewport, thus maintaining the same scale in the X and Y axes.
+ * of the viewport, thus maintaining the same scaleWithXY in the X and Y axes.
  * 
  * @see Mediators
  * 
@@ -47,7 +47,7 @@ public class MouseBoxZoomMediator extends AbstractMediator
 
     private Point2D   m_start            = null;
 
-    private Point2D   m_end              = new Point2D();
+    private Point2D   m_end              = new Point2D(0,0);
 
     private Transform m_inverseTransform = null;
 
@@ -72,7 +72,7 @@ public class MouseBoxZoomMediator extends AbstractMediator
     }
 
     /**
-     * Sets the maximum scale of the viewport.
+     * Sets the maximum scaleWithXY of the viewport.
      * 
      * The default value is Double.MAX_VALUE (unlimited.)
      * 
@@ -84,7 +84,7 @@ public class MouseBoxZoomMediator extends AbstractMediator
     }
 
     /**
-     * Sets the maximum scale of the viewport.
+     * Sets the maximum scaleWithXY of the viewport.
      * 
      * The default value is Double.MAX_VALUE (unlimited.)
      * 

@@ -4,23 +4,46 @@ import java.util.List;
 
 import com.ait.lienzo.client.core.Attribute;
 import com.ait.lienzo.client.core.Context2D;
-import com.ait.lienzo.client.core.shape.Attributes;
 import com.ait.lienzo.client.core.shape.IDestroyable;
+import com.ait.lienzo.client.core.shape.Picture;
 import com.ait.lienzo.client.core.shape.Shape;
 import com.ait.lienzo.client.core.shape.json.IJSONSerializable;
 import com.ait.lienzo.client.core.shape.json.validators.ValidationContext;
 import com.ait.lienzo.client.core.shape.json.validators.ValidationException;
 import com.ait.lienzo.client.core.types.BoundingBox;
 import com.ait.lienzo.shared.core.types.ShapeType;
-import com.ait.tooling.nativetools.client.collection.MetaData;
+import com.ait.lienzo.tools.client.collection.MetaData;
 import com.google.gwt.json.client.JSONObject;
 import com.google.gwt.json.client.JSONString;
+
+import jsinterop.annotations.JsProperty;
 
 public class Image
         extends Shape<Image>
         implements IDestroyable {
 
     ImageElementProxy imageProxy;
+
+    @JsProperty
+    private String                 url;
+
+    @JsProperty
+    private int clippedImageStartX;
+
+    @JsProperty
+    private int clippedImageStartY;
+
+    @JsProperty
+    private int clippedImageWidth;
+
+    @JsProperty
+    private int clippedImageHeight;
+
+    @JsProperty
+    private int clippedImageDestinationWidth;
+
+    @JsProperty
+    private int clippedImageDestinationHeight;
 
     public Image(final String stripName,
                  final int index) {
@@ -55,7 +78,7 @@ public class Image
      * The default value is 0.
      */
     public int getClippedImageStartX() {
-        return getAttributes().getClippedImageStartX();
+        return this.clippedImageStartX;
     }
 
     /**
@@ -63,7 +86,7 @@ public class Image
      * The default value is 0.
      */
     public Image setClippedImageStartX(int sx) {
-        getAttributes().setClippedImageStartX(sx);
+        this.clippedImageStartX = sx;
 
         return this;
     }
@@ -73,7 +96,7 @@ public class Image
      * The default value is 0.
      */
     public int getClippedImageStartY() {
-        return getAttributes().getClippedImageStartY();
+        return this.clippedImageStartY;
     }
 
     /**
@@ -81,7 +104,7 @@ public class Image
      * The default value is 0.
      */
     public Image setClippedImageStartY(int clippedImageStartY) {
-        getAttributes().setClippedImageStartY(clippedImageStartY);
+        this.clippedImageStartY = clippedImageStartY;
 
         return this;
     }
@@ -93,7 +116,7 @@ public class Image
      * @return int
      */
     public int getClippedImageWidth() {
-        return getAttributes().getClippedImageWidth();
+        return this.clippedImageWidth;
     }
 
     /**
@@ -102,7 +125,7 @@ public class Image
      * use the width of the loaded image.
      */
     public Image setClippedImageWidth(int clippedImageWidth) {
-        getAttributes().setClippedImageWidth(clippedImageWidth);
+        this.clippedImageWidth = clippedImageWidth;
 
         return this;
     }
@@ -113,7 +136,7 @@ public class Image
      * use the height of the loaded image.
      */
     public int getClippedImageHeight() {
-        return getAttributes().getClippedImageHeight();
+        return this.clippedImageHeight;
     }
 
     /**
@@ -122,7 +145,7 @@ public class Image
      * use the height of the loaded image.
      */
     public Image setClippedImageHeight(int clippedImageHeight) {
-        getAttributes().setClippedImageHeight(clippedImageHeight);
+        this.clippedImageHeight = clippedImageHeight;
 
         return this;
     }
@@ -132,7 +155,7 @@ public class Image
      * The default value is 0, which means it will use the clippedImageWidth.
      */
     public int getClippedImageDestinationWidth() {
-        return getAttributes().getClippedImageDestinationWidth();
+        return this.clippedImageDestinationWidth;
     }
 
     /**
@@ -140,7 +163,7 @@ public class Image
      * The default value is 0, which means it will use the clippedImageWidth.
      */
     public Image setClippedImageDestinationWidth(int clippedImageDestinationWidth) {
-        getAttributes().setClippedImageDestinationWidth(clippedImageDestinationWidth);
+        this.clippedImageDestinationWidth = clippedImageDestinationWidth;
 
         return this;
     }
@@ -153,11 +176,11 @@ public class Image
      * This can be used to reduce the memory footprint of the Image
      * used in the selection layer.
      * <p/>
-     * Note that further scaling can be achieved via the <code>scale</code>
+     * Note that further scaling can be achieved via the <code>scaleWithXY</code>
      * or <code>transform</code> attributes, which apply to all Shapes.
      */
     public int getClippedImageDestinationHeight() {
-        return getAttributes().getClippedImageDestinationHeight();
+        return this.clippedImageDestinationHeight;
     }
 
     /**
@@ -168,11 +191,11 @@ public class Image
      * This can be used to reduce the memory footprint of the Image
      * used in the selection layer.
      * <p/>
-     * Note that further scaling can be achieved via the <code>scale</code>
+     * Note that further scaling can be achieved via the <code>scaleWithXY</code>
      * or <code>transform</code> attributes, which apply to all Shapes.
      */
     public Image setClippedImageDestinationHeight(int clippedImageDestinationHeight) {
-        getAttributes().setClippedImageDestinationHeight(clippedImageDestinationHeight);
+        this.clippedImageDestinationHeight = clippedImageDestinationHeight;
 
         return this;
     }
@@ -185,15 +208,14 @@ public class Image
 
     @Override
     protected boolean prepare(final Context2D context,
-                              final Attributes attr,
                               final double alpha) {
         context.save();
 
         if (!context.isSelection()) {
             context.setGlobalAlpha(alpha);
 
-            if (attr.hasShadow()) {
-                doApplyShadow(context, attr);
+            if (getShadow() != null) {
+                doApplyShadow(context);
             }
         }
         drawImage(context);
@@ -236,7 +258,7 @@ public class Image
 
     @Override
     public BoundingBox getBoundingBox() {
-        return new BoundingBox(0, 0, getWidth(), getHeight());
+        return BoundingBox.fromDoubles(0, 0, getWidth(), getHeight());
     }
 
     public double getWidth() {
@@ -250,26 +272,24 @@ public class Image
     }
 
     Image configure(final String url) {
-        getAttributes().setURL(url);
-        if (null != url && url.trim().length() > 0) {
-            destroyProxy();
-            if (ImageStrips.isURLValid(url)) {
-                final ImageStrips.ImageStripRef stripRef = ImageStrips.get().getRef(url);
-                final ImageStrip strip = ImageStrips.get().get(stripRef.getName());
-                imageProxy = ImageStrips.get().newProxy(strip);
-                configureClipArea(strip,
-                                  stripRef.getIndex());
-            } else {
-                imageProxy = new ImageElementProxy();
-                restoreClipArea();
-            }
+        setURL(url); // this also validates the url, and throws exception if not valid or null
+        destroyProxy();
+        if (ImageStrips.isURLValid(url)) {
+            final ImageStrips.ImageStripRef stripRef = ImageStrips.get().getRef(url);
+            final ImageStrip strip = ImageStrips.get().get(stripRef.getName());
+            imageProxy = ImageStrips.get().newProxy(strip);
+            configureClipArea(strip,
+                              stripRef.getIndex());
+        } else {
+            imageProxy = new ImageElementProxy();
+            restoreClipArea();
         }
         return this;
     }
 
     Image load(final ImageLoadCallback callback) {
         if (!imageProxy.isLoaded()) {
-            final String url = getAttributes().getURL();
+            final String url = getURL();
             imageProxy.load(url,
                             new Runnable() {
                                 @Override
@@ -319,11 +339,35 @@ public class Image
         }
     }
 
+    /**
+     * Returns the URL of the image. For ImageResources, this return the
+     * value of ImageResource.getSafeUri().asString().
+     *
+     * @return String
+     */
+    public String getURL()
+    {
+        return this.url;
+    }
+
+    /**
+     * Sets the URL of the image. For ImageResources, this should be the
+     * value of ImageResource.getSafeUri().asString().
+     *
+     * @param url
+     * @return Picture
+     */
+    protected void setURL(final String url)
+    {
+        this.url = Picture.toValidURL(url);
+    }
+
     @Override
     public JSONObject toJSONObject() {
-        JSONObject attr = new JSONObject(getAttributes().getJSO());
+        //JSONObject attr = new JSONObject(getAttributes().getJSO());
+        JSONObject attr = new JSONObject();
 
-        attr.put("url", new JSONString(getAttributes().getURL()));
+        attr.put("url", new JSONString(getURL()));
 
         JSONObject object = new JSONObject();
 
@@ -333,7 +377,8 @@ public class Image
             final MetaData meta = getMetaData();
 
             if (false == meta.isEmpty()) {
-                object.put("meta", new JSONObject(meta.getJSO()));
+                // @FIXME (mdp)
+                //object.putString("meta", new JSONObject(meta.getJSO()));
             }
         }
         object.put("attributes", attr);
@@ -373,7 +418,7 @@ public class Image
         public void process(IJSONSerializable<?> node, ValidationContext ctx) throws ValidationException {
             if (node instanceof Image) {
                 final Image self = (Image) node;
-                self.configure(self.getAttributes().getURL())
+                self.configure(self.getURL())
                     .load(new ImageLoadCallback() {
                         @Override
                         public void onImageLoaded(Image image) {

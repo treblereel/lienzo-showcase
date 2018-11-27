@@ -30,6 +30,8 @@ import com.ait.lienzo.client.core.util.Geometry;
 import com.ait.lienzo.shared.core.types.ShapeType;
 import com.google.gwt.json.client.JSONObject;
 
+import jsinterop.annotations.JsProperty;
+
 /**
  * A triangle is one of the basic shapes of geometry: a polygon with three corners or vertices and three sides 
  * or edges which are line segments.
@@ -39,6 +41,12 @@ import com.google.gwt.json.client.JSONObject;
 public class Triangle extends AbstractMultiPointShape<Triangle>
 {
     private final PathPartList m_list = new PathPartList();
+
+    @JsProperty
+    private double       cornerRadius;
+
+    @JsProperty
+    private  Point2DArray points;
 
     /**
      * Constructor. Creates an instance of a triangle.
@@ -67,7 +75,7 @@ public class Triangle extends AbstractMultiPointShape<Triangle>
     @Override
     public BoundingBox getBoundingBox()
     {
-        return new BoundingBox(getPoints());
+        return BoundingBox.fromPoint2DArray(getPoints());
     }
 
     /**
@@ -76,11 +84,11 @@ public class Triangle extends AbstractMultiPointShape<Triangle>
      * @param context
      */
     @Override
-    protected boolean prepare(final Context2D context, final Attributes attr, final double alpha)
+    protected boolean prepare(final Context2D context, final double alpha)
     {
         if (m_list.size() < 1)
         {
-            if (false == parse(attr))
+            if (false == parse())
             {
                 return false;
             }
@@ -94,9 +102,9 @@ public class Triangle extends AbstractMultiPointShape<Triangle>
         return true;
     }
 
-    private boolean parse(final Attributes attr)
+    private boolean parse()
     {
-        final Point2DArray list = attr.getPoints().noAdjacentPoints();
+        final Point2DArray list = getPoints().noAdjacentPoints();
 
         if ((null != list) && (list.size() > 2))
         {
@@ -116,7 +124,8 @@ public class Triangle extends AbstractMultiPointShape<Triangle>
             }
             else
             {
-                Geometry.drawArcJoinedLines(m_list, list.push(p0), corner);
+                list.push(p0);
+                Geometry.drawArcJoinedLines(m_list, list, corner);
             }
             return true;
         }
@@ -130,7 +139,7 @@ public class Triangle extends AbstractMultiPointShape<Triangle>
      */
     public Point2DArray getPoints()
     {
-        return getAttributes().getPoints();
+        return this.points;
     }
 
     /**
@@ -141,17 +150,18 @@ public class Triangle extends AbstractMultiPointShape<Triangle>
      */
     public Triangle setPoints(final Point2D a, final Point2D b, final Point2D c)
     {
-        return setPoint2DArray(new Point2DArray(a, b, c));
+        return setPoint2DArray(Point2DArray.fromArrayOfPoint2D(a, b, c));
     }
 
     @Override
     public Triangle setPoint2DArray(final Point2DArray points)
     {
-        while (points.size() > 3)
+        if (points.size() > 3)
         {
-            points.pop();
+            throw new IllegalArgumentException("Cannot have more than 3 points");
         }
-        getAttributes().setPoints(points);
+
+        this.points = points;
 
         return refresh();
     }
@@ -164,12 +174,12 @@ public class Triangle extends AbstractMultiPointShape<Triangle>
 
     public double getCornerRadius()
     {
-        return getAttributes().getCornerRadius();
+        return this.cornerRadius;
     }
 
     public Triangle setCornerRadius(final double radius)
     {
-        getAttributes().setCornerRadius(radius);
+        this.cornerRadius = radius;
 
         return refresh();
     }

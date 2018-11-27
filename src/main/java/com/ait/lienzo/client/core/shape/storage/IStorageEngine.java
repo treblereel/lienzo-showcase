@@ -17,8 +17,8 @@
 package com.ait.lienzo.client.core.shape.storage;
 
 import com.ait.lienzo.client.core.types.BoundingBox;
-import com.ait.tooling.nativetools.client.collection.MetaData;
-import com.ait.tooling.nativetools.client.collection.NFastArrayList;
+import com.ait.lienzo.tools.client.collection.MetaData;
+import com.ait.lienzo.tools.client.collection.NFastArrayList;
 import com.google.gwt.json.client.JSONObject;
 
 public interface IStorageEngine<M> extends IStorageEngineIterable<M>

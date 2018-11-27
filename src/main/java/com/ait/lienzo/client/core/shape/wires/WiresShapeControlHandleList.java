@@ -45,7 +45,7 @@ import com.ait.lienzo.client.core.shape.wires.event.WiresResizeStepEvent;
 import com.ait.lienzo.client.core.types.BoundingBox;
 import com.ait.lienzo.client.core.types.Point2D;
 import com.ait.lienzo.client.core.types.Point2DArray;
-import com.ait.tooling.nativetools.client.event.HandlerRegistrationManager;
+import com.ait.lienzo.tools.client.event.HandlerRegistrationManager;
 
 /**
  * This class handles the Wires Shape controls to provide additional features.
@@ -379,7 +379,7 @@ public class WiresShapeControlHandleList implements IControlHandleList
         parent.setY(ap[1]);
         parent.moveToTop();
 
-        for (final WiresShape child : m_wires_shape.getChildShapes())
+        for (final WiresShape child : m_wires_shape.getChildShapes().asList())
         {
             if (null != child.getControls())
             {
@@ -395,7 +395,7 @@ public class WiresShapeControlHandleList implements IControlHandleList
         double maxx = controlPoints.get(0).getX();
         double maxy = controlPoints.get(0).getY();
 
-        for (Point2D control : controlPoints)
+        for (Point2D control : controlPoints.asArray())
         {
             if (control.getX() < minx)
             {
@@ -433,7 +433,7 @@ public class WiresShapeControlHandleList implements IControlHandleList
         // with the parent one.
         if (!visible)
         {
-            for (WiresShape shape : m_wires_shape.getChildShapes())
+            for (WiresShape shape : m_wires_shape.getChildShapes().asList())
             {
                 if (shape.getControls() == null)
                 {

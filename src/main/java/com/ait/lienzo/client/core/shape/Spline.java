@@ -27,14 +27,25 @@ import com.ait.lienzo.client.core.types.PathPartList;
 import com.ait.lienzo.client.core.types.Point2D;
 import com.ait.lienzo.client.core.types.Point2DArray;
 import com.ait.lienzo.shared.core.types.ShapeType;
-import com.ait.tooling.nativetools.client.collection.NFastArrayList;
+import com.ait.lienzo.tools.client.collection.NFastArrayList;
 import com.google.gwt.json.client.JSONObject;
+
+import jsinterop.annotations.JsProperty;
 
 public class Spline extends AbstractMultiPointShape<Spline>
 {
     private boolean            m_fill = false;
 
     private final PathPartList m_list = new PathPartList();
+
+    @JsProperty
+    private double curveFactor = 0.5;
+
+    @JsProperty
+    private double angleFactor = 0;
+
+    @JsProperty
+    private boolean lineFlatten;
 
     /**
      * Constructor. Creates an instance of a spline.
@@ -56,7 +67,7 @@ public class Spline extends AbstractMultiPointShape<Spline>
     {
         if (m_list.size() < 1)
         {
-            parse(getAttributes());
+            parse();
         }
         return m_list.getBoundingBox();
     }
@@ -67,11 +78,11 @@ public class Spline extends AbstractMultiPointShape<Spline>
     * @param context the {@link Context2D} used to draw this spline.
     */
     @Override
-    protected boolean prepare(final Context2D context, final Attributes attr, final double alpha)
+    protected boolean prepare(final Context2D context, final double alpha)
     {
         if (m_list.size() < 1)
         {
-            parse(attr);
+            parse();
         }
         if (m_list.size() < 1)
         {
@@ -83,18 +94,18 @@ public class Spline extends AbstractMultiPointShape<Spline>
     }
 
     @Override
-    protected boolean fill(Context2D context, Attributes attr, double alpha)
+    protected boolean fill(Context2D context, double alpha)
     {
         if (m_fill)
         {
-            return super.fill(context, attr, alpha);
+            return super.fill(context, alpha);
         }
         return false;
     }
 
-    private final void parse(final Attributes attr)
+    private final void parse()
     {
-        final PathPoint[] points = getPathPoints(attr.getControlPoints());
+        final PathPoint[] points = getPathPoints(getControlPoints());
 
         final int size = points.length;
 
@@ -106,9 +117,9 @@ public class Spline extends AbstractMultiPointShape<Spline>
             }
             return;
         }
-        final double curveFactor = attr.getCurveFactor();
+        final double curveFactor = getCurveFactor();
 
-        final double angleFactor = attr.getAngleFactor();
+        final double angleFactor = getAngleFactor();
 
         boolean closed = false;
 
@@ -217,7 +228,7 @@ public class Spline extends AbstractMultiPointShape<Spline>
                 carray.set(i, PathPoint.toArray(cp1, cp2));
             }
         }
-        final boolean lineFlatten = attr.getLineFlatten();
+        final boolean lineFlatten = getLineFlatten();
 
         m_list.M(points[0].x, points[0].y);
 
@@ -283,31 +294,6 @@ public class Spline extends AbstractMultiPointShape<Spline>
         return points;
     }
 
-    /**
-     * Gets this spline's control points.
-     * 
-     * @return {@link Point2DArray}
-     */
-    public Point2DArray getControlPoints()
-    {
-        return getAttributes().getControlPoints();
-    }
-
-    /**
-     * Sets the control points for this curve.
-     * 
-     * @param points
-     *            A {@link Point2DArray} containing the control points
-     *       
-     * @return this Spline
-     */
-    public Spline setControlPoints(final Point2DArray points)
-    {
-        getAttributes().setControlPoints(points);
-
-        return refresh();
-    }
-
     @Override
     public Spline setPoint2DArray(Point2DArray points)
     {
@@ -322,36 +308,36 @@ public class Spline extends AbstractMultiPointShape<Spline>
 
     public double getCurveFactor()
     {
-        return getAttributes().getCurveFactor();
+        return this.curveFactor;
     }
 
     public Spline setCurveFactor(final double factor)
     {
-        getAttributes().setCurveFactor(factor);
+        this.curveFactor = factor;
 
         return refresh();
     }
 
     public double getAngleFactor()
     {
-        return getAttributes().getAngleFactor();
+        return this.angleFactor;
     }
 
     public Spline setAngleFactor(final double factor)
     {
-        getAttributes().setAngleFactor(factor);
+        this.angleFactor = angleFactor;
 
         return refresh();
     }
 
     public boolean getLineFlatten()
     {
-        return getAttributes().getLineFlatten();
+        return this.lineFlatten;
     }
 
     public Spline setLineFlatten(final boolean flat)
     {
-        getAttributes().setLineFlatten(flat);
+        this.lineFlatten = flat;
 
         return refresh();
     }

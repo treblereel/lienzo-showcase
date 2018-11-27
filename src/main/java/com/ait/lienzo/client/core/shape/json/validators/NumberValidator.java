@@ -19,6 +19,8 @@ package com.ait.lienzo.client.core.shape.json.validators;
 import com.google.gwt.json.client.JSONNumber;
 import com.google.gwt.json.client.JSONValue;
 
+import elemental2.core.JsNumber;
+
 public class NumberValidator extends AbstractAttributeTypeValidator
 {
     public static final NumberValidator INSTANCE = new NumberValidator();
@@ -51,8 +53,8 @@ public class NumberValidator extends AbstractAttributeTypeValidator
         }
     }
 
-    private final native boolean isNumber(double number)
-    /*-{
-		return isFinite(number);
-    }-*/;
+    private final boolean isNumber(double number)
+    {
+		return JsNumber.isFinite(number);
+    };
 }

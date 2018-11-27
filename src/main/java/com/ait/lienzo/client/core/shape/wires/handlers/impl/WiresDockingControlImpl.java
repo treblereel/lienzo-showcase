@@ -15,7 +15,7 @@ import com.ait.lienzo.client.core.shape.wires.picker.ColorMapBackedPicker;
 import com.ait.lienzo.client.core.types.BoundingBox;
 import com.ait.lienzo.client.core.types.Point2D;
 import com.ait.lienzo.client.core.util.Geometry;
-import com.ait.tooling.nativetools.client.event.HandlerRegistrationManager;
+import com.ait.lienzo.tools.client.event.HandlerRegistrationManager;
 import com.google.gwt.event.shared.HandlerRegistration;
 
 public class WiresDockingControlImpl extends AbstractWiresParentPickerControl
@@ -241,7 +241,7 @@ public class WiresDockingControlImpl extends AbstractWiresParentPickerControl
                     // this is a hack, to ensure it runs on the first before any resize computations
                     BoundingBox parentBox = event.getShape().getPath().getBoundingBox();
 
-                    // make sure everything is shifted to have x/y greater than 0
+                    // makeXY sure everything is shifted to have x/y greater than 0
                     double normaliseX = parentBox.getX() >= 0 ? 0 : 0 - parentBox.getX();
                     double normaliseY = parentBox.getY() >= 0 ? 0 : 0 - parentBox.getY();
 

@@ -45,12 +45,9 @@ import com.ait.lienzo.client.core.types.Transform;
 import com.ait.lienzo.client.core.util.ScratchPad;
 import com.ait.lienzo.shared.core.types.DataURLType;
 import com.ait.lienzo.shared.core.types.NodeType;
-import com.ait.tooling.common.api.java.util.function.Predicate;
-import com.ait.tooling.nativetools.client.collection.MetaData;
-import com.ait.tooling.nativetools.client.collection.NFastArrayList;
-import com.google.gwt.dom.client.CanvasElement;
-import com.google.gwt.dom.client.DivElement;
-import com.google.gwt.dom.client.Document;
+import com.ait.lienzo.tools.client.collection.MetaData;
+import com.ait.lienzo.tools.client.collection.NFastArrayList;
+import com.ait.lienzo.tools.common.api.java.util.function.Predicate;
 import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.dom.client.Style.Position;
 import com.google.gwt.dom.client.Style.Unit;
@@ -59,35 +56,47 @@ import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.json.client.JSONArray;
 import com.google.gwt.json.client.JSONObject;
 import com.google.gwt.json.client.JSONString;
+import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.Widget;
+
+import elemental2.dom.CSSProperties;
+import elemental2.dom.DomGlobal;
+import elemental2.dom.HTMLCanvasElement;
+import elemental2.dom.HTMLDivElement;
+import jsinterop.annotations.JsProperty;
 
 /**
  * Serves as a container for {@link Scene}
  * 
  * <ul>
- * <li>A {@link Viewport} contains three {@link Scene} (Main, Drag and Back Scene)</li>
+ * <li>A {@link Viewport} containsBoundingBox three {@link Scene} (Main, Drag and Back Scene)</li>
  * <li>The main {@link Scene} can contain multiple {@link Layer}.</li>
  * </ul> 
  */
 public class Viewport extends ContainerNode<Scene, Viewport>
 {
-    private int                    m_wide    = 0;
+    private       int            m_wide    = 0;
 
-    private int                    m_high    = 0;
+    private       int            m_high    = 0;
 
-    private Widget                 m_owns    = null;
+    private       Widget         m_owns    = null;
 
-    private final DivElement       m_element = Document.get().createDivElement();
+    private final HTMLDivElement m_element = (HTMLDivElement) DomGlobal.document.createElement("div");;
 
-    private Scene                  m_drag    = new Scene();
+    private       Scene          m_drag    = new Scene();
 
-    private Scene                  m_main    = null;
+    private       Scene          m_main    = null;
 
-    private Scene                  m_back    = new Scene();
+    private       Scene          m_back    = new Scene();
 
-    private ScratchPad             m_spad    = new ScratchPad(0, 0);
+    private       ScratchPad     m_spad    = new ScratchPad(0, 0);
 
-    private Mediators              m_mediators;
+    private       Mediators      m_mediators;
+
+    @JsProperty
+    private Transform            transform;
+
+    private static long idCounter;
 
     private final OnEventHandlers m_onEventHandlers = new OnEventHandlers();
 
@@ -130,6 +139,8 @@ public class Viewport extends ContainerNode<Scene, Viewport>
         super(NodeType.VIEWPORT, node, ctx);
     }
 
+
+
     @Override
     public final IStorageEngine<Scene> getDefaultStorageEngine()
     {
@@ -138,7 +149,25 @@ public class Viewport extends ContainerNode<Scene, Viewport>
 
     public Transform getTransform()
     {
-        return getAttributes().getTransform();
+        return this.transform;
+    }
+
+    /**
+     * Sets the Transform for this Viewport and fires a ZoomEvent
+     * to any ZoomHandlers registered with this Viewport.
+     *
+     *
+     * @param transform Transform
+     * @return this Viewport
+     */
+
+    public final Viewport setTransform(final Transform transform)
+    {
+        this.transform = transform;
+
+        super.fireEvent(new ViewportTransformChangedEvent(this));
+
+        return this;
     }
 
     @Override
@@ -171,6 +200,7 @@ public class Viewport extends ContainerNode<Scene, Viewport>
 
             setTransform(new Transform());
         }
+        m_element.id = "viewPort_div" + idCounter++;
     }
 
     public final boolean adopt(final Widget owns)
@@ -211,11 +241,11 @@ public class Viewport extends ContainerNode<Scene, Viewport>
     }
 
     /**
-     * Returns the {@link DivElement}
+     * Returns the {@link HTMLDivElement}
      * 
-     * @return {@link DivElement}
+     * @return {@link HTMLDivElement}
      */
-    public final DivElement getElement()
+    public final HTMLDivElement getElement()
     {
         return m_element;
     }
@@ -233,9 +263,9 @@ public class Viewport extends ContainerNode<Scene, Viewport>
 
         m_high = high;
 
-        getElement().getStyle().setWidth(wide, Unit.PX);
+        getElement().style.width = CSSProperties.WidthUnionType.of(wide + Unit.PX.getType());
 
-        getElement().getStyle().setHeight(high, Unit.PX);
+        getElement().style.height= CSSProperties.HeightUnionType.of(high + Unit.PX.getType());
 
         final NFastArrayList<Scene> scenes = getChildNodes();
 
@@ -281,13 +311,13 @@ public class Viewport extends ContainerNode<Scene, Viewport>
             {
                 throw new IllegalArgumentException("Too many Scene objects is Viewport.");
             }
-            DivElement element = scene.getElement();
+            HTMLDivElement element = scene.getElement();
 
             scene.setPixelSize(m_wide, m_high);
 
-            element.getStyle().setPosition(Position.ABSOLUTE);
+            element.style.position = Position.ABSOLUTE.getCssName();
 
-            element.getStyle().setDisplay(Display.INLINE_BLOCK);
+            element.style.display = Display.INLINE_BLOCK.getCssName();
 
             getElement().appendChild(element);
 
@@ -555,23 +585,6 @@ public class Viewport extends ContainerNode<Scene, Viewport>
         }
     }
 
-    /**
-     * Sets the Transform for this Viewport and fires a ZoomEvent
-     * to any ZoomHandlers registered with this Viewport.
-     * 
-     * 
-     * @param transform Transform
-     * @return this Viewport
-     */
-
-    public final Viewport setTransform(final Transform transform)
-    {
-        getAttributes().setTransform(transform);
-
-        super.fireEvent(new ViewportTransformChangedEvent(this));
-
-        return this;
-    }
 
     /**
      * Returns a {@link JSONObject} representation of the {@link Viewport} with its {@link Attributes} as well as its children.
@@ -591,10 +604,11 @@ public class Viewport extends ContainerNode<Scene, Viewport>
 
             if (false == meta.isEmpty())
             {
-                object.put("meta", new JSONObject(meta.getJSO()));
+                // @FIXME (mdp)
+                //object.putString("meta", new JSONObject(meta.getJSO()));
             }
         }
-        object.put("attributes", new JSONObject(getAttributes().getJSO()));
+        //object.put("attributes", new JSONObject(getAttributes().getJSO()));
 
         final JSONArray children = new JSONArray();
 
@@ -681,7 +695,7 @@ public class Viewport extends ContainerNode<Scene, Viewport>
 
     /**
      * Returns the {@link Mediators} for this viewport.
-     * Mediators can be used to e.g. to add zoom operations.
+     * Mediators can be used to e.g. to addBoundingBox zoom operations.
      * 
      * @return Mediators
      */
@@ -694,7 +708,7 @@ public class Viewport extends ContainerNode<Scene, Viewport>
      * Add a mediator to the stack of {@link Mediators} for this viewport.
      * The one that is added last, will be called first.
      * 
-     * Mediators can be used to e.g. to add zoom operations.
+     * Mediators can be used to e.g. to addBoundingBox zoom operations.
      * 
      * @param mediator IMediator
      */
@@ -780,9 +794,9 @@ public class Viewport extends ContainerNode<Scene, Viewport>
         }
 
         @Override
-        public CanvasElement getCanvasElement()
+        public HTMLCanvasElement getCanvasElement()
         {
-            final CanvasElement element = super.getCanvasElement();
+            final HTMLCanvasElement element = super.getCanvasElement();
 
             if (null != element)
             {
@@ -802,7 +816,7 @@ public class Viewport extends ContainerNode<Scene, Viewport>
 
         private static class DragContext2D extends Context2D
         {
-            public DragContext2D(CanvasElement element)
+            public DragContext2D(HTMLCanvasElement element)
             {
                 super(element);
             }

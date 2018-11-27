@@ -158,7 +158,7 @@ public class WiresCompositeControlImpl
                 parentPickerControl.getParent().getComputedLocation().add(candidate) :
                 candidate;
         if (null != parentPickerControl.getInitialParent()) {
-            co = co.minus(parentPickerControl.getInitialParent().getComputedLocation());
+            co = co.sub(parentPickerControl.getInitialParent().getComputedLocation());
         }
         return co;
     }

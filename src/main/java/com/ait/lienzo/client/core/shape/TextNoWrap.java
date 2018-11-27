@@ -113,11 +113,8 @@ public class TextNoWrap implements ITextWrapper {
 
     @Override
     public void drawString(final Context2D context,
-                           final Attributes attr,
+                           final String text,
                            final IDrawString drawCommand) {
-        drawCommand.draw(context,
-                         attr.getText(),
-                         0,
-                         0);
+        drawCommand.draw(context, text, 0, 0);
     }
 }

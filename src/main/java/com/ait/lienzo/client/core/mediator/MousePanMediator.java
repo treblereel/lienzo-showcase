@@ -33,7 +33,7 @@ import com.google.gwt.event.shared.GwtEvent;
  */
 public class MousePanMediator extends AbstractMediator
 {
-    private Point2D   m_last             = new Point2D();
+    private Point2D   m_last             = new Point2D(0,0);
 
     private boolean   m_dragging         = false;
 

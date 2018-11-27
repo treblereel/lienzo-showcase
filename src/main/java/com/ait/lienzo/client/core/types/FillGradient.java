@@ -18,6 +18,8 @@ package com.ait.lienzo.client.core.types;
 
 import com.google.gwt.core.client.JavaScriptObject;
 
+import jsinterop.annotations.JsType;
+
 /**
  * Common interface for {@link LinearGradient}, {@link RadialGradient}
  * and {@link PatternGradient}
@@ -32,15 +34,13 @@ public interface FillGradient
 
     public PatternGradient asPatternGradient();
 
-    public static class GradientJSO extends JavaScriptObject
+    @JsType
+    public static class GradientJSO
     {
+        public String type;
+
         protected GradientJSO()
         {
         }
-
-        public final native String getType()
-        /*-{
-        	return this.type;
-        }-*/;
     }
 }

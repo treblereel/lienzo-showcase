@@ -18,7 +18,7 @@ package com.ait.lienzo.client.core.shape.json.validators;
 
 import java.util.Set;
 
-import com.ait.tooling.common.api.java.util.StringOps;
+import com.ait.lienzo.tools.common.api.java.util.StringOps;
 import com.google.gwt.json.client.JSONArray;
 import com.google.gwt.json.client.JSONObject;
 import com.google.gwt.json.client.JSONValue;

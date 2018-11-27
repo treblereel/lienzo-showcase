@@ -34,9 +34,9 @@ import com.ait.lienzo.client.core.types.Point2DArray;
 import com.ait.lienzo.client.widget.DefaultDragConstraintEnforcer;
 import com.ait.lienzo.client.widget.DragConstraintEnforcer;
 import com.ait.lienzo.client.widget.DragContext;
-import com.ait.tooling.common.api.java.util.function.Consumer;
-import com.ait.tooling.nativetools.client.collection.NFastDoubleArray;
-import com.ait.tooling.nativetools.client.event.HandlerRegistrationManager;
+import com.ait.lienzo.tools.common.api.java.util.function.Consumer;
+import com.ait.lienzo.tools.client.collection.NFastDoubleArray;
+import com.ait.lienzo.tools.client.event.HandlerRegistrationManager;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.Timer;
 
@@ -457,7 +457,7 @@ public class WiresConnectorControlImpl implements WiresConnectorControl {
     }
 
     /**
-     * Timer class responsible to delay simulating a long press when click + drag to add a new
+     * Timer class responsible to delay simulating a long press when click + drag to addBoundingBox a new
      * control point. Besides that the delay is necessary to preserve the selection on connector
      * when there is only a click, in this case this time should be cancelled.
      */
@@ -481,9 +481,9 @@ public class WiresConnectorControlImpl implements WiresConnectorControl {
     public Shape<?> createTransientControlHandle(final Consumer<Point2D> addControlHandleConsumer) {
         final Shape<?> pointHandleShape = new Circle(R0);
         m_pointHandleDecorator.decorate(pointHandleShape, IShapeDecorator.ShapeState.INVALID);
-        //increase the selection area to make it easier do drag
-        pointHandleShape.getAttributes().setSelectionBoundsOffset(SELECTION_OFFSET);
-        pointHandleShape.getAttributes().setSelectionStrokeOffset(SELECTION_OFFSET);
+        //increase the selection area to makeXY it easier do drag
+        pointHandleShape.setSelectionBoundsOffset(SELECTION_OFFSET);
+        pointHandleShape.setSelectionStrokeOffset(SELECTION_OFFSET);
         pointHandleShape.setFillBoundsForSelection(true);
 
         //adding the handlers on the transient control handle
@@ -502,7 +502,7 @@ public class WiresConnectorControlImpl implements WiresConnectorControl {
             @Override
             public void onNodeMouseClick(NodeMouseClickEvent event) {
                 if(addControlPointTimer != null){
-                    //when clicking then cancel the add connector action and fire the click on the connector line
+                    //when clicking then cancel the addBoundingBox connector action and fire the click on the connector line
                     addControlPointTimer.cancel();
                     addControlPointTimer = null;
                     event.preventDefault();
@@ -511,7 +511,7 @@ public class WiresConnectorControlImpl implements WiresConnectorControl {
             }
         }));
 
-        //add the shape on the connector line
+        //addBoundingBox the shape on the connector line
         m_connector.getLine().getLayer().add(pointHandleShape);
 
         this.transientControlHandle = pointHandleShape;

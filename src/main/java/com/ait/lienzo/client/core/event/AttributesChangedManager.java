@@ -18,19 +18,23 @@ package com.ait.lienzo.client.core.event;
 
 import com.ait.lienzo.client.core.Attribute;
 import com.ait.lienzo.client.core.shape.json.IJSONSerializable;
-import com.ait.tooling.nativetools.client.collection.NFastStringHistogram;
-import com.ait.tooling.nativetools.client.collection.NFastStringMap;
-import com.ait.tooling.nativetools.client.collection.NFastStringSet;
+import com.ait.lienzo.tools.client.collection.NFastStringHistogram;
+import com.ait.lienzo.tools.client.collection.NFastStringMap;
+import com.ait.lienzo.tools.client.collection.NFastStringSet;
 import com.google.gwt.event.shared.HandlerManager;
 import com.google.gwt.event.shared.HandlerRegistration;
 
+import elemental2.core.JsArray;
+import elemental2.core.JsSet;
+import jsinterop.base.Js;
+
 public final class AttributesChangedManager
 {
-    private NFastStringHistogram           m_ctr;
+    private       NFastStringHistogram           m_ctr;
 
-    private NFastStringMap<HandlerManager> m_map;
+    private       NFastStringMap<HandlerManager> m_map;
 
-    private final IJSONSerializable<?>     m_ser;
+    private final IJSONSerializable<?>           m_ser;
 
     public AttributesChangedManager(final IJSONSerializable<?> ser)
     {
@@ -79,7 +83,9 @@ public final class AttributesChangedManager
         {
             final AttributesChangedEvent event = new AttributesChangedEvent(changed, begtime, endtime);
 
-            for (String name : changed)
+            // @FIXME why can't we use union typsace casting? (mdp)
+            String[] array = Js.uncheckedCast(changed);
+            for (String name : array)
             {
                 if (m_ctr.contains(name))
                 {

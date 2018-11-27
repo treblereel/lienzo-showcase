@@ -30,16 +30,19 @@ import com.ait.lienzo.client.core.types.BoundingBox;
 import com.ait.lienzo.client.core.util.ScratchPad;
 import com.ait.lienzo.shared.core.types.DataURLType;
 import com.ait.lienzo.shared.core.types.NodeType;
-import com.ait.tooling.common.api.java.util.function.Predicate;
-import com.ait.tooling.nativetools.client.collection.MetaData;
-import com.ait.tooling.nativetools.client.collection.NFastArrayList;
-import com.google.gwt.dom.client.DivElement;
-import com.google.gwt.dom.client.Document;
+import com.ait.lienzo.tools.client.collection.MetaData;
+import com.ait.lienzo.tools.client.collection.NFastArrayList;
+import com.ait.lienzo.tools.common.api.java.util.function.Predicate;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.shared.GwtEvent;
 import com.google.gwt.json.client.JSONArray;
 import com.google.gwt.json.client.JSONObject;
 import com.google.gwt.json.client.JSONString;
+
+import elemental2.dom.CSSProperties;
+import elemental2.dom.DomGlobal;
+import elemental2.dom.HTMLDivElement;
+import jsinterop.base.Js;
 
 /**
  * Scene serves as a container for {@link Layer}<
@@ -56,7 +59,9 @@ public class Scene extends ContainerNode<Layer, Scene>
 
     private Viewport         m_owns    = null;
 
-    private final DivElement m_element = Document.get().createDivElement();
+    private static long idCounter;
+
+    private final HTMLDivElement m_element = (HTMLDivElement) DomGlobal.document.createElement("div");;
 
     /**
      * Constructor. Creates an instance of a scene.
@@ -64,11 +69,13 @@ public class Scene extends ContainerNode<Layer, Scene>
     public Scene()
     {
         super(NodeType.SCENE, new SceneFastArrayStorageEngine());
+        m_element.id = "scene_div" + idCounter++;
     }
 
     protected Scene(final JSONObject node, final ValidationContext ctx) throws ValidationException
     {
         super(NodeType.SCENE, node, ctx);
+        m_element.id = "scene_div" + idCounter++;
     }
 
     @Override
@@ -95,11 +102,11 @@ public class Scene extends ContainerNode<Layer, Scene>
     }
 
     /**
-     * Returns the {@link DivElement}
+     * Returns the {@link HTMLDivElement}
      * 
-     * @return {@link DivElement}
+     * @return {@link HTMLDivElement}
      */
-    public DivElement getElement()
+    public HTMLDivElement getElement()
     {
         return m_element;
     }
@@ -163,9 +170,10 @@ public class Scene extends ContainerNode<Layer, Scene>
 
         m_high = high;
 
-        getElement().getStyle().setWidth(wide, Unit.PX);
+        // @FIXME is this correct? (mdp)
+        m_element.style.width = CSSProperties.WidthUnionType.of(wide + Unit.PX.getType());
 
-        getElement().getStyle().setHeight(high, Unit.PX);
+        m_element.style.height = CSSProperties.HeightUnionType.of(high + Unit.PX.getType());
 
         final NFastArrayList<Layer> layers = getChildNodes();
 
@@ -363,10 +371,11 @@ public class Scene extends ContainerNode<Layer, Scene>
 
             if (false == meta.isEmpty())
             {
-                object.put("meta", new JSONObject(meta.getJSO()));
+                // @FIXME (mdp)
+                // object.putString("meta", new JSONObject(meta.getJSO()));
             }
         }
-        object.put("attributes", new JSONObject(getAttributes().getJSO()));
+        // object.put("attributes", new JSONObject(getAttributes().getJSO()));
 
         final NFastArrayList<Layer> list = getChildNodes();
 
@@ -476,9 +485,9 @@ public class Scene extends ContainerNode<Layer, Scene>
     {
         if (LienzoCore.IS_CANVAS_SUPPORTED)
         {
-            while (getElement().getChildCount() > 0)
+            while (getElement().childElementCount > 0)
             {
-                getElement().removeChild(getElement().getChild(0));
+                getElement().removeChild(getElement().firstChild);
             }
         }
         super.removeAll();
@@ -496,17 +505,17 @@ public class Scene extends ContainerNode<Layer, Scene>
     {
         if ((null != layer) && (LienzoCore.IS_CANVAS_SUPPORTED))
         {
-            final int size = getElement().getChildCount();
+            final int size = (int) getElement().childElementCount;
 
             if (size < 2)
             {
                 return this;
             }
-            final DivElement element = layer.getElement();
+            final HTMLDivElement element = layer.getElement();
 
             for (int i = 0; i < size; i++)
             {
-                final DivElement look = getElement().getChild(i).cast();
+                final HTMLDivElement look = Js.uncheckedCast(getElement().childNodes.getAt(i));
 
                 if (look == element)
                 {
@@ -516,7 +525,7 @@ public class Scene extends ContainerNode<Layer, Scene>
 
                         break;
                     }
-                    getElement().insertBefore(element, getElement().getChild(i - 1));
+                    getElement().insertBefore(element, getElement().childNodes.getAt(i - 1));
 
                     break;
                 }
@@ -541,17 +550,17 @@ public class Scene extends ContainerNode<Layer, Scene>
     {
         if ((null != layer) && (LienzoCore.IS_CANVAS_SUPPORTED))
         {
-            final int size = getElement().getChildCount();
+            final int size = (int) getElement().childElementCount;
 
             if (size < 2)
             {
                 return this;
             }
-            final DivElement element = layer.getElement();
+            final HTMLDivElement element = layer.getElement();
 
             for (int i = 0; i < size; i++)
             {
-                final DivElement look = getElement().getChild(i).cast();
+                final HTMLDivElement look = Js.uncheckedCast(getElement().childNodes.getAt(i));
 
                 if (look == element)
                 {
@@ -561,7 +570,9 @@ public class Scene extends ContainerNode<Layer, Scene>
                     }
                     getElement().removeChild(element);
 
-                    getElement().insertAfter(element, getElement().getChild(i + 1));
+                    // @FIXME does this really need the +1 and nextsibling. We sholud tes this (mdp)
+                    getElement().insertBefore(element, getElement().childNodes.getAt(i+1).nextSibling);
+                    //getElement().insertAfter(element, getElement().getChild(i + 1)); // FIXME  his is what it was before (md)
 
                     break;
                 }
@@ -586,13 +597,13 @@ public class Scene extends ContainerNode<Layer, Scene>
     {
         if ((null != layer) && (LienzoCore.IS_CANVAS_SUPPORTED))
         {
-            final int size = getElement().getChildCount();
+            final double size = getElement().childElementCount;
 
             if (size < 2)
             {
                 return this;
             }
-            final DivElement element = layer.getElement();
+            final HTMLDivElement element = layer.getElement();
 
             getElement().removeChild(element);
 
@@ -618,17 +629,17 @@ public class Scene extends ContainerNode<Layer, Scene>
     {
         if ((null != layer) && (LienzoCore.IS_CANVAS_SUPPORTED))
         {
-            final int size = getElement().getChildCount();
+            final int size = (int) getElement().childElementCount;
 
             if (size < 2)
             {
                 return this;
             }
-            final DivElement element = layer.getElement();
+            final HTMLDivElement element = layer.getElement();
 
             getElement().removeChild(element);
 
-            getElement().insertFirst(element);
+            getElement().insertBefore(element, getElement().firstChild);
 
             final NFastArrayList<Layer> layers = getChildNodes();
 

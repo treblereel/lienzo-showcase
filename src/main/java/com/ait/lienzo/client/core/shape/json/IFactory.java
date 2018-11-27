@@ -43,7 +43,7 @@ public interface IFactory<T extends IJSONSerializable<T>>
      * Returns the type name that is used when serializing an object of this type.
      * <p>
      * See {@link ShapeType} and {@link NodeType} for the type names used by the Lienzo toolkit
-     * (and make sure you don't use the same names!)
+     * (and makeXY sure you don't use the same names!)
      * 
      * @return String e.g. "Circle" for the Circle class
      */

@@ -55,8 +55,7 @@ import com.ait.lienzo.client.core.types.Point2D;
 import com.ait.lienzo.client.core.types.Transform;
 import com.ait.lienzo.client.core.util.ScratchPad;
 import com.ait.lienzo.shared.core.types.NodeType;
-import com.ait.tooling.nativetools.client.NObjectOnWire;
-import com.ait.tooling.nativetools.client.collection.MetaData;
+import com.ait.lienzo.tools.client.collection.MetaData;
 import com.google.gwt.event.shared.GwtEvent;
 import com.google.gwt.event.shared.GwtEvent.Type;
 import com.google.gwt.event.shared.HandlerRegistration;
@@ -64,7 +63,7 @@ import com.google.gwt.event.shared.HandlerRegistration;
 /**
  * Interface to be implemented by drawable objects.
  */
-public interface IDrawable<T extends IDrawable<T>> extends NObjectOnWire, IJSONSerializable<T>
+public interface IDrawable<T extends IDrawable<T>> extends IJSONSerializable<T> //NObjectOnWire,
 {
     public T copy();
 
@@ -84,15 +83,9 @@ public interface IDrawable<T extends IDrawable<T>> extends NObjectOnWire, IJSONS
 
     public NodeType getNodeType();
 
-    public Attributes getAttributes();
-
     public List<Attribute> getBoundingBoxAttributes();
     
     public T refresh();
-
-    public T setName(String name);
-
-    public String getName();
 
     public T setID(String id);
 

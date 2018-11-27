@@ -20,12 +20,11 @@ import com.ait.lienzo.client.core.Context2D;
 import com.ait.lienzo.client.core.shape.MultiPath;
 import com.ait.lienzo.client.core.shape.wires.*;
 import com.ait.lienzo.client.core.types.ColorKeyRotor;
-import com.ait.lienzo.client.core.types.ImageData;
 import com.ait.lienzo.client.core.types.ImageDataPixelColor;
 import com.ait.lienzo.client.core.types.Point2D;
 import com.ait.lienzo.client.core.util.ScratchPad;
-import com.ait.tooling.nativetools.client.collection.NFastArrayList;
-import com.ait.tooling.nativetools.client.collection.NFastStringMap;
+import com.ait.lienzo.tools.client.collection.NFastArrayList;
+import com.ait.lienzo.tools.client.collection.NFastStringMap;
 
 public class ColorMapBackedPicker
 {

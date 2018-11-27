@@ -19,10 +19,12 @@ package com.ait.lienzo.client.core.image.filter;
 import com.ait.lienzo.client.core.shape.json.IFactory;
 import com.ait.lienzo.client.core.shape.json.validators.ValidationContext;
 import com.ait.lienzo.client.core.shape.json.validators.ValidationException;
-import com.ait.lienzo.client.core.types.ImageData;
+import com.ait.lienzo.client.core.types.ImageDataUtil;
 import com.ait.lienzo.shared.core.types.ImageFilterType;
-import com.google.gwt.canvas.dom.client.CanvasPixelArray;
 import com.google.gwt.json.client.JSONObject;
+
+import elemental2.core.Uint8ClampedArray;
+import elemental2.dom.ImageData;
 
 /**
  * A class that allows for easy creation of a Luminosity Gray Scale based Image Filter.
@@ -48,13 +50,13 @@ public class LuminosityGrayScaleImageDataFilter extends AbstractImageDataFilter<
         }
         if (copy)
         {
-            source = source.copy();
+            source = ImageDataUtil.copy(source);
         }
         if (false == isActive())
         {
             return source;
         }
-        final CanvasPixelArray data = source.getData();
+        final Uint8ClampedArray data = source.data;
 
         if (null == data)
         {

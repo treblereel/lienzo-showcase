@@ -73,7 +73,7 @@ public class MouseWheelZoomMediator extends AbstractMediator
     }
 
     /**
-     * Sets the minimum scale of the viewport.
+     * Sets the minimum scaleWithXY of the viewport.
      * 
      * The default value is 0 (unlimited.)
      * 
@@ -85,7 +85,7 @@ public class MouseWheelZoomMediator extends AbstractMediator
     }
 
     /**
-     * Sets the minimum scale of the viewport.
+     * Sets the minimum scaleWithXY of the viewport.
      * 
      * The default value is 0 (unlimited.)
      * 
@@ -100,7 +100,7 @@ public class MouseWheelZoomMediator extends AbstractMediator
     }
 
     /**
-     * Sets the maximum scale of the viewport.
+     * Sets the maximum scaleWithXY of the viewport.
      * 
      * The default value is Double.MAX_VALUE (unlimited.)
      * 
@@ -112,7 +112,7 @@ public class MouseWheelZoomMediator extends AbstractMediator
     }
 
     /**
-     * Sets the maximum scale of the viewport.
+     * Sets the maximum scaleWithXY of the viewport.
      * 
      * The default value is Double.MAX_VALUE (unlimited.)
      * 

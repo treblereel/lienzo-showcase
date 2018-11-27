@@ -20,7 +20,7 @@ import com.ait.lienzo.client.core.shape.json.IJSONSerializable;
 import com.ait.lienzo.client.core.shape.json.validators.ValidationContext;
 import com.ait.lienzo.client.core.shape.json.validators.ValidationException;
 import com.ait.lienzo.client.core.types.BoundingBox;
-import com.ait.tooling.nativetools.client.collection.NFastArrayList;
+import com.ait.lienzo.tools.client.collection.NFastArrayList;
 import com.google.gwt.json.client.JSONObject;
 
 public abstract class AbstractFastArrayStorageEngine<M> extends AbstractStorageEngine<M>

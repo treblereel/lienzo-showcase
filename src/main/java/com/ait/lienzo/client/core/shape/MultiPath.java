@@ -23,7 +23,7 @@ import com.ait.lienzo.client.core.types.PathPartList;
 import com.ait.lienzo.client.core.types.PathPartList.PathPartListJSO;
 import com.ait.lienzo.client.core.types.Point2D;
 import com.ait.lienzo.shared.core.types.ShapeType;
-import com.ait.tooling.nativetools.client.collection.NFastArrayList;
+import com.ait.lienzo.tools.client.collection.NFastArrayList;
 import com.google.gwt.json.client.JSONArray;
 import com.google.gwt.json.client.JSONObject;
 import com.google.gwt.json.client.JSONValue;
@@ -84,9 +84,10 @@ public class MultiPath extends AbstractMultiPathPartShape<MultiPath>
 
                         if (null != path)
                         {
-                            PathPartListJSO pjso = path.getJavaScriptObject().cast();
-
-                            add(new PathPartList(pjso, true));
+//@FIXME fix this later (mdp)
+//                            PathPartListJSO pjso = path.getJavaScriptObject().cast();
+//
+//                            addBoundingBox(new PathPartList(pjso, true));
                         }
                     }
                 }
@@ -224,10 +225,11 @@ public class MultiPath extends AbstractMultiPathPartShape<MultiPath>
 
         final int size = list.size();
 
-        for (int i = 0; i < size; i++)
-        {
-            path.set(i, list.get(i).toJSONArray());
-        }
+//@FIXME fix later (mdp)
+//        for (int i = 0; i < size; i++)
+//        {
+//            path.set(i, list.get(i).toJSONArray());
+//        }
         object.put("path-list", path);
 
         return object;

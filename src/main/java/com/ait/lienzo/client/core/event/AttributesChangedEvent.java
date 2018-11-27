@@ -20,9 +20,11 @@ import java.util.List;
 
 import com.ait.lienzo.client.core.Attribute;
 import com.ait.lienzo.client.core.AttributeOp;
-import com.ait.tooling.common.api.flow.Flows.BooleanOp;
-import com.ait.tooling.nativetools.client.collection.NFastStringSet;
+import com.ait.lienzo.tools.client.collection.NFastStringSet;
+import com.ait.lienzo.tools.common.api.flow.Flows.BooleanOp;
 import com.google.gwt.core.client.GWT;
+
+import elemental2.core.Global;
 
 public class AttributesChangedEvent extends AbstractNodeEvent<AttributesChangedHandler>
 {
@@ -41,7 +43,7 @@ public class AttributesChangedEvent extends AbstractNodeEvent<AttributesChangedH
 
     public AttributesChangedEvent(final String name, final long begtime, final long endtime)
     {
-        this(new NFastStringSet(name), begtime, endtime);
+        this(NFastStringSet.makeFromString(name), begtime, endtime);
     }
 
     public AttributesChangedEvent(final NFastStringSet changed, final long begtime, final long endtime)
@@ -84,7 +86,7 @@ public class AttributesChangedEvent extends AbstractNodeEvent<AttributesChangedH
 
     public final String toJSONString()
     {
-        return m_changed.toJSONString();
+        return Global.JSON.stringify(m_changed);
     }
 
     public final boolean any(final Attribute... attributes)

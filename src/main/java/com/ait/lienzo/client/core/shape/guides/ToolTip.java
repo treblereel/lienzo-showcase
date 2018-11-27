@@ -31,7 +31,7 @@ import com.ait.lienzo.shared.core.types.GroupType;
 import com.ait.lienzo.shared.core.types.IColor;
 import com.ait.lienzo.shared.core.types.TextAlign;
 import com.ait.lienzo.shared.core.types.TextBaseLine;
-import com.ait.tooling.common.api.java.util.StringOps;
+import com.ait.lienzo.tools.client.StringOps;
 import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.core.client.Scheduler.RepeatingCommand;
 import com.google.gwt.json.client.JSONObject;

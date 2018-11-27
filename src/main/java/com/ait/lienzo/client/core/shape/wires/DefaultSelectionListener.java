@@ -8,12 +8,12 @@ public class DefaultSelectionListener implements SelectionListener
     {
         SelectionManager.ChangedItems changed = selectedItems.getChanged();
 
-        for (WiresShape shape : changed.getRemovedShapes())
+        for (WiresShape shape : changed.getRemovedShapes().asList())
         {
             unselect(shape);
         }
 
-        for (WiresConnector connector : changed.getRemovedConnectors())
+        for (WiresConnector connector : changed.getRemovedConnectors().asList())
         {
             unselect(connector);
         }

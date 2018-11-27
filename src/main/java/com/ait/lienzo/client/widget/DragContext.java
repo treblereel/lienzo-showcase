@@ -23,6 +23,7 @@ import com.ait.lienzo.client.core.shape.Node;
 import com.ait.lienzo.client.core.types.Point2D;
 import com.ait.lienzo.client.core.types.Transform;
 import com.ait.lienzo.shared.core.types.NodeType;
+import com.ait.lienzo.tools.client.Console;
 
 /**
  * DragContext maintains information during a Drag operation of a Node.
@@ -154,7 +155,7 @@ public class DragContext
 
         while (null != node)
         {
-            alpha = alpha * node.getAttributes().getAlpha();
+            alpha = alpha * node.getAlpha();
 
             node = node.getParent();
 
@@ -208,6 +209,8 @@ public class DragContext
         {
             m_prim.setY(m_lsty = y);
         }
+        //Console.get().info("2) m_prim " + m_evtx + ":" + m_evty + ":" + m_dstx + " : " + m_dsty + " : " + p2 + " : " + m_lclp + " : " + m_prim.getLocation());
+
     }
 
     /**
@@ -370,7 +373,7 @@ public class DragContext
      * @return
      */
     public Point2D getDistanceAdjusted() {
-        return getEventAdjusted().minus(getStartAdjusted());
+        return getEventAdjusted().sub(getStartAdjusted());
     }
 
     /**

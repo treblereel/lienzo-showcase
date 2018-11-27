@@ -16,7 +16,7 @@
 
 package com.ait.lienzo.client.core.event;
 
-import com.ait.tooling.nativetools.client.collection.NFastStringSet;
+import com.ait.lienzo.tools.client.collection.NFastStringSet;
 import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.core.client.Scheduler.RepeatingCommand;
 
@@ -38,7 +38,7 @@ public final class ImmediateAttributesChangedBatcher implements IAttributesChang
             @Override
             public boolean execute()
             {
-                manager.fireChanged(new NFastStringSet(name), time, time);
+                manager.fireChanged(NFastStringSet.makeFromString(name), time, time);
 
                 return false;
             }

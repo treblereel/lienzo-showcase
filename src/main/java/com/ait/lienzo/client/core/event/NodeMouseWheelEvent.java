@@ -20,6 +20,11 @@ import com.google.gwt.dom.client.NativeEvent;
 import com.google.gwt.event.dom.client.MouseEvent;
 import com.google.gwt.event.dom.client.MouseWheelEvent;
 
+import elemental2.dom.DomGlobal;
+import elemental2.dom.WheelEvent;
+import jsinterop.base.Js;
+import jsinterop.base.JsPropertyMap;
+
 public class NodeMouseWheelEvent extends AbstractNodeMouseEvent<MouseEvent<?>, NodeMouseWheelHandler>
 {
     private static final Type<NodeMouseWheelHandler> TYPE = new Type<NodeMouseWheelHandler>();
@@ -92,6 +97,7 @@ public class NodeMouseWheelEvent extends AbstractNodeMouseEvent<MouseEvent<?>, N
      */
     public static double getNormalizedDeltaY(MouseWheelEvent e)
     {
+
         return getNativeNormalizedDeltaY(e.getNativeEvent());
     }
 
@@ -107,18 +113,21 @@ public class NodeMouseWheelEvent extends AbstractNodeMouseEvent<MouseEvent<?>, N
      * @see http://stackoverflow.com/questions/6775168/zooming-with-canvas        
      * @see http://www.adomas.org/javascript-mouse-wheel/
      */
-    private static native final double getNativeNormalizedDeltaY(NativeEvent event)
-    /*-{
-		var delta = 0;
-		if (event.wheelDelta) {
+    private static final double getNativeNormalizedDeltaY(NativeEvent event)
+    {
+        WheelEvent    wheelEvent = Js.uncheckedCast(event);
+        JsPropertyMap<Object> wheelventMap  = Js.uncheckedCast(wheelEvent);
+
+		double delta = 0;
+		if (wheelventMap.has("wheelDelta")) {
 			// IE/Opera.
-			delta = event.wheelDelta / 120;
-		} else if (event.detail) {
+			delta = (int)wheelventMap.get("wheelDelta") / 120;
+		} else if (wheelventMap.has("detail")) {
 			// Mozilla case. 
 			// In Mozilla, sign of delta is different than in IE.
 			// Also, delta is multiple of 3.
-			delta = -event.detail / 3;
+			delta = -wheelEvent.detail / 3;
 		}
 		return delta;
-    }-*/;
+    };
 }

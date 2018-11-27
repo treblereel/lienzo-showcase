@@ -27,44 +27,46 @@ import com.ait.lienzo.client.core.shape.AbstractImageShape;
 import com.ait.lienzo.client.core.shape.Layer;
 import com.ait.lienzo.client.core.shape.json.IFactory;
 import com.ait.lienzo.client.core.types.BoundingBox;
-import com.ait.lienzo.client.core.types.ImageData;
 import com.ait.lienzo.client.core.util.ScratchPad;
 import com.ait.lienzo.shared.core.types.ImageFilterType;
 import com.ait.lienzo.shared.core.types.ImageSelectionMode;
-import com.google.gwt.dom.client.ImageElement;
 import com.google.gwt.json.client.JSONObject;
 import com.google.gwt.resources.client.ImageResource;
-import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.RootPanel;
+
+import elemental2.dom.HTMLImageElement;
+import elemental2.dom.ImageData;
+import elemental2.dom.Image;
+import jsinterop.base.Js;
 
 /**
  * ImageProxy is used by {@link AbstractImageShape} to load and draw the image.
  */
 public class ImageProxy<T extends AbstractImageShape<T>> implements ImageDataFilterable<ImageProxy<T>>
 {
-    private final T                          m_image;
+    private final T                m_image;
 
-    private Image                      m_img;
+    private       Image            m_img;
 
-    private ImageElement               m_jsimg;
+    private       HTMLImageElement m_jsimg;
 
-    private final ScratchPad           m_normalImage;
+    private final ScratchPad       m_normalImage;
 
-    private final ScratchPad           m_filterImage;
+    private final ScratchPad       m_filterImage;
 
-    private final ScratchPad           m_selectImage;
+    private final ScratchPad       m_selectImage;
 
-    private int                        m_clip_xpos;
+    private       int              m_clip_xpos;
 
-    private int                        m_clip_ypos;
+    private       int              m_clip_ypos;
 
-    private int                        m_clip_wide;
+    private       int              m_clip_wide;
 
-    private int                        m_clip_high;
+    private       int              m_clip_high;
 
-    private int                        m_dest_wide;
+    private       int              m_dest_wide;
 
-    private int                        m_dest_high;
+    private       int              m_dest_high;
 
     private boolean                    m_is_done     = false;
 
@@ -130,7 +132,7 @@ public class ImageProxy<T extends AbstractImageShape<T>> implements ImageDataFil
                         m_img)
         {
             @Override
-            public final void onImageElementLoad(final ImageElement elem)
+            public final void onImageElementLoad(final HTMLImageElement elem)
             {
                 doInitialize(elem);
             }
@@ -165,7 +167,7 @@ public class ImageProxy<T extends AbstractImageShape<T>> implements ImageDataFil
                         m_img)
         {
             @Override
-            public final void onImageElementLoad(final ImageElement elem)
+            public final void onImageElementLoad(final HTMLImageElement elem)
             {
                 doInitialize(elem);
             }
@@ -178,17 +180,17 @@ public class ImageProxy<T extends AbstractImageShape<T>> implements ImageDataFil
         };
     }
 
-    private final void doInitialize(final ImageElement image)
+    private final void doInitialize(final HTMLImageElement image)
     {
         m_jsimg = image;
 
         if (m_clip_wide == 0)
         {
-            m_clip_wide = m_jsimg.getWidth();
+            m_clip_wide = m_jsimg.width;
         }
         if (m_clip_high == 0)
         {
-            m_clip_high = m_jsimg.getHeight();
+            m_clip_high = m_jsimg.height;
         }
         if (m_dest_wide == 0)
         {
@@ -289,7 +291,7 @@ public class ImageProxy<T extends AbstractImageShape<T>> implements ImageDataFil
     {
         if (null != m_jsimg)
         {
-            return m_jsimg.getSrc();
+            return m_jsimg.src;
         }
         return null;
     }
@@ -498,11 +500,11 @@ public class ImageProxy<T extends AbstractImageShape<T>> implements ImageDataFil
 
             if (m_clip_wide == 0)
             {
-                m_clip_wide = m_jsimg.getWidth();
+                m_clip_wide = m_jsimg.width;
             }
             if (m_clip_high == 0)
             {
-                m_clip_high = m_jsimg.getHeight();
+                m_clip_high = m_jsimg.height;
             }
             if (m_dest_wide == 0)
             {
@@ -650,7 +652,7 @@ public class ImageProxy<T extends AbstractImageShape<T>> implements ImageDataFil
         }
         if ((m_fastout) || (false == filtered))
         {
-            final ScratchPad temp = new ScratchPad(m_jsimg.getWidth(), m_jsimg.getHeight());
+            final ScratchPad temp = new ScratchPad(m_jsimg.width, m_jsimg.height);
 
             temp.getContext().drawImage(m_jsimg, 0, 0);
 
@@ -684,14 +686,14 @@ public class ImageProxy<T extends AbstractImageShape<T>> implements ImageDataFil
         return m_dest_high;
     }
 
-    public ImageElement getImage()
+    public HTMLImageElement getImage()
     {
         return m_jsimg;
     }
 
     public BoundingBox getBoundingBox()
     {
-        return new BoundingBox(0, 0, m_dest_wide, m_dest_high);
+        return BoundingBox.fromDoubles(0, 0, m_dest_wide, m_dest_high);
     }
 
     public void destroy()
@@ -702,8 +704,9 @@ public class ImageProxy<T extends AbstractImageShape<T>> implements ImageDataFil
 
     void destroy(final Image image)
     {
-        RootPanel.get().remove(image);
-        image.removeFromParent();
+        // @TODO check this works (mdp)
+        RootPanel.get().remove(Js.uncheckedCast(image));
+        image.parentNode.removeChild(image);
         m_image.removeFromParent();
         m_normalImage.clear();
         m_filterImage.clear();

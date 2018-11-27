@@ -16,13 +16,13 @@
 
 package com.ait.lienzo.client.core.shape;
 
+import com.ait.lienzo.client.core.Attribute;
 import com.ait.lienzo.client.core.image.ImageClipBounds;
 import com.ait.lienzo.client.core.image.ImageProxy;
 import com.ait.lienzo.client.core.image.ImageShapeLoadedHandler;
 import com.ait.lienzo.client.core.shape.json.validators.ValidationContext;
 import com.ait.lienzo.client.core.shape.json.validators.ValidationException;
 import com.ait.lienzo.client.core.types.BoundingBox;
-import com.ait.lienzo.client.core.types.ImageData;
 import com.ait.lienzo.shared.core.types.ImageSelectionMode;
 import com.ait.lienzo.shared.core.types.ImageSerializationMode;
 import com.ait.lienzo.shared.core.types.ShapeType;
@@ -30,9 +30,21 @@ import com.google.gwt.json.client.JSONObject;
 import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.safehtml.shared.UriUtils;
 
+import elemental2.dom.ImageData;
+import jsinterop.annotations.JsProperty;
+
 public abstract class AbstractImageShape<T extends AbstractImageShape<T>> extends Shape<T>
 {
     private final ImageProxy<T> m_proxy;
+
+    @JsProperty
+    private String                 url;
+
+    @JsProperty
+    private ImageSerializationMode imageSerializationMode;
+
+    @JsProperty
+    private ImageSelectionMode imageSelectionMode;
 
     protected AbstractImageShape(final ShapeType type, final JSONObject node, final ValidationContext ctx) throws ValidationException
     {
@@ -86,7 +98,7 @@ public abstract class AbstractImageShape<T extends AbstractImageShape<T>> extend
      */
     public String getURL()
     {
-        return getAttributes().getURL();
+        return this.url;
     }
 
     /**
@@ -98,10 +110,10 @@ public abstract class AbstractImageShape<T extends AbstractImageShape<T>> extend
      */
     protected void setURL(final String url)
     {
-        getAttributes().setURL(toValidURL(url));
+        this.url = toValidURL(url);
     }
 
-    protected String toValidURL(String url)
+    public static String toValidURL(String url)
     {
         if ((null == url) || ((url = url.trim()).isEmpty()) || (url.startsWith("#")))
         {
@@ -122,24 +134,24 @@ public abstract class AbstractImageShape<T extends AbstractImageShape<T>> extend
 
     public ImageSelectionMode getImageSelectionMode()
     {
-        return getAttributes().getImageSelectionMode();
+        return this.imageSelectionMode;
     }
 
     public T setImageSelectionMode(final ImageSelectionMode selectionMode)
     {
-        getAttributes().setImageSelectionMode(selectionMode);
+        this.imageSelectionMode = selectionMode;
 
         return upcast();
     }
 
     public ImageSerializationMode getImageSerializationMode()
     {
-        return getAttributes().getSerializationMode();
+        return this.imageSerializationMode;
     }
 
     public T setImageSerializationMode(final ImageSerializationMode serializationMode)
     {
-        getAttributes().setSerializationMode(serializationMode);
+        this.imageSerializationMode = imageSerializationMode;
 
         return upcast();
     }
