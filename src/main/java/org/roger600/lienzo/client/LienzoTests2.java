@@ -1,21 +1,20 @@
 package org.roger600.lienzo.client;
 
-import org.gwtproject.core.client.EntryPoint;
-
-import com.ait.lienzo.client.core.shape.GridLayer;
 import com.ait.lienzo.client.core.shape.Layer;
-import com.ait.lienzo.client.core.shape.Line;
-import com.ait.lienzo.client.widget.LienzoPanel2;
+import com.google.gwt.core.client.EntryPoint;
+import elemental2.dom.DomGlobal;
+import elemental2.dom.Event;
+import elemental2.dom.EventListener;
+import elemental2.dom.HTMLButtonElement;
+import elemental2.dom.MouseEvent;
+
+import static elemental2.dom.DomGlobal.document;
+
 //import com.ait.lienzo.client.widget.LienzoPanel;
 //import com.google.gwt.core.client.EntryPoint;
 //import com.google.gwt.user.client.ui.Button;
 
-import elemental2.dom.DomGlobal;
-import elemental2.dom.HTMLBodyElement;
-import elemental2.dom.HTMLDivElement;
-
-public class LienzoTests2 implements EntryPoint
-{
+public class LienzoTests2 implements EntryPoint {
 
     public static final int WIDE = 2815; //2815
     public static final int HIGH = 1415; // 1415
@@ -82,14 +81,24 @@ public class LienzoTests2 implements EntryPoint
 //    private int buttonsPanelSize = 0;
 //    private FlowPanel testsPanel = new FlowPanel();
 
-    public void onModuleLoad()
-    {
+    public void onModuleLoad() {
+
+        HTMLButtonElement btn = (HTMLButtonElement) document.createElement("button");
+        btn.textContent = "I am a button";
+        btn.addEventListener("click", evt -> {
+            if(evt instanceof MouseEvent) {
+                MouseEvent mouseEvent = (MouseEvent) evt;
+                DomGlobal.alert("Clicked " + mouseEvent.clientX + " " + mouseEvent.clientY);
+
+            }
+        });
+
+        document.body.appendChild(btn);
+
         //HTMLBodyElement body   = DomGlobal.document.body;
         //HTMLDivElement  div    = (HTMLDivElement) DomGlobal.document.getElementById("demo");
 
         //lienzo.
-
-
 
 //        buttonsPanel.getElement().getStyle().setMargin( 10, Style.Unit.PX );
 //
@@ -115,7 +124,7 @@ public class LienzoTests2 implements EntryPoint
 
     }
 
-    private void createPanelForTest( MyLienzoTest test ) {
+    private void createPanelForTest(MyLienzoTest test) {
 //
 //        screenButtonsPanel.clear();
 //        testsPanel.clear();
@@ -151,7 +160,7 @@ public class LienzoTests2 implements EntryPoint
 
     }
 
-    private void addMediators( Layer layer ) {
+    private void addMediators(Layer layer) {
 //        final Mediators mediators = layer.getViewport().getMediators();
 //        mediators.push( new MouseWheelZoomMediator( zommFilters ) );
 //        mediators.push( new MousePanMediator( panFilters ) );
@@ -191,5 +200,4 @@ public class LienzoTests2 implements EntryPoint
 //
 //        panel.setBackgroundLayer( gridLayer );
 //    }
-
 }
