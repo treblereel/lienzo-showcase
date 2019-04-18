@@ -1,0 +1,36 @@
+<!doctype html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <script type="text/javascript" language="javascript" src="org.roger600.lienzo.LienzoTests/org.roger600.lienzo.LienzoTests.nocache.js"></script>
+</head>
+
+<body>
+    <button onclick="myFunction()">Click me</button>
+
+    <div id="demo" style="display:inline-block; width:2815px; height:1415px">
+        asdf
+    </div>
+
+    <script>
+
+        window.onload = function() {
+            var div = document.getElementById("demo");
+            // div.onclick = function() {
+            //     alert('Hi1!');
+            // };
+
+            // div.addEventListener('click', function (event) {
+            //     alert('Hi!');
+            // });
+        };
+
+
+        function myFunction() {
+            var test1 = new Test1()
+            test1.exec(document.getElementById("demo"));
+        }
+    </script>
+</body>
+
+</html>
