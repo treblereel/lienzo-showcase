@@ -18,7 +18,6 @@ package com.ait.lienzo.client.core.types;
 
 import com.ait.lienzo.client.core.types.LinearGradient.LinearGradientJSO;
 import com.ait.lienzo.shared.core.types.IColor;
-import com.google.gwt.json.client.JSONObject;
 
 import elemental2.core.Global;
 import jsinterop.annotations.JsType;

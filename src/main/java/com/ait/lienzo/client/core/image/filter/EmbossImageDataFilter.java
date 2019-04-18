@@ -21,7 +21,6 @@ import com.ait.lienzo.client.core.shape.json.validators.ValidationContext;
 import com.ait.lienzo.client.core.shape.json.validators.ValidationException;
 import com.ait.lienzo.client.core.types.ImageDataUtil;
 import com.ait.lienzo.shared.core.types.ImageFilterType;
-import com.google.gwt.json.client.JSONObject;
 
 import elemental2.core.JsArray;
 import elemental2.core.Uint8ClampedArray;
@@ -36,7 +35,7 @@ public class EmbossImageDataFilter extends AbstractImageDataFilter<EmbossImageDa
         super(ImageFilterType.EmbossImageDataFilterType);
     }
 
-    protected EmbossImageDataFilter(JSONObject node, ValidationContext ctx) throws ValidationException
+    protected EmbossImageDataFilter(Object node, ValidationContext ctx) throws ValidationException
     {
         super(ImageFilterType.EmbossImageDataFilterType, node, ctx);
     }
@@ -112,7 +111,7 @@ public class EmbossImageDataFilter extends AbstractImageDataFilter<EmbossImageDa
         }
 
         @Override
-        public EmbossImageDataFilter create(JSONObject node, ValidationContext ctx) throws ValidationException
+        public EmbossImageDataFilter create(Object node, ValidationContext ctx) throws ValidationException
         {
             return new EmbossImageDataFilter(node, ctx);
         }

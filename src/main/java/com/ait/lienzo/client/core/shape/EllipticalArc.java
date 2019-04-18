@@ -24,7 +24,6 @@ import com.ait.lienzo.client.core.shape.json.validators.ValidationContext;
 import com.ait.lienzo.client.core.shape.json.validators.ValidationException;
 import com.ait.lienzo.client.core.types.BoundingBox;
 import com.ait.lienzo.shared.core.types.ShapeType;
-import com.google.gwt.json.client.JSONObject;
 
 import jsinterop.annotations.JsProperty;
 
@@ -80,7 +79,7 @@ public class EllipticalArc extends Shape<EllipticalArc>
         setRadiusX(radiusX).setRadiusY(radiusY).setStartAngle(startAngle).setEndAngle(endAngle).setCounterClockwise(false);
     }
 
-    protected EllipticalArc(final JSONObject node, final ValidationContext ctx) throws ValidationException
+    protected EllipticalArc(final Object node, final ValidationContext ctx) throws ValidationException
     {
         super(ShapeType.ELLIPTICAL_ARC, node, ctx);
     }
@@ -257,7 +256,7 @@ public class EllipticalArc extends Shape<EllipticalArc>
         }
 
         @Override
-        public EllipticalArc create(final JSONObject node, final ValidationContext ctx) throws ValidationException
+        public EllipticalArc create(final Object node, final ValidationContext ctx) throws ValidationException
         {
             return new EllipticalArc(node, ctx);
         }

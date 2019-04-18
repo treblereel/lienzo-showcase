@@ -27,7 +27,6 @@ import com.ait.lienzo.client.core.types.Point2D;
 import com.ait.lienzo.client.core.types.Point2DArray;
 import com.ait.lienzo.client.core.util.Geometry;
 import com.ait.lienzo.shared.core.types.ShapeType;
-import com.google.gwt.json.client.JSONObject;
 
 /**
  * Quadratic curves, a type of Bezier curve, are defined by a context point, a control point, and an ending point.
@@ -66,7 +65,7 @@ public class QuadraticCurve extends AbstractMultiPointShape<QuadraticCurve>
         this(new Point2D(0, 0), cp, ep);
     }
 
-    protected QuadraticCurve(final JSONObject node, final ValidationContext ctx) throws ValidationException
+    protected QuadraticCurve(final Object node, final ValidationContext ctx) throws ValidationException
     {
         super(ShapeType.QUADRATIC_CURVE, node, ctx);
     }
@@ -146,7 +145,7 @@ public class QuadraticCurve extends AbstractMultiPointShape<QuadraticCurve>
         }
 
         @Override
-        public QuadraticCurve create(final JSONObject node, final ValidationContext ctx) throws ValidationException
+        public QuadraticCurve create(final Object node, final ValidationContext ctx) throws ValidationException
         {
             return new QuadraticCurve(node, ctx);
         }

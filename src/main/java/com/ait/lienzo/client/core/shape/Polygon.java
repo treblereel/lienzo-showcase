@@ -28,7 +28,6 @@ import com.ait.lienzo.client.core.types.Point2D;
 import com.ait.lienzo.client.core.types.Point2DArray;
 import com.ait.lienzo.client.core.util.Geometry;
 import com.ait.lienzo.shared.core.types.ShapeType;
-import com.google.gwt.json.client.JSONObject;
 
 import jsinterop.annotations.JsProperty;
 
@@ -75,7 +74,7 @@ public class Polygon extends AbstractMultiPointShape<Polygon>
         this(Point2DArray.fromArrayOfDouble(array));
     }
 
-    protected Polygon(final JSONObject node, final ValidationContext ctx) throws ValidationException
+    protected Polygon(final Object node, final ValidationContext ctx) throws ValidationException
     {
         super(ShapeType.POLYGON, node, ctx);
     }
@@ -212,7 +211,7 @@ public class Polygon extends AbstractMultiPointShape<Polygon>
         }
 
         @Override
-        public Polygon create(final JSONObject node, final ValidationContext ctx) throws ValidationException
+        public Polygon create(final Object node, final ValidationContext ctx) throws ValidationException
         {
             return new Polygon(node, ctx);
         }

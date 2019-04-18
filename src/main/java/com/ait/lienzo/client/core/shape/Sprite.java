@@ -18,6 +18,8 @@ package com.ait.lienzo.client.core.shape;
 
 import java.util.List;
 
+import org.gwtproject.resources.client.ImageResource;
+
 import com.ait.lienzo.client.core.Attribute;
 import com.ait.lienzo.client.core.Context2D;
 import com.ait.lienzo.client.core.config.LienzoCore;
@@ -33,34 +35,31 @@ import com.ait.lienzo.client.core.types.SpriteBehaviorMap;
 import com.ait.lienzo.client.core.util.ScratchPad;
 import com.ait.lienzo.shared.core.types.ImageSerializationMode;
 import com.ait.lienzo.shared.core.types.ShapeType;
+import com.ait.lienzo.tools.client.Timer;
 import com.ait.lienzo.tools.client.collection.MetaData;
-import com.google.gwt.json.client.JSONObject;
-import com.google.gwt.json.client.JSONString;
-import com.google.gwt.resources.client.ImageResource;
-import com.google.gwt.user.client.Timer;
 
 import elemental2.dom.HTMLImageElement;
 import jsinterop.annotations.JsProperty;
 
 public class Sprite extends Shape<Sprite>
 {
-    private int                 m_index  = 0;
+    private int                    m_index  = 0;
 
-    private BoundingBox[]       m_frames = null;
+    private BoundingBox[]          m_frames = null;
 
-    private HTMLImageElement    m_sprite = null;
+    private HTMLImageElement       m_sprite = null;
 
-    private SpriteLoadedHandler m_loaded = null;
+    private SpriteLoadedHandler    m_loaded = null;
 
-    private SpriteOnTickHandler m_ontick = null;
+    private SpriteOnTickHandler    m_ontick = null;
 
-    private SpriteOnRollHandler m_onroll = null;
+    private SpriteOnRollHandler    m_onroll = null;
 
-    private boolean             m_paused = true;
+    private boolean                m_paused = true;
 
-    private boolean             m_inited = false;
+    private boolean                m_inited = false;
 
-    private Timer               m_ticker = null;
+    private Timer                  m_ticker = null;
 
     @JsProperty
     private String                 url;
@@ -148,7 +147,7 @@ public class Sprite extends Shape<Sprite>
         }
     }
 
-    public Sprite(JSONObject node, ValidationContext ctx) throws ValidationException
+    public Sprite(Object node, ValidationContext ctx) throws ValidationException
     {
         super(ShapeType.SPRITE, node, ctx);
     }
@@ -460,39 +459,41 @@ public class Sprite extends Shape<Sprite>
         return (m_sprite != null);
     }
 
-    @Override
-    public JSONObject toJSONObject()
-    {
-        //JSONObject attr = new JSONObject(getAttributes().getJSO());
-        JSONObject attr = new JSONObject();
 
-        if (getSerializationMode() == ImageSerializationMode.DATA_URL)
-        {
-            String url = getURL();
-
-            if (false == url.startsWith("data:"))
-            {
-                attr.put("url", new JSONString(ScratchPad.toDataURL(m_sprite)));
-            }
-        }
-        JSONObject object = new JSONObject();
-
-        object.put("type", new JSONString(getShapeType().getValue()));
-
-        if (hasMetaData())
-        {
-            final MetaData meta = getMetaData();
-
-            if (false == meta.isEmpty())
-            {
-                // @FIXME (mdp)
-                //object.putString("meta", new JSONObject(meta.getJSO()));
-            }
-        }
-        object.put("attributes", attr);
-
-        return object;
-    }
+    // @FIXME serialization (mdp)
+//    @Override
+//    public JSONObject toJSONObject()
+//    {
+//        //JSONObject attr = new JSONObject(getAttributes().getJSO());
+//        JSONObject attr = new JSONObject();
+//
+//        if (getSerializationMode() == ImageSerializationMode.DATA_URL)
+//        {
+//            String url = getURL();
+//
+//            if (false == url.startsWith("data:"))
+//            {
+//                attr.put("url", new JSONString(ScratchPad.toDataURL(m_sprite)));
+//            }
+//        }
+//        JSONObject object = new JSONObject();
+//
+//        object.put("type", new JSONString(getShapeType().getValue()));
+//
+//        if (hasMetaData())
+//        {
+//            final MetaData meta = getMetaData();
+//
+//            if (false == meta.isEmpty())
+//            {
+//                // @FIXME (mdp)
+//                //object.putString("meta", new JSONObject(meta.getJSO()));
+//            }
+//        }
+//        object.put("attributes", attr);
+//
+//        return object;
+//    }
 
     @Override
     public List<Attribute> getBoundingBoxAttributes()
@@ -520,7 +521,7 @@ public class Sprite extends Shape<Sprite>
         }
 
         @Override
-        public Sprite create(JSONObject node, ValidationContext ctx) throws ValidationException
+        public Sprite create(Object node, ValidationContext ctx) throws ValidationException
         {
             return new Sprite(node, ctx);
         }

@@ -19,7 +19,7 @@ package com.ait.lienzo.tools.client;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import com.google.gwt.core.client.GWT;
+import org.gwtproject.core.client.GWT;
 
 public final class Logging implements ILogging
 {
@@ -38,7 +38,9 @@ public final class Logging implements ILogging
 
     private Logging()
     {
-        m_logger = Logger.getLogger(GWT.getModuleName() + "_logger");
+        // @FIXME getModuleName() does not exist in gwt3, yet (mdp);
+        m_logger = Logger.getLogger( "lienzo-core_logger");
+        //m_logger = Logger.getLogger(GWT.getModuleName() + "_logger");
     }
 
     @Override

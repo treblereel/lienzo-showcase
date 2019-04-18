@@ -29,7 +29,6 @@ import com.ait.lienzo.client.core.util.Geometry;
 import com.ait.lienzo.client.core.util.GeometryException;
 import com.ait.lienzo.shared.core.types.ArrowType;
 import com.ait.lienzo.shared.core.types.ShapeType;
-import com.google.gwt.json.client.JSONObject;
 
 import jsinterop.annotations.JsProperty;
 
@@ -114,7 +113,7 @@ public class Arrow extends Shape<Arrow>
      * 
      * @param node serialized arrow 
      */
-    protected Arrow(JSONObject node, ValidationContext ctx) throws ValidationException
+    protected Arrow(Object node, ValidationContext ctx) throws ValidationException
     {
         super(ShapeType.ARROW, node, ctx);
     }
@@ -557,7 +556,7 @@ public class Arrow extends Shape<Arrow>
         }
 
         @Override
-        public Arrow create(JSONObject node, ValidationContext ctx) throws ValidationException
+        public Arrow create(Object node, ValidationContext ctx) throws ValidationException
         {
             return new Arrow(node, ctx);
         }

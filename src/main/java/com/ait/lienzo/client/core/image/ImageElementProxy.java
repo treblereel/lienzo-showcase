@@ -2,33 +2,29 @@ package com.ait.lienzo.client.core.image;
 
 import com.ait.lienzo.client.core.Context2D;
 import com.ait.lienzo.client.core.config.LienzoCore;
-import com.google.gwt.user.client.ui.RootPanel;
-import com.google.gwt.user.client.ui.Image;
+import com.ait.lienzo.client.widget.RootPanel;
 
+import elemental2.dom.Event;
 import elemental2.dom.HTMLImageElement;
 import jsinterop.base.Js;
 
 // @FIXME need rogoer to help me understand this, before I continue (mdp)
 public class ImageElementProxy {
     private HTMLImageElement imageElement;
-    private Image imageWidget;
 
     public ImageElementProxy() {
     }
 
-    ImageElementProxy(HTMLImageElement imageElement, Image imageWidget) {
+    ImageElementProxy(HTMLImageElement imageElement) {
         this.imageElement = imageElement;
-        this.imageWidget = imageWidget;
     }
 
     public void load(final String url,
                      final Runnable callback) {
-        assert null == imageWidget;
         assert null == imageElement;
-        imageWidget = new Image();
 
         new ImageLoader(url,
-                        Js.uncheckedCast(imageWidget.getElement())) {
+                        imageElement) {
 
             @Override
             public void onImageElementLoad(final HTMLImageElement image) {
@@ -77,9 +73,7 @@ public class ImageElementProxy {
     }
 
     public void destroy() {
-        RootPanel.get().remove(imageWidget);
-        imageWidget.removeFromParent();
+        RootPanel.get().remove(imageElement);
         imageElement = null;
-        imageWidget = null;
     }
 }

@@ -22,6 +22,10 @@ import java.util.List;
 import com.ait.lienzo.client.core.Attribute;
 import com.ait.lienzo.client.core.Context2D;
 import com.ait.lienzo.client.core.config.LienzoCore;
+import com.ait.lienzo.client.core.event.EventReceiver;
+import com.ait.lienzo.client.core.shape.ContainerNode.ContainerNodeFactory;
+import com.ait.lienzo.tools.client.event.HandlerRegistration;
+import com.ait.lienzo.tools.client.event.INodeEvent;
 import com.ait.lienzo.client.core.event.OnEventHandlers;
 import com.ait.lienzo.client.core.event.OrientationChangeEvent;
 import com.ait.lienzo.client.core.event.OrientationChangeHandler;
@@ -31,7 +35,6 @@ import com.ait.lienzo.client.core.event.ResizeEndEvent;
 import com.ait.lienzo.client.core.event.ResizeEndHandler;
 import com.ait.lienzo.client.core.event.ResizeStartEvent;
 import com.ait.lienzo.client.core.event.ResizeStartHandler;
-import com.ait.lienzo.client.core.event.OnMouseEventHandler;
 import com.ait.lienzo.client.core.event.ViewportTransformChangedEvent;
 import com.ait.lienzo.client.core.event.ViewportTransformChangedHandler;
 import com.ait.lienzo.client.core.mediator.IMediator;
@@ -48,21 +51,16 @@ import com.ait.lienzo.shared.core.types.NodeType;
 import com.ait.lienzo.tools.client.collection.MetaData;
 import com.ait.lienzo.tools.client.collection.NFastArrayList;
 import com.ait.lienzo.tools.common.api.java.util.function.Predicate;
-import com.google.gwt.dom.client.Style.Display;
-import com.google.gwt.dom.client.Style.Position;
-import com.google.gwt.dom.client.Style.Unit;
-import com.google.gwt.event.shared.GwtEvent;
-import com.google.gwt.event.shared.HandlerRegistration;
-import com.google.gwt.json.client.JSONArray;
-import com.google.gwt.json.client.JSONObject;
-import com.google.gwt.json.client.JSONString;
-import com.google.gwt.user.client.ui.HTML;
-import com.google.gwt.user.client.ui.Widget;
+import org.gwtproject.dom.style.shared.Display;
+import org.gwtproject.dom.style.shared.Position;
+import org.gwtproject.dom.style.shared.Unit;
+import com.gwtlienzo.event.shared.EventHandler;
 
 import elemental2.dom.CSSProperties;
 import elemental2.dom.DomGlobal;
 import elemental2.dom.HTMLCanvasElement;
 import elemental2.dom.HTMLDivElement;
+import elemental2.dom.HTMLElement;
 import jsinterop.annotations.JsProperty;
 
 /**
@@ -73,13 +71,13 @@ import jsinterop.annotations.JsProperty;
  * <li>The main {@link Scene} can contain multiple {@link Layer}.</li>
  * </ul> 
  */
-public class Viewport extends ContainerNode<Scene, Viewport>
+public class Viewport extends ContainerNode<Scene, Viewport> implements EventReceiver
 {
     private       int            m_wide    = 0;
 
     private       int            m_high    = 0;
 
-    private       Widget         m_owns    = null;
+    private       HTMLElement    m_owns    = null;
 
     private final HTMLDivElement m_element = (HTMLDivElement) DomGlobal.document.createElement("div");;
 
@@ -100,6 +98,7 @@ public class Viewport extends ContainerNode<Scene, Viewport>
 
     private final OnEventHandlers m_onEventHandlers = new OnEventHandlers();
 
+    private ViewportTransformChangedEvent viewportTransformChangedEvent;
 
     public Viewport()
     {
@@ -134,7 +133,7 @@ public class Viewport extends ContainerNode<Scene, Viewport>
         setSceneAndState(new Scene());
     }
 
-    protected Viewport(final JSONObject node, final ValidationContext ctx) throws ValidationException
+    protected Viewport(final Object node, final ValidationContext ctx) throws ValidationException
     {
         super(NodeType.VIEWPORT, node, ctx);
     }
@@ -165,8 +164,10 @@ public class Viewport extends ContainerNode<Scene, Viewport>
     {
         this.transform = transform;
 
-        super.fireEvent(new ViewportTransformChangedEvent(this));
-
+        viewportTransformChangedEvent.revive();
+        viewportTransformChangedEvent.override(this);
+        super.fireEvent(viewportTransformChangedEvent);
+        viewportTransformChangedEvent.kill();
         return this;
     }
 
@@ -192,6 +193,8 @@ public class Viewport extends ContainerNode<Scene, Viewport>
 
         m_mediators = new Mediators(this);
 
+        viewportTransformChangedEvent = new ViewportTransformChangedEvent(getElement());
+
         final Transform transform = getTransform();
 
         if (null == transform)
@@ -203,7 +206,7 @@ public class Viewport extends ContainerNode<Scene, Viewport>
         m_element.id = "viewPort_div" + idCounter++;
     }
 
-    public final boolean adopt(final Widget owns)
+    public final boolean adopt(final HTMLElement owns)
     {
         if (null == m_owns)
         {
@@ -212,6 +215,11 @@ public class Viewport extends ContainerNode<Scene, Viewport>
             return true;
         }
         return false;
+    }
+
+    public HTMLElement getOwnerHTMLElement()
+    {
+        return m_owns;
     }
 
     @Override
@@ -586,40 +594,41 @@ public class Viewport extends ContainerNode<Scene, Viewport>
     }
 
 
-    /**
-     * Returns a {@link JSONObject} representation of the {@link Viewport} with its {@link Attributes} as well as its children.
-     * 
-     * @return {@link JSONObject}
-     */
-    @Override
-    public final JSONObject toJSONObject()
-    {
-        final JSONObject object = new JSONObject();
-
-        object.put("type", new JSONString(getNodeType().getValue()));
-
-        if (hasMetaData())
-        {
-            final MetaData meta = getMetaData();
-
-            if (false == meta.isEmpty())
-            {
-                // @FIXME (mdp)
-                //object.putString("meta", new JSONObject(meta.getJSO()));
-            }
-        }
-        //object.put("attributes", new JSONObject(getAttributes().getJSO()));
-
-        final JSONArray children = new JSONArray();
-
-        children.set(0, getScene().toJSONObject());
-
-        object.put("children", children);
-
-        object.put("storage", getStorageEngine().toJSONObject());
-
-        return object;
-    }
+    // @FIXME seialisation (mdp)
+//    /**
+//     * Returns a {@link JSONObject} representation of the {@link Viewport} with its {@link Attributes} as well as its children.
+//     *
+//     * @return {@link JSONObject}
+//     */
+//    @Override
+//    public final JSONObject toJSONObject()
+//    {
+//        final JSONObject object = new JSONObject();
+//
+//        object.put("type", new JSONString(getNodeType().getValue()));
+//
+//        if (hasMetaData())
+//        {
+//            final MetaData meta = getMetaData();
+//
+//            if (false == meta.isEmpty())
+//            {
+//                // @FIXME (mdp)
+//                //object.putString("meta", new JSONObject(meta.getJSO()));
+//            }
+//        }
+//        //object.put("attributes", new JSONObject(getAttributes().getJSO()));
+//
+//        final JSONArray children = new JSONArray();
+//
+//        children.set(0, getScene().toJSONObject());
+//
+//        object.put("children", children);
+//
+//        object.put("storage", getStorageEngine().toJSONObject());
+//
+//        return object;
+//    }
 
     private final Layer getBackgroundLayer()
     {
@@ -644,7 +653,7 @@ public class Viewport extends ContainerNode<Scene, Viewport>
     /**
      * Fires the given GWT event.
      */
-    public final void fireEvent(final GwtEvent<?> event)
+    public final  <H extends EventHandler, S> void fireEvent(final INodeEvent<H, S> event)
     {
         getScene().fireEvent(event);
     }
@@ -717,17 +726,17 @@ public class Viewport extends ContainerNode<Scene, Viewport>
         m_mediators.push(mediator);
     }
 
-    /**
-     * Adds a ViewportTransformChangedHandler that will be notified whenever the Viewport's 
-     * transform changes (probably due to a zoom or pan operation.)
-     * 
-     * @param handler ViewportTransformChangedHandler
-     * @return HandlerRegistration
-     */
-    public HandlerRegistration addViewportTransformChangedHandler(final ViewportTransformChangedHandler handler)
-    {
-        return addEnsureHandler(ViewportTransformChangedEvent.getType(), handler);
-    }
+//    /**
+//     * Adds a ViewportTransformChangedHandler that will be notified whenever the Viewport's
+//     * transform changes (probably due to a zoom or pan operation.)
+//     *
+//     * @param handler ViewportTransformChangedHandler
+//     * @return HandlerRegistration
+//     */
+//    public HandlerRegistration addViewportTransformChangedHandler(final ViewportTransformChangedHandler handler)
+//    {
+//        return addEnsureHandler(ViewportTransformChangedEvent.getType(), handler);
+//    }
 
     public static class ViewportFactory extends ContainerNodeFactory<Viewport>
     {
@@ -742,7 +751,7 @@ public class Viewport extends ContainerNode<Scene, Viewport>
         }
 
         @Override
-        public final Viewport container(final JSONObject node, final ValidationContext ctx) throws ValidationException
+        public final Viewport container(final Object node, final ValidationContext ctx) throws ValidationException
         {
             return new Viewport(node, ctx);
         }

@@ -33,7 +33,6 @@ import com.ait.lienzo.client.core.types.BoundingPoints;
 import com.ait.lienzo.shared.core.types.NodeType;
 import com.ait.lienzo.tools.client.collection.NFastArrayList;
 import com.ait.lienzo.tools.common.api.java.util.function.Predicate;
-import com.google.gwt.json.client.JSONObject;
 
 /**
  * ContainerNode acts as a Collection holder for primitives.
@@ -60,7 +59,7 @@ public abstract class ContainerNode<M extends IDrawable<?>, T extends ContainerN
         setStorageEngine(storage);
     }
 
-    protected ContainerNode(final NodeType type, final JSONObject node, final ValidationContext ctx) throws ValidationException
+    protected ContainerNode(final NodeType type, final Object node, final ValidationContext ctx) throws ValidationException
     {
         super(type, node, ctx);
     }
@@ -396,10 +395,10 @@ public abstract class ContainerNode<M extends IDrawable<?>, T extends ContainerN
             super(typeName);
         }
 
-        protected abstract C container(JSONObject node, ValidationContext ctx) throws ValidationException;
+        protected abstract C container(Object node, ValidationContext ctx) throws ValidationException;
 
         @Override
-        public C create(final JSONObject node, final ValidationContext ctx) throws ValidationException
+        public C create(final Object node, final ValidationContext ctx) throws ValidationException
         {
             final C container = container(node, ctx);
 

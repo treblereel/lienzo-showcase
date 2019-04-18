@@ -20,7 +20,6 @@ import com.ait.lienzo.client.core.Attribute;
 import com.ait.lienzo.client.core.shape.json.validators.ValidationContext;
 import com.ait.lienzo.client.core.shape.json.validators.ValidationException;
 import com.ait.lienzo.shared.core.types.ImageFilterType;
-import com.google.gwt.json.client.JSONObject;
 
 import jsinterop.annotations.JsProperty;
 
@@ -36,7 +35,7 @@ public abstract class AbstractValueImageDataFilter<T extends AbstractValueImageD
         setValue(value);
     }
 
-    protected AbstractValueImageDataFilter(final ImageFilterType type, final JSONObject node, final ValidationContext ctx) throws ValidationException
+    protected AbstractValueImageDataFilter(final ImageFilterType type, final Object node, final ValidationContext ctx) throws ValidationException
     {
         super(type, node, ctx);
     }

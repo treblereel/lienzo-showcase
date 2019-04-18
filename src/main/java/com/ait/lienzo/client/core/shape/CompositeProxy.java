@@ -40,7 +40,6 @@ import com.ait.lienzo.shared.core.types.DragConstraint;
 import com.ait.lienzo.shared.core.types.DragMode;
 import com.ait.lienzo.shared.core.types.NodeType;
 import com.ait.lienzo.shared.core.types.ProxyType;
-import com.google.gwt.json.client.JSONObject;
 
 public abstract class CompositeProxy<C extends CompositeProxy<C, P>, P extends IPrimitive<?>> extends Node<C>implements IPrimitive<C>
 {
@@ -57,7 +56,7 @@ public abstract class CompositeProxy<C extends CompositeProxy<C, P>, P extends I
         m_type = type;
     }
 
-    protected CompositeProxy(final ProxyType type, final JSONObject node, final ValidationContext ctx) throws ValidationException
+    protected CompositeProxy(final ProxyType type, final Object node, final ValidationContext ctx) throws ValidationException
     {
         super(NodeType.PROXY, node, ctx);
 
@@ -241,12 +240,13 @@ public abstract class CompositeProxy<C extends CompositeProxy<C, P>, P extends I
         return cast();
     }
 
-    @Override
-    public JSONObject toJSONObject()
-    {
-        // TODO Auto-generated method stub
-        return null;
-    }
+    // @FIXME serialization (mdp)
+//    @Override
+//    public JSONObject toJSONObject()
+//    {
+//        // TODO Auto-generated method stub
+//        return null;
+//    }
 
     @Override
     public DragConstraintEnforcer getDragConstraints()

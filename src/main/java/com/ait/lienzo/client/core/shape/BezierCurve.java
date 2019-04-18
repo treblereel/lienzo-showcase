@@ -27,7 +27,6 @@ import com.ait.lienzo.client.core.types.Point2D;
 import com.ait.lienzo.client.core.types.Point2DArray;
 import com.ait.lienzo.client.core.util.Geometry;
 import com.ait.lienzo.shared.core.types.ShapeType;
-import com.google.gwt.json.client.JSONObject;
 
 /**
  * Bezier curves are defined with two anchor points and two control points.
@@ -69,7 +68,7 @@ public class BezierCurve extends AbstractMultiPointShape<BezierCurve>
         this(new Point2D(0, 0), c1, c2, ep);
     }
 
-    protected BezierCurve(final JSONObject node, final ValidationContext ctx) throws ValidationException
+    protected BezierCurve(final Object node, final ValidationContext ctx) throws ValidationException
     {
         super(ShapeType.BEZIER_CURVE, node, ctx);
     }
@@ -161,7 +160,7 @@ public class BezierCurve extends AbstractMultiPointShape<BezierCurve>
         }
 
         @Override
-        public BezierCurve create(final JSONObject node, final ValidationContext ctx) throws ValidationException
+        public BezierCurve create(final Object node, final ValidationContext ctx) throws ValidationException
         {
             return new BezierCurve(node, ctx);
         }

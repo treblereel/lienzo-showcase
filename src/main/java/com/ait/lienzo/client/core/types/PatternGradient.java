@@ -18,7 +18,6 @@ package com.ait.lienzo.client.core.types;
 
 import com.ait.lienzo.client.core.util.ScratchPad;
 import com.ait.lienzo.shared.core.types.FillRepeat;
-import com.google.gwt.json.client.JSONObject;
 
 import elemental2.core.Global;
 import elemental2.dom.HTMLImageElement;

@@ -16,8 +16,6 @@
 
 package com.ait.lienzo.client.core.types;
 
-import com.google.gwt.core.client.JavaScriptObject;
-
 import jsinterop.annotations.JsType;
 
 /**

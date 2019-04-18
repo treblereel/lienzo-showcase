@@ -14,10 +14,11 @@
    limitations under the License.
  */
 
-package com.ait.lienzo.client.core.shape.wires.event;
+package com.ait.lienzo.tools.client.event;
 
-import com.google.gwt.event.shared.EventHandler;
-
-public interface WiresEventHandler extends EventHandler
+public interface INodeXYEvent<H, S> extends INodeEvent<H, S>
 {
+    public int getX();
+
+    public int getY();
 }

@@ -21,7 +21,6 @@ import com.ait.lienzo.client.core.shape.json.validators.ValidationContext;
 import com.ait.lienzo.client.core.shape.json.validators.ValidationException;
 import com.ait.lienzo.client.core.types.ImageDataUtil;
 import com.ait.lienzo.shared.core.types.ImageFilterType;
-import com.google.gwt.json.client.JSONObject;
 
 import elemental2.core.JsArray;
 import elemental2.core.Uint8ClampedArray;
@@ -44,7 +43,7 @@ public class HueImageDataFilter extends AbstractValueImageDataFilter<HueImageDat
         super(ImageFilterType.HueImageDataFilterType, value);
     }
 
-    protected HueImageDataFilter(JSONObject node, ValidationContext ctx) throws ValidationException
+    protected HueImageDataFilter(Object node, ValidationContext ctx) throws ValidationException
     {
         super(ImageFilterType.HueImageDataFilterType, node, ctx);
     }
@@ -127,7 +126,7 @@ public class HueImageDataFilter extends AbstractValueImageDataFilter<HueImageDat
         }
 
         @Override
-        public HueImageDataFilter create(JSONObject node, ValidationContext ctx) throws ValidationException
+        public HueImageDataFilter create(Object node, ValidationContext ctx) throws ValidationException
         {
             return new HueImageDataFilter(node, ctx);
         }

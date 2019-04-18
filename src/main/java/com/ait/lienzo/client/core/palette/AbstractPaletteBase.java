@@ -24,10 +24,6 @@ import com.ait.lienzo.client.core.shape.json.validators.ValidationContext;
 import com.ait.lienzo.client.core.shape.json.validators.ValidationException;
 import com.ait.lienzo.shared.core.types.PaletteType;
 import com.ait.lienzo.tools.client.collection.MetaData;
-import com.google.gwt.core.client.JavaScriptObject;
-import com.google.gwt.json.client.JSONObject;
-import com.google.gwt.json.client.JSONString;
-import com.google.gwt.json.client.JSONValue;
 
 public abstract class AbstractPaletteBase<T extends AbstractPaletteBase<T>> implements IJSONSerializable<T>
 {
@@ -43,7 +39,7 @@ public abstract class AbstractPaletteBase<T extends AbstractPaletteBase<T>> impl
     }
 
 
-    protected AbstractPaletteBase(final PaletteType type, final JSONObject node, final ValidationContext ctx) throws ValidationException
+    protected AbstractPaletteBase(final PaletteType type, final Object node, final ValidationContext ctx) throws ValidationException
     {
         // @FIXME re-enable htis later (mdp)
         m_type = type;
@@ -121,28 +117,29 @@ public abstract class AbstractPaletteBase<T extends AbstractPaletteBase<T>> impl
         return m_meta;
     }
 
+    // @FIXME serialisation (mdp)
     @Override
     public final String toJSONString()
     {
-        return toJSONObject().toString();
+        return null; //toJSONObject().toString();
     }
 
-    @Override
-    public JSONObject toJSONObject()
-    {
-        JSONObject object = new JSONObject();
-
-        object.put("type", new JSONString(m_type.getValue()));
-
-        if (false == getMetaData().isEmpty())
-        {
-            // @FIXME (mdp)
-            // object.putString("meta", new JSONObject(getMetaData().getJSO()));
-        }
-        //object.putString("attributes", new JSONObject(getAttributes().getJSO()));
-
-        return object;
-    }
+//    @Override
+//    public JSONObject toJSONObject()
+//    {
+//        JSONObject object = new JSONObject();
+//
+//        object.put("type", new JSONString(m_type.getValue()));
+//
+//        if (false == getMetaData().isEmpty())
+//        {
+//            // @FIXME (mdp)
+//            // object.putString("meta", new JSONObject(getMetaData().getJSO()));
+//        }
+//        //object.putString("attributes", new JSONObject(getAttributes().getJSO()));
+//
+//        return object;
+//    }
 
     @Override
     public IFactory<?> getFactory()

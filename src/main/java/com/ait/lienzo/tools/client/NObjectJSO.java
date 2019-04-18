@@ -16,8 +16,6 @@
 
 package com.ait.lienzo.tools.client;
 
-import com.google.gwt.core.client.JavaScriptObject;
-
 import elemental2.core.Global;
 import elemental2.core.JsArray;
 import elemental2.core.JsBoolean;
@@ -48,15 +46,15 @@ public class NObjectJSO implements JsIterable<JsIterableTypeParameterArrayUnionT
     {
     }
 
-    @JsOverlay
-    public static final NObjectJSO cast(final JavaScriptObject jso)
-    {
-        if (null != jso)
-        {
-            return Js.uncheckedCast(jso);
-        }
-        return null;
-    }
+//    @JsOverlay
+//    public static final NObjectJSO cast(final JavaScriptObject jso)
+//    {
+//        if (null != jso)
+//        {
+//            return Js.uncheckedCast(jso);
+//        }
+//        return null;
+//    }
 
     /**
      * Returns the number of key-value mappings in this map
@@ -133,11 +131,11 @@ public class NObjectJSO implements JsIterable<JsIterableTypeParameterArrayUnionT
 //        }
 //    }
 
-    @JsOverlay
-    public final void put(final String name, final JavaScriptObject value)
-    {
-        set(name, value);
-    }
+//    @JsOverlay
+//    public final void put(final String name, final JavaScriptObject value)
+//    {
+//        set(name, value);
+//    }
 
 //    private final native void put_0(String name, int value)
 //    /*-{
@@ -169,11 +167,11 @@ public class NObjectJSO implements JsIterable<JsIterableTypeParameterArrayUnionT
 //        return getAsNValue_0(NUtils.doKeyRepair(name));
 //    }
 
-    @JsOverlay
-    public final JavaScriptObject getAsJSO(final String name)
-    {
-        return Js.uncheckedCast(get(name));
-    }
+//    @JsOverlay
+//    public final JavaScriptObject getAsJSO(final String name)
+//    {
+//        return Js.uncheckedCast(get(name));
+//    }
 
     @JsOverlay
     public final int getAsInteger(final String name)

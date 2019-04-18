@@ -17,12 +17,9 @@
 package com.ait.lienzo.client.core.types;
 
 import com.ait.lienzo.shared.core.types.IColor;
-import com.google.gwt.json.client.JSONObject;
 
 import elemental2.core.Global;
 import elemental2.core.JsArray;
-import elemental2.core.JsMap;
-import jsinterop.annotations.JsOverlay;
 import jsinterop.annotations.JsType;
 
 /**

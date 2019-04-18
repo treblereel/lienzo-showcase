@@ -19,6 +19,10 @@ package com.ait.lienzo.client.core.shape;
 import java.util.Collection;
 import java.util.List;
 
+import org.gwtproject.core.client.Scheduler;
+import org.gwtproject.core.client.Scheduler.ScheduledCommand;
+import org.gwtproject.safehtml.shared.UriUtils;
+
 import com.ait.lienzo.client.core.Attribute;
 import com.ait.lienzo.client.core.Context2D;
 import com.ait.lienzo.client.core.animation.IAnimation;
@@ -41,19 +45,14 @@ import com.ait.lienzo.shared.core.types.ShapeType;
 import com.ait.lienzo.shared.core.types.TextAlign;
 import com.ait.lienzo.shared.core.types.TextBaseLine;
 import com.ait.lienzo.shared.core.types.TextUnit;
-import com.google.gwt.core.client.Scheduler;
-import com.google.gwt.core.client.Scheduler.ScheduledCommand;
-import com.google.gwt.event.dom.client.EndedEvent;
-import com.google.gwt.event.dom.client.EndedHandler;
-import com.google.gwt.event.shared.HandlerRegistration;
-import com.google.gwt.json.client.JSONArray;
-import com.google.gwt.json.client.JSONBoolean;
-import com.google.gwt.json.client.JSONObject;
-import com.google.gwt.json.client.JSONValue;
-import com.google.gwt.media.client.Video;
-import com.google.gwt.safehtml.shared.UriUtils;
-import com.google.gwt.user.client.ui.RootPanel;
 
+import com.ait.lienzo.tools.client.event.HandlerRegistration;
+//import com.google.gwt.media.client.Video;
+//import com.google.gwt.dom.client.Document;
+//import com.google.gwt.user.client.ui.RootPanel;
+
+import elemental2.dom.DomGlobal;
+import elemental2.dom.HTMLDocument;
 import elemental2.dom.HTMLImageElement;
 import elemental2.dom.HTMLVideoElement;
 import elemental2.dom.MediaError;
@@ -86,7 +85,7 @@ public class Movie extends Shape<Movie>implements ImageDataFilterable<Movie>
 
     private              MovieEndedHandler m_onend          = null;
 
-    private final        HTMLVideoElement  m_video          = Js.uncheckedCast(Video.createIfSupported()); // @FIXME This is still using GWT widget (mdp)
+    private final        HTMLVideoElement  m_video          = Js.uncheckedCast(DomGlobal.document.createElement("video"));
 
     private final        MovieAnimation       m_animate;
 
@@ -143,7 +142,7 @@ public class Movie extends Shape<Movie>implements ImageDataFilterable<Movie>
         setFilters(filter, filters);
     }
 
-    protected Movie(final JSONObject node, final ValidationContext ctx) throws ValidationException
+    protected Movie(final Object node, final ValidationContext ctx) throws ValidationException
     {
         super(ShapeType.MOVIE, node, ctx);
 
@@ -807,39 +806,39 @@ public class Movie extends Shape<Movie>implements ImageDataFilterable<Movie>
         }
     }
 
-    @Override
-    public JSONObject toJSONObject()
-    {
-        JSONObject object = super.toJSONObject();
-
-        ImageDataFilterChain chain = m_filters;
-
-        if ((null != chain) && (chain.size() > 0))
-        {
-            JSONArray filters = new JSONArray();
-
-            JSONObject filter = new JSONObject();
-
-            filter.put("active", JSONBoolean.getInstance(chain.isActive()));
-
-            for (ImageDataFilter<?> ifilter : chain.getFilters())
-            {
-                if (null != ifilter)
-                {
-                    JSONObject make = ifilter.toJSONObject();
-
-                    if (null != make)
-                    {
-                        filters.set(filters.size(), make);
-                    }
-                }
-            }
-            filter.put("filters", filters);
-
-            object.put("filter", filter);
-        }
-        return object;
-    }
+//    @Override
+//    public JSONObject toJSONObject()
+//    {
+//        JSONObject object = super.toJSONObject();
+//
+//        ImageDataFilterChain chain = m_filters;
+//
+//        if ((null != chain) && (chain.size() > 0))
+//        {
+//            JSONArray filters = new JSONArray();
+//
+//            JSONObject filter = new JSONObject();
+//
+//            filter.put("active", JSONBoolean.getInstance(chain.isActive()));
+//
+//            for (ImageDataFilter<?> ifilter : chain.getFilters())
+//            {
+//                if (null != ifilter)
+//                {
+//                    JSONObject make = ifilter.toJSONObject();
+//
+//                    if (null != make)
+//                    {
+//                        filters.set(filters.size(), make);
+//                    }
+//                }
+//            }
+//            filter.put("filters", filters);
+//
+//            object.put("filter", filter);
+//        }
+//        return object;
+//    }
 
     @Override
     public List<Attribute> getBoundingBoxAttributes()
@@ -881,7 +880,7 @@ public class Movie extends Shape<Movie>implements ImageDataFilterable<Movie>
         @Override
         public IAnimation doStart()
         {
-            RootPanel.get().add(Js.uncheckedCast(m_video));
+            m_video.remove();
 
             m_video.play();
 
@@ -910,7 +909,7 @@ public class Movie extends Shape<Movie>implements ImageDataFilterable<Movie>
         @Override
         public IAnimation doClose()
         {
-            RootPanel.get().remove(Js.uncheckedCast(m_video));
+            m_video.remove();
 
             if (null != m_watch)
             {
@@ -979,30 +978,30 @@ public class Movie extends Shape<Movie>implements ImageDataFilterable<Movie>
         }
 
         @Override
-        public Movie create(JSONObject node, ValidationContext ctx) throws ValidationException
+        public Movie create(Object node, ValidationContext ctx) throws ValidationException
         {
             Movie movie = new Movie(node, ctx);
-
-            JSONValue jval = node.get("filter");
-
-            if (null != jval)
-            {
-                JSONObject object = jval.isObject();
-
-                if (null != object)
-                {
-                    JSONDeserializer.get().deserializeFilters(movie, object, ctx);
-
-                    jval = object.get("active");
-
-                    JSONBoolean active = jval.isBoolean();
-
-                    if (null != active)
-                    {
-                        movie.setFiltersActive(active.booleanValue());
-                    }
-                }
-            }
+// @FIXME serialisation (mdp)
+//            JSONValue jval = node.get("filter");
+//
+//            if (null != jval)
+//            {
+//                JSONObject object = jval.isObject();
+//
+//                if (null != object)
+//                {
+//                    JSONDeserializer.get().deserializeFilters(movie, object, ctx);
+//
+//                    jval = object.get("active");
+//
+//                    JSONBoolean active = jval.isBoolean();
+//
+//                    if (null != active)
+//                    {
+//                        movie.setFiltersActive(active.booleanValue());
+//                    }
+//                }
+//            }
             return movie;
         }
     }

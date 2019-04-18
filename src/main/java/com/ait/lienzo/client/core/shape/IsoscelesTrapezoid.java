@@ -28,7 +28,6 @@ import com.ait.lienzo.client.core.types.Point2D;
 import com.ait.lienzo.client.core.types.Point2DArray;
 import com.ait.lienzo.client.core.util.Geometry;
 import com.ait.lienzo.shared.core.types.ShapeType;
-import com.google.gwt.json.client.JSONObject;
 
 import jsinterop.annotations.JsProperty;
 
@@ -62,7 +61,7 @@ public class IsoscelesTrapezoid extends Shape<IsoscelesTrapezoid>
         setCornerRadius(corner);
     }
 
-    protected IsoscelesTrapezoid(final JSONObject node, final ValidationContext ctx) throws ValidationException
+    protected IsoscelesTrapezoid(final Object node, final ValidationContext ctx) throws ValidationException
     {
         super(ShapeType.ISOSCELES_TRAPEZOID, node, ctx);
     }
@@ -243,7 +242,7 @@ public class IsoscelesTrapezoid extends Shape<IsoscelesTrapezoid>
         }
 
         @Override
-        public IsoscelesTrapezoid create(final JSONObject node, final ValidationContext ctx) throws ValidationException
+        public IsoscelesTrapezoid create(final Object node, final ValidationContext ctx) throws ValidationException
         {
             return new IsoscelesTrapezoid(node, ctx);
         }

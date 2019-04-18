@@ -26,11 +26,6 @@ import com.ait.lienzo.client.core.types.Point2D;
 import com.ait.lienzo.client.core.types.Point2DArray;
 import com.ait.lienzo.client.core.types.Transform;
 import com.ait.lienzo.shared.core.types.NodeType;
-import com.google.gwt.json.client.JSONArray;
-import com.google.gwt.json.client.JSONNull;
-import com.google.gwt.json.client.JSONNumber;
-import com.google.gwt.json.client.JSONObject;
-import com.google.gwt.json.client.JSONValue;
 
 /**
  * GridLayer is a layer that draws a grid behind its child nodes.
@@ -122,7 +117,7 @@ public class GridLayer extends Layer
         setSecondaryLineY(secondaryLine);
     }
 
-    protected GridLayer(JSONObject node, ValidationContext ctx, Line[] lines, double[] sizes) throws ValidationException
+    protected GridLayer(Object node, ValidationContext ctx, Line[] lines, double[] sizes) throws ValidationException
     {
         super(node, ctx);
 
@@ -489,33 +484,34 @@ public class GridLayer extends Layer
         super.drawWithoutTransforms(context, alpha, bounds);
     }
 
-    @Override
-    public JSONObject toJSONObject()
-    {
-        JSONObject obj = super.toJSONObject();
-
-        JSONArray lines = new JSONArray();
-
-        JSONArray sizes = new JSONArray();
-
-        for (int i = 0; i < 4; i++)
-        {
-            if (m_lines[i] == null)
-            {
-                lines.set(i, JSONNull.getInstance());
-            }
-            else
-            {
-                lines.set(i, m_lines[i].toJSONObject());
-            }
-            sizes.set(i, new JSONNumber(m_sizes[i]));
-        }
-        obj.put("lines", lines);
-
-        obj.put("sizes", sizes);
-
-        return obj;
-    }
+    // @FIXME serilization (mdp)
+//    @Override
+//    public JSONObject toJSONObject()
+//    {
+//        JSONObject obj = super.toJSONObject();
+//
+//        JSONArray lines = new JSONArray();
+//
+//        JSONArray sizes = new JSONArray();
+//
+//        for (int i = 0; i < 4; i++)
+//        {
+//            if (m_lines[i] == null)
+//            {
+//                lines.set(i, JSONNull.getInstance());
+//            }
+//            else
+//            {
+//                lines.set(i, m_lines[i].toJSONObject());
+//            }
+//            sizes.set(i, new JSONNumber(m_sizes[i]));
+//        }
+//        obj.put("lines", lines);
+//
+//        obj.put("sizes", sizes);
+//
+//        return obj;
+//    }
 
     public static class GridLayerFactory extends LayerFactory
     {
@@ -525,63 +521,65 @@ public class GridLayer extends Layer
         }
 
         @Override
-        public GridLayer container(final JSONObject node, final ValidationContext ctx) throws ValidationException
+        public GridLayer container(final Object node, final ValidationContext ctx) throws ValidationException
         {
-            Line[] lines = new Line[4];
-
-            double[] sizes = { 10, 10, 5, 5 };
-
-            JSONValue aval = node.get("lines");
-
-            if (aval != null)
-            {
-                JSONArray arr = aval.isArray();
-
-                if (arr != null)
-                {
-                    for (int i = 0; i < 4 && i < arr.size(); i++)
-                    {
-                        JSONValue jval = arr.get(i);
-
-                        if (jval != null)
-                        {
-                            JSONObject jobj = jval.isObject();
-
-                            if (jobj != null)
-                            {
-                                Line line = (Line) JSONDeserializer.get().fromJSON(jobj, ctx);
-
-                                lines[i] = line;
-                            }
-                        }
-                    }
-                }
-            }
-            aval = node.get("sizes");
-
-            if (aval != null)
-            {
-                JSONArray arr = aval.isArray();
-
-                if (arr != null)
-                {
-                    for (int i = 0; i < 4 && i < arr.size(); i++)
-                    {
-                        JSONValue jval = arr.get(i);
-
-                        if (jval != null)
-                        {
-                            JSONNumber jnum = jval.isNumber();
-
-                            if (jnum != null)
-                            {
-                                sizes[i] = jnum.doubleValue();
-                            }
-                        }
-                    }
-                }
-            }
-            return new GridLayer(node, ctx, lines, sizes);
+            // @FIXME serilization (mdp)
+            throw new UnsupportedOperationException();
+//            Line[] lines = new Line[4];
+//
+//            double[] sizes = { 10, 10, 5, 5 };
+//
+//            JSONValue aval = node.get("lines");
+//
+//            if (aval != null)
+//            {
+//                JSONArray arr = aval.isArray();
+//
+//                if (arr != null)
+//                {
+//                    for (int i = 0; i < 4 && i < arr.size(); i++)
+//                    {
+//                        JSONValue jval = arr.get(i);
+//
+//                        if (jval != null)
+//                        {
+//                            JSONObject jobj = jval.isObject();
+//
+//                            if (jobj != null)
+//                            {
+//                                Line line = (Line) JSONDeserializer.get().fromJSON(jobj, ctx);
+//
+//                                lines[i] = line;
+//                            }
+//                        }
+//                    }
+//                }
+//            }
+//            aval = node.get("sizes");
+//
+//            if (aval != null)
+//            {
+//                JSONArray arr = aval.isArray();
+//
+//                if (arr != null)
+//                {
+//                    for (int i = 0; i < 4 && i < arr.size(); i++)
+//                    {
+//                        JSONValue jval = arr.get(i);
+//
+//                        if (jval != null)
+//                        {
+//                            JSONNumber jnum = jval.isNumber();
+//
+//                            if (jnum != null)
+//                            {
+//                                sizes[i] = jnum.doubleValue();
+//                            }
+//                        }
+//                    }
+//                }
+//            }
+//            return new GridLayer(node, ctx, lines, sizes);
         }
     }
 }

@@ -16,6 +16,9 @@
 
 package com.ait.lienzo.client.core.mediator;
 
+import elemental2.dom.UIEvent;
+
+import com.ait.lienzo.tools.client.event.INodeEvent;
 import com.ait.lienzo.client.core.event.NodeMouseDownEvent;
 import com.ait.lienzo.client.core.event.NodeMouseMoveEvent;
 import com.ait.lienzo.client.core.event.NodeMouseUpEvent;
@@ -24,7 +27,8 @@ import com.ait.lienzo.client.core.shape.Rectangle;
 import com.ait.lienzo.client.core.types.Point2D;
 import com.ait.lienzo.client.core.types.Transform;
 import com.ait.lienzo.shared.core.types.Color;
-import com.google.gwt.event.shared.GwtEvent;
+import com.ait.lienzo.tools.client.event.INodeEvent.Type;
+import com.gwtlienzo.event.shared.EventHandler;
 
 /**
  * MouseBoxZoomMediator zooms in when the user drags a rectangular area.
@@ -136,35 +140,35 @@ public class MouseBoxZoomMediator extends AbstractMediator
     }
 
     @Override
-    public boolean handleEvent(final GwtEvent<?> event)
+    public <H extends EventHandler> boolean handleEvent(Type<H> type, final UIEvent event, int x, int y)
     {
-        if (event.getAssociatedType() == NodeMouseMoveEvent.getType())
+        if (type == NodeMouseMoveEvent.getType())
         {
             if (m_dragging)
             {
-                onMouseMove((NodeMouseMoveEvent) event);
+                onMouseMove(x, y);
 
                 return true;
             }
             return false;
         }
-        else if (event.getAssociatedType() == NodeMouseDownEvent.getType())
+        else if (type == NodeMouseDownEvent.getType())
         {
             final IEventFilter filter = getEventFilter();
 
             if ((null == filter) || (false == filter.isEnabled()) || (filter.test(event)))
             {
-                onMouseDown((NodeMouseDownEvent) event);
+                onMouseDown(x, y);
 
                 return true;
             }
             return false;
         }
-        else if (event.getAssociatedType() == NodeMouseUpEvent.getType())
+        else if (type == NodeMouseUpEvent.getType())
         {
             if (m_dragging)
             {
-                onMouseUp((NodeMouseUpEvent) event);
+                onMouseUp(x, y);
 
                 return true;
             }
@@ -172,9 +176,9 @@ public class MouseBoxZoomMediator extends AbstractMediator
         return false;
     }
 
-    protected void onMouseDown(final NodeMouseDownEvent event)
+    protected void onMouseDown(int x, int y)
     {
-        m_start = new Point2D(event.getX(), event.getY());
+        m_start = new Point2D(x, y);
 
         m_dragging = true;
 
@@ -195,9 +199,9 @@ public class MouseBoxZoomMediator extends AbstractMediator
         m_addedRectangle = false;
     }
 
-    protected void onMouseMove(final NodeMouseMoveEvent event)
+    protected void onMouseMove(int eventX, int eventY)
     {
-        m_end.setX(event.getX()).setY(event.getY());
+        m_end.setX(eventX).setY(eventY);
 
         m_inverseTransform.transform(m_end, m_end);
 
@@ -232,11 +236,11 @@ public class MouseBoxZoomMediator extends AbstractMediator
         m_dragLayer.draw();
     }
 
-    protected void onMouseUp(final NodeMouseUpEvent event)
+    protected void onMouseUp(int eventX, int eventY)
     {
         cancel();
 
-        m_end.setX(event.getX()).setY(event.getY());
+        m_end.setX(eventX).setY(eventY);
 
         m_inverseTransform.transform(m_end, m_end);
 

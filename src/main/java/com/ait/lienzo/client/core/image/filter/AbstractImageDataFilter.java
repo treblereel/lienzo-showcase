@@ -17,18 +17,11 @@
 package com.ait.lienzo.client.core.image.filter;
 
 import com.ait.lienzo.client.core.Attribute;
-import com.ait.lienzo.client.core.event.AttributesChangedHandler;
-import com.ait.lienzo.client.core.event.IAttributesChangedBatcher;
 import com.ait.lienzo.client.core.shape.json.AbstractFactory;
 import com.ait.lienzo.client.core.shape.json.validators.ValidationContext;
 import com.ait.lienzo.client.core.shape.json.validators.ValidationException;
 import com.ait.lienzo.shared.core.types.ImageFilterType;
 import com.ait.lienzo.tools.client.collection.MetaData;
-import com.google.gwt.core.client.JavaScriptObject;
-import com.google.gwt.event.shared.HandlerRegistration;
-import com.google.gwt.json.client.JSONObject;
-import com.google.gwt.json.client.JSONString;
-import com.google.gwt.json.client.JSONValue;
 
 import jsinterop.annotations.JsProperty;
 
@@ -50,7 +43,7 @@ public abstract class AbstractImageDataFilter<T extends AbstractImageDataFilter<
         setActive(true);
     }
 
-    protected AbstractImageDataFilter(final ImageFilterType type, final JSONObject node, final ValidationContext ctx) throws ValidationException
+    protected AbstractImageDataFilter(final ImageFilterType type, final Object node, final ValidationContext ctx) throws ValidationException
     {
         m_type = type;
 
@@ -62,65 +55,68 @@ public abstract class AbstractImageDataFilter<T extends AbstractImageDataFilter<
 
             return;
         }
-        JSONValue aval = node.get("attributes");
 
-        if (null == aval)
-        {
-            // m_attr = new Attributes(this);
-        }
-        else
-        {
-            JSONObject aobj = aval.isObject();
-
-            if (null == aobj)
-            {
-                // m_attr = new Attributes(this);
-            }
-            else
-            {
-                JavaScriptObject ajso = aobj.getJavaScriptObject();
-
-                if (null == ajso)
-                {
-                    // m_attr = new Attributes(this);
-                }
-                else
-                {
-                    // m_attr = new Attributes(ajso, this);
-                }
-            }
-        }
-        JSONValue mval = node.get("meta");
-
-        if (null == mval)
-        {
-            m_meta = new MetaData();
-        }
-        else
-        {
-            JSONObject mobj = mval.isObject();
-
-            if (null == mobj)
-            {
-                m_meta = new MetaData();
-            }
-            else
-            {
-                JavaScriptObject mjso = mobj.getJavaScriptObject();
-
-                if (null == mjso)
-                {
-                    m_meta = new MetaData();
-                }
-                else
-                {
-                    // @FIXME (mdp)
-                    // NObjectJSO jso = mjso.cast();
-                    // m_meta = new MetaData(jso);
-                    m_meta = new MetaData();;
-                }
-            }
-        }
+        // @FIXME serialization (mdp)
+        m_meta = new MetaData(); // temorary here see FIXME ^
+//        JSONValue aval = node.get("attributes");
+//
+//        if (null == aval)
+//        {
+//            // m_attr = new Attributes(this);
+//        }
+//        else
+//        {
+//            JSONObject aobj = aval.isObject();
+//
+//            if (null == aobj)
+//            {
+//                // m_attr = new Attributes(this);
+//            }
+//            else
+//            {
+//                JavaScriptObject ajso = aobj.getJavaScriptObject();
+//
+//                if (null == ajso)
+//                {
+//                    // m_attr = new Attributes(this);
+//                }
+//                else
+//                {
+//                    // m_attr = new Attributes(ajso, this);
+//                }
+//            }
+//        }
+//        JSONValue mval = node.get("meta");
+//
+//        if (null == mval)
+//        {
+//            m_meta = new MetaData();
+//        }
+//        else
+//        {
+//            JSONObject mobj = mval.isObject();
+//
+//            if (null == mobj)
+//            {
+//                m_meta = new MetaData();
+//            }
+//            else
+//            {
+//                JavaScriptObject mjso = mobj.getJavaScriptObject();
+//
+//                if (null == mjso)
+//                {
+//                    m_meta = new MetaData();
+//                }
+//                else
+//                {
+//                    // @FIXME (mdp)
+//                    // NObjectJSO jso = mjso.cast();
+//                    // m_meta = new MetaData(jso);
+//                    m_meta = new MetaData();;
+//                }
+//            }
+//        }
     }
 
     @Override
@@ -161,25 +157,27 @@ public abstract class AbstractImageDataFilter<T extends AbstractImageDataFilter<
     @Override
     public String toJSONString()
     {
-        return toJSONObject().toString();
+        throw new UnsupportedOperationException();
+        //return toJSONObject().toString();
     }
 
-    @Override
-    public JSONObject toJSONObject()
-    {
-        JSONObject object = new JSONObject();
-
-        object.put("type", new JSONString(getType().getValue()));
-
-        if (false == getMetaData().isEmpty())
-        {
-            // @FIXME (mdp)
-            // object.putString("meta", new JSONObject(getMetaData().getJSO()));
-        }
-        // object.put("attributes", new JSONObject(getAttributes().getJSO()));
-
-        return object;
-    }
+    // @FIXME serialization (mdp)
+//    @Override
+//    public JSONObject toJSONObject()
+//    {
+//        JSONObject object = new JSONObject();
+//
+//        object.put("type", new JSONString(getType().getValue()));
+//
+//        if (false == getMetaData().isEmpty())
+//        {
+//            // @FIXME (mdp)
+//            // object.putString("meta", new JSONObject(getMetaData().getJSO()));
+//        }
+//        // object.put("attributes", new JSONObject(getAttributes().getJSO()));
+//
+//        return object;
+//    }
 
     protected static abstract class ImageDataFilterFactory<T extends ImageDataFilter<T>> extends AbstractFactory<T>
     {

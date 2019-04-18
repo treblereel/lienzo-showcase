@@ -25,8 +25,10 @@ import com.ait.lienzo.client.core.animation.AnimationProperties;
 import com.ait.lienzo.client.core.animation.AnimationTweener;
 import com.ait.lienzo.client.core.animation.IAnimationCallback;
 import com.ait.lienzo.client.core.animation.IAnimationHandle;
-import com.ait.lienzo.client.core.event.AttributesChangedHandler;
-import com.ait.lienzo.client.core.event.IAttributesChangedBatcher;
+import com.ait.lienzo.client.core.event.EventReceiver;
+import com.ait.lienzo.tools.client.event.HandlerRegistration;
+import com.ait.lienzo.tools.client.event.INodeEvent;
+import com.ait.lienzo.tools.client.event.INodeEvent.Type;
 import com.ait.lienzo.client.core.event.NodeDragEndHandler;
 import com.ait.lienzo.client.core.event.NodeDragMoveHandler;
 import com.ait.lienzo.client.core.event.NodeDragStartHandler;
@@ -56,14 +58,12 @@ import com.ait.lienzo.client.core.types.Transform;
 import com.ait.lienzo.client.core.util.ScratchPad;
 import com.ait.lienzo.shared.core.types.NodeType;
 import com.ait.lienzo.tools.client.collection.MetaData;
-import com.google.gwt.event.shared.GwtEvent;
-import com.google.gwt.event.shared.GwtEvent.Type;
-import com.google.gwt.event.shared.HandlerRegistration;
+import com.gwtlienzo.event.shared.EventHandler;
 
 /**
  * Interface to be implemented by drawable objects.
  */
-public interface IDrawable<T extends IDrawable<T>> extends IJSONSerializable<T> //NObjectOnWire,
+public interface IDrawable<T extends IDrawable<T>> extends EventReceiver, IJSONSerializable<T> //NObjectOnWire,
 {
     public T copy();
 
@@ -95,8 +95,6 @@ public interface IDrawable<T extends IDrawable<T>> extends IJSONSerializable<T> 
     
     public Object getUserData();
 
-    public T setAttributesChangedBatcher(IAttributesChangedBatcher batcher);
-
     public T cancelAttributesChangedBatcher();
 
     public BoundingBox getBoundingBox();
@@ -110,8 +108,6 @@ public interface IDrawable<T extends IDrawable<T>> extends IJSONSerializable<T> 
     public Point2D getAbsoluteLocation();
     
     public Transform getAbsoluteTransform();
-
-    public HandlerRegistration addAttributesChangedHandler(Attribute attribute, AttributesChangedHandler handler);
 
     public HandlerRegistration addNodeMouseClickHandler(NodeMouseClickHandler handler);
 
@@ -290,14 +286,8 @@ public interface IDrawable<T extends IDrawable<T>> extends IJSONSerializable<T> 
      * @param type the event type
      * @return boolean
      */
-    public boolean isEventHandled(Type<?> type);
+    public <H extends EventHandler> boolean isEventHandled(Type<H> type);
 
-    /**
-     * Fires off the given GWT event.
-     * 
-     * @param event
-     */
-    public void fireEvent(GwtEvent<?> event);
 
     /**
      * Applies transformations to the object and draws it.

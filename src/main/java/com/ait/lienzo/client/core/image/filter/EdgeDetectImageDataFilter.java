@@ -21,7 +21,6 @@ import com.ait.lienzo.client.core.shape.json.validators.ValidationContext;
 import com.ait.lienzo.client.core.shape.json.validators.ValidationException;
 import com.ait.lienzo.client.core.types.ImageDataUtil;
 import com.ait.lienzo.shared.core.types.ImageFilterType;
-import com.google.gwt.json.client.JSONObject;
 
 import elemental2.core.JsArray;
 import elemental2.core.Uint8ClampedArray;
@@ -39,7 +38,7 @@ public class EdgeDetectImageDataFilter extends AbstractImageDataFilter<EdgeDetec
         super(ImageFilterType.EdgeDetectImageDataFilterType);
     }
 
-    protected EdgeDetectImageDataFilter(JSONObject node, ValidationContext ctx) throws ValidationException
+    protected EdgeDetectImageDataFilter(Object node, ValidationContext ctx) throws ValidationException
     {
         super(ImageFilterType.EdgeDetectImageDataFilterType, node, ctx);
     }
@@ -143,7 +142,7 @@ public class EdgeDetectImageDataFilter extends AbstractImageDataFilter<EdgeDetec
         }
 
         @Override
-        public EdgeDetectImageDataFilter create(JSONObject node, ValidationContext ctx) throws ValidationException
+        public EdgeDetectImageDataFilter create(Object node, ValidationContext ctx) throws ValidationException
         {
             return new EdgeDetectImageDataFilter(node, ctx);
         }

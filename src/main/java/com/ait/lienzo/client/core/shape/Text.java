@@ -32,7 +32,6 @@ import com.ait.lienzo.shared.core.types.ShapeType;
 import com.ait.lienzo.shared.core.types.TextAlign;
 import com.ait.lienzo.shared.core.types.TextBaseLine;
 import com.ait.lienzo.shared.core.types.TextUnit;
-import com.google.gwt.json.client.JSONObject;
 
 import elemental2.dom.TextMetrics;
 import jsinterop.annotations.JsProperty;
@@ -168,7 +167,7 @@ public class Text extends Shape<Text>
         setText(text).setFontFamily(family).setFontStyle(style).setFontSize(size);
     }
 
-    protected Text(JSONObject node, ValidationContext ctx) throws ValidationException
+    protected Text(Object node, ValidationContext ctx) throws ValidationException
     {
         super(ShapeType.TEXT, node, ctx);
     }
@@ -689,7 +688,7 @@ public class Text extends Shape<Text>
         }
 
         @Override
-        public Text create(JSONObject node, ValidationContext ctx) throws ValidationException
+        public Text create(Object node, ValidationContext ctx) throws ValidationException
         {
             return new Text(node, ctx);
         }

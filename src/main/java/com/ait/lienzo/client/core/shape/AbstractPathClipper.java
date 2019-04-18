@@ -20,7 +20,6 @@ import com.ait.lienzo.client.core.Context2D;
 import com.ait.lienzo.client.core.types.BoundingBox;
 import com.ait.lienzo.client.core.types.PathPartList;
 import com.ait.lienzo.shared.core.types.PathClipperType;
-import com.google.gwt.core.client.JavaScriptObject;
 
 import jsinterop.annotations.JsProperty;
 import jsinterop.annotations.JsType;
@@ -117,7 +116,7 @@ public abstract class AbstractPathClipper implements IPathClipper
 
 
     @JsType
-    public static final class PathClipperJSO extends JavaScriptObject
+    public static final class PathClipperJSO
     {
         private String type;
 
@@ -160,7 +159,7 @@ public abstract class AbstractPathClipper implements IPathClipper
 
         static final PathClipperJSO make(final BoundingBox bbox)
         {
-            final PathClipperJSO jso = JavaScriptObject.createObject().cast();
+            final PathClipperJSO jso = new PathClipperJSO();
 
             jso.setTypeString(PathClipperType.BOUNDING_BOX.getValue());
 
@@ -175,7 +174,7 @@ public abstract class AbstractPathClipper implements IPathClipper
 
         static final PathClipperJSO make(final PathPartList path)
         {
-            final PathClipperJSO jso = JavaScriptObject.createObject().cast();
+            final PathClipperJSO jso = new PathClipperJSO();
 
             jso.setTypeString(PathClipperType.PATH_PART_LIST.getValue());
 

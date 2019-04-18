@@ -18,11 +18,15 @@ package com.ait.lienzo.client.core.mediator;
 
 import java.util.Iterator;
 
+import com.ait.lienzo.tools.client.event.INodeEvent;
 import com.ait.lienzo.client.core.shape.Viewport;
 import com.ait.lienzo.client.core.types.NFastArrayListIterator;
 import com.ait.lienzo.client.widget.LienzoPanel;
 import com.ait.lienzo.tools.client.collection.NFastArrayList;
-import com.google.gwt.event.shared.GwtEvent;
+import com.ait.lienzo.tools.client.event.INodeEvent.Type;
+import com.gwtlienzo.event.shared.EventHandler;
+
+import elemental2.dom.UIEvent;
 
 /**
  * Mediators maintains a list (or stack) of {@link IMediator} instances.
@@ -126,7 +130,7 @@ public final class Mediators implements Iterable<IMediator>
         return removed;
     }
 
-    public boolean handleEvent(final GwtEvent<?> event)
+    public <H extends EventHandler> boolean handleEvent(Type<H> type, final UIEvent event, int x, int y)
     {
         if ((m_size > 0) && (m_enabled))
         {
@@ -134,7 +138,7 @@ public final class Mediators implements Iterable<IMediator>
             {
                 final IMediator mediator = m_mediators.get(i);
 
-                if ((null != mediator) && (mediator.isEnabled()) && (mediator.handleEvent(event)))
+                if ((null != mediator) && (mediator.isEnabled()) && (mediator.handleEvent(type, event, x, y)))
                 {
                     return true;
                 }

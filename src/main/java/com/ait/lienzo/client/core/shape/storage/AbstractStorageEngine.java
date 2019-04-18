@@ -26,10 +26,6 @@ import com.ait.lienzo.client.core.types.BoundingBox;
 import com.ait.lienzo.client.core.types.NFastArrayListIterator;
 import com.ait.lienzo.tools.client.collection.MetaData;
 import com.ait.lienzo.tools.client.collection.NFastArrayList;
-import com.google.gwt.core.client.JavaScriptObject;
-import com.google.gwt.json.client.JSONObject;
-import com.google.gwt.json.client.JSONString;
-import com.google.gwt.json.client.JSONValue;
 
 public abstract class AbstractStorageEngine<M> implements IStorageEngine<M>
 {
@@ -44,41 +40,41 @@ public abstract class AbstractStorageEngine<M> implements IStorageEngine<M>
         m_meta = new MetaData();
     }
 
-    protected AbstractStorageEngine(final StorageEngineType type, final JSONObject node, final ValidationContext ctx) throws ValidationException
+    protected AbstractStorageEngine(final StorageEngineType type, final Object node, final ValidationContext ctx) throws ValidationException
     {
         m_type = type;
 
-        final JSONValue mval = node.get("meta");
-
-        if (null == mval)
-        {
-            m_meta = new MetaData();
-        }
-        else
-        {
-            final JSONObject mobj = mval.isObject();
-
-            if (null == mobj)
-            {
-                m_meta = new MetaData();
-            }
-            else
-            {
-                final JavaScriptObject mjso = mobj.getJavaScriptObject();
-
-                if (null == mjso)
-                {
-                    m_meta = new MetaData();
-                }
-                else
-                {
-                    // @FIXME (mdp)
-                    // final NObjectJSO jso = mjso.cast();
-                    // m_meta = new MetaData(jso);
-                    m_meta = new MetaData();
-                }
-            }
-        }
+        //final JSONValue mval = node.get("meta");
+        m_meta = new MetaData();
+//        if (null == mval)
+//        {
+//            m_meta = new MetaData();
+//        }
+//        else
+//        {
+//            final JSONObject mobj = mval.isObject();
+//
+//            if (null == mobj)
+//            {
+//                m_meta = new MetaData();
+//            }
+//            else
+//            {
+//                final JavaScriptObject mjso = mobj.getJavaScriptObject();
+//
+//                if (null == mjso)
+//                {
+//                    m_meta = new MetaData();
+//                }
+//                else
+//                {
+//                    // @FIXME (mdp)
+//                    // final NObjectJSO jso = mjso.cast();
+//                    // m_meta = new MetaData(jso);
+//                    m_meta = new MetaData();
+//                }
+//            }
+//        }
     }
 
     @Override
@@ -89,23 +85,25 @@ public abstract class AbstractStorageEngine<M> implements IStorageEngine<M>
 
     public String toJSONString()
     {
-        return toJSONObject().toString();
+        // @FIXME json serialisation (mdp)
+        //return toJSONObject().toString();
+        return null;
     }
 
-    @Override
-    public JSONObject toJSONObject()
-    {
-        final JSONObject object = new JSONObject();
-
-        object.put("type", new JSONString(getStorageEngineType().getValue()));
-
-        if (false == getMetaData().isEmpty())
-        {
-            // @FIXME (mdp)
-            // object.putString("meta", new JSONObject(getMetaData().getJSO()));
-        }
-        return object;
-    }
+//    @Override
+//    public JSONObject toJSONObject()
+//    {
+//        final JSONObject object = new JSONObject();
+//
+//        object.put("type", new JSONString(getStorageEngineType().getValue()));
+//
+//        if (false == getMetaData().isEmpty())
+//        {
+//            // @FIXME (mdp)
+//            // object.putString("meta", new JSONObject(getMetaData().getJSO()));
+//        }
+//        return object;
+//    }
 
     @Override
     public void migrate(final IStorageEngine<M> storage)

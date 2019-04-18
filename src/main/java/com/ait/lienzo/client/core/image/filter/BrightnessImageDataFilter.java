@@ -21,7 +21,6 @@ import com.ait.lienzo.client.core.shape.json.validators.ValidationContext;
 import com.ait.lienzo.client.core.shape.json.validators.ValidationException;
 import com.ait.lienzo.client.core.types.ImageDataUtil;
 import com.ait.lienzo.shared.core.types.ImageFilterType;
-import com.google.gwt.json.client.JSONObject;
 
 import elemental2.core.JsArray;
 import elemental2.core.Uint8ClampedArray;
@@ -44,7 +43,7 @@ public class BrightnessImageDataFilter extends AbstractValueImageDataFilter<Brig
         super(ImageFilterType.BrightnessImageDataFilterType, value);
     }
 
-    protected BrightnessImageDataFilter(JSONObject node, ValidationContext ctx) throws ValidationException
+    protected BrightnessImageDataFilter(Object node, ValidationContext ctx) throws ValidationException
     {
         super(ImageFilterType.BrightnessImageDataFilterType, node, ctx);
     }
@@ -119,7 +118,7 @@ public class BrightnessImageDataFilter extends AbstractValueImageDataFilter<Brig
         }
 
         @Override
-        public BrightnessImageDataFilter create(JSONObject node, ValidationContext ctx) throws ValidationException
+        public BrightnessImageDataFilter create(Object node, ValidationContext ctx) throws ValidationException
         {
             return new BrightnessImageDataFilter(node, ctx);
         }

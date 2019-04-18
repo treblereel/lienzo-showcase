@@ -36,20 +36,15 @@ import com.ait.lienzo.client.core.types.Transform;
 import com.ait.lienzo.shared.core.types.DataURLType;
 import com.ait.lienzo.shared.core.types.LayerClearMode;
 import com.ait.lienzo.shared.core.types.NodeType;
-import com.ait.lienzo.tools.client.collection.MetaData;
 import com.ait.lienzo.tools.client.collection.NFastArrayList;
 import com.ait.lienzo.tools.client.collection.NFastStringMap;
 import com.ait.lienzo.tools.common.api.java.util.function.Predicate;
-import com.google.gwt.dom.client.Style.Display;
-import com.google.gwt.dom.client.Style.Position;
-import com.google.gwt.dom.client.Style.Unit;
-import com.google.gwt.dom.client.Style.Visibility;
-import com.google.gwt.json.client.JSONArray;
-import com.google.gwt.json.client.JSONObject;
-import com.google.gwt.json.client.JSONString;
+import org.gwtproject.dom.style.shared.Display;
+import org.gwtproject.dom.style.shared.Position;
+import org.gwtproject.dom.style.shared.Unit;
+import org.gwtproject.dom.style.shared.Visibility;
 
 import elemental2.dom.CSSProperties;
-import elemental2.dom.CSSStyleDeclaration;
 import elemental2.dom.DomGlobal;
 import elemental2.dom.HTMLCanvasElement;
 import elemental2.dom.HTMLDivElement;
@@ -113,7 +108,7 @@ public class Layer extends ContainerNode<IPrimitive<?>, Layer>
      * 
      * @param node 
      */
-    protected Layer(final JSONObject node, final ValidationContext ctx) throws ValidationException
+    protected Layer(final Object node, final ValidationContext ctx) throws ValidationException
     {
         super(NodeType.LAYER, node, ctx);
     }
@@ -381,59 +376,60 @@ public class Layer extends ContainerNode<IPrimitive<?>, Layer>
         }
     }
 
-    /**
-     * Serializes this Layer as a {@link com.google.gwt.json.client.JSONObject}
-     * 
-     * @return JSONObject
-     */
-    @Override
-    public JSONObject toJSONObject()
-    {
-        final JSONObject object = new JSONObject();
-
-        object.put("type", new JSONString(getNodeType().getValue()));
-
-        if (hasMetaData())
-        {
-            final MetaData meta = getMetaData();
-
-            if (false == meta.isEmpty())
-            {
-                // @FIXME (mdp)
-                //object.putString("meta", new JSONObject(meta.getJSO()));
-            }
-        }
-        //object.put("attributes", new JSONObject(getAttributes().getJSO()));
-
-        final NFastArrayList<IPrimitive<?>> list = getChildNodes();
-
-        final JSONArray children = new JSONArray();
-
-        if (null != list)
-        {
-            final int size = list.size();
-
-            for (int i = 0; i < size; i++)
-            {
-                final IPrimitive<?> prim = list.get(i);
-
-                if (null != prim)
-                {
-                    JSONObject make = prim.toJSONObject();
-
-                    if (null != make)
-                    {
-                        children.set(children.size(), make);
-                    }
-                }
-            }
-        }
-        object.put("children", children);
-
-        object.put("storage", getStorageEngine().toJSONObject());
-
-        return object;
-    }
+    // @FIXME serialisation (mdp)
+//    /**
+//     * Serializes this Layer as a {@link com.google.gwt.json.client.JSONObject}
+//     *
+//     * @return JSONObject
+//     */
+//    @Override
+//    public JSONObject toJSONObject()
+//    {
+//        final JSONObject object = new JSONObject();
+//
+//        object.put("type", new JSONString(getNodeType().getValue()));
+//
+//        if (hasMetaData())
+//        {
+//            final MetaData meta = getMetaData();
+//
+//            if (false == meta.isEmpty())
+//            {
+//                // @FIXME (mdp)
+//                //object.putString("meta", new JSONObject(meta.getJSO()));
+//            }
+//        }
+//        //object.put("attributes", new JSONObject(getAttributes().getJSO()));
+//
+//        final NFastArrayList<IPrimitive<?>> list = getChildNodes();
+//
+//        final JSONArray children = new JSONArray();
+//
+//        if (null != list)
+//        {
+//            final int size = list.size();
+//
+//            for (int i = 0; i < size; i++)
+//            {
+//                final IPrimitive<?> prim = list.get(i);
+//
+//                if (null != prim)
+//                {
+//                    JSONObject make = prim.toJSONObject();
+//
+//                    if (null != make)
+//                    {
+//                        children.set(children.size(), make);
+//                    }
+//                }
+//            }
+//        }
+//        object.put("children", children);
+//
+//        object.put("storage", getStorageEngine().toJSONObject());
+//
+//        return object;
+//    }
 
     /**
      * Sets this layer's pixel size.
@@ -1143,7 +1139,7 @@ public class Layer extends ContainerNode<IPrimitive<?>, Layer>
         }
 
         @Override
-        public Layer container(final JSONObject node, final ValidationContext ctx) throws ValidationException
+        public Layer container(final Object node, final ValidationContext ctx) throws ValidationException
         {
             return new Layer(node, ctx);
         }

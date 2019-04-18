@@ -16,6 +16,9 @@
 
 package com.ait.lienzo.client.core.shape;
 
+import org.gwtproject.resources.client.ImageResource;
+import org.gwtproject.safehtml.shared.UriUtils;
+
 import com.ait.lienzo.client.core.Attribute;
 import com.ait.lienzo.client.core.image.ImageClipBounds;
 import com.ait.lienzo.client.core.image.ImageProxy;
@@ -26,9 +29,6 @@ import com.ait.lienzo.client.core.types.BoundingBox;
 import com.ait.lienzo.shared.core.types.ImageSelectionMode;
 import com.ait.lienzo.shared.core.types.ImageSerializationMode;
 import com.ait.lienzo.shared.core.types.ShapeType;
-import com.google.gwt.json.client.JSONObject;
-import com.google.gwt.resources.client.ImageResource;
-import com.google.gwt.safehtml.shared.UriUtils;
 
 import elemental2.dom.ImageData;
 import jsinterop.annotations.JsProperty;
@@ -46,7 +46,7 @@ public abstract class AbstractImageShape<T extends AbstractImageShape<T>> extend
     @JsProperty
     private ImageSelectionMode imageSelectionMode;
 
-    protected AbstractImageShape(final ShapeType type, final JSONObject node, final ValidationContext ctx) throws ValidationException
+    protected AbstractImageShape(final ShapeType type, final Object node, final ValidationContext ctx) throws ValidationException
     {
         super(type, node, ctx);
 

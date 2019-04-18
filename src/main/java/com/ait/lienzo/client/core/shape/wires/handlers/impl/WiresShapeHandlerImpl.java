@@ -148,7 +148,7 @@ public class WiresShapeHandlerImpl extends WiresManager.WiresDragHandler impleme
                                                  event.getY(),
                                                  event.isShiftKeyDown(),
                                                  event.isAltKeyDown(),
-                                                 event.isControlKeyDown()));
+                                                 event.isCtrlKeyDown()));
         clickEventConsumer.accept(event);
     }
 
@@ -158,7 +158,7 @@ public class WiresShapeHandlerImpl extends WiresManager.WiresDragHandler impleme
                                            event.getY(),
                                            event.isShiftKeyDown(),
                                            event.isAltKeyDown(),
-                                           event.isControlKeyDown()));
+                                           event.isCtrlKeyDown()));
     }
 
     @Override
@@ -167,7 +167,7 @@ public class WiresShapeHandlerImpl extends WiresManager.WiresDragHandler impleme
                                          event.getY(),
                                          event.isShiftKeyDown(),
                                          event.isAltKeyDown(),
-                                         event.isControlKeyDown()));
+                                         event.isCtrlKeyDown()));
     }
 
     @Override

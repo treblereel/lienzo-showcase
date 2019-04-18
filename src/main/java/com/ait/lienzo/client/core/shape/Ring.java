@@ -24,7 +24,6 @@ import com.ait.lienzo.client.core.shape.json.validators.ValidationContext;
 import com.ait.lienzo.client.core.shape.json.validators.ValidationException;
 import com.ait.lienzo.client.core.types.BoundingBox;
 import com.ait.lienzo.shared.core.types.ShapeType;
-import com.google.gwt.json.client.JSONObject;
 
 import jsinterop.annotations.JsProperty;
 
@@ -52,7 +51,7 @@ public class Ring extends Shape<Ring>
         setInnerRadius(innerRadius).setOuterRadius(outerRadius);
     }
 
-    protected Ring(final JSONObject node, final ValidationContext ctx) throws ValidationException
+    protected Ring(final Object node, final ValidationContext ctx) throws ValidationException
     {
         super(ShapeType.RING, node, ctx);
     }
@@ -191,7 +190,7 @@ public class Ring extends Shape<Ring>
         }
 
         @Override
-        public Ring create(final JSONObject node, final ValidationContext ctx) throws ValidationException
+        public Ring create(final Object node, final ValidationContext ctx) throws ValidationException
         {
             return new Ring(node, ctx);
         }

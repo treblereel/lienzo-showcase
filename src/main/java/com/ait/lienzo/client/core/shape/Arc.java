@@ -24,7 +24,6 @@ import com.ait.lienzo.client.core.shape.json.validators.ValidationContext;
 import com.ait.lienzo.client.core.shape.json.validators.ValidationException;
 import com.ait.lienzo.client.core.types.BoundingBox;
 import com.ait.lienzo.shared.core.types.ShapeType;
-import com.google.gwt.json.client.JSONObject;
 
 import jsinterop.annotations.JsProperty;
 
@@ -77,7 +76,7 @@ public class Arc extends Shape<Arc>
         setRadius(radius).setStartAngle(startAngle).setEndAngle(endAngle).setCounterClockwise(false);
     }
 
-    protected Arc(final JSONObject node, final ValidationContext ctx) throws ValidationException
+    protected Arc(final Object node, final ValidationContext ctx) throws ValidationException
     {
         super(ShapeType.ARC, node, ctx);
     }
@@ -225,7 +224,7 @@ public class Arc extends Shape<Arc>
         }
 
         @Override
-        public Arc create(final JSONObject node, final ValidationContext ctx) throws ValidationException
+        public Arc create(final Object node, final ValidationContext ctx) throws ValidationException
         {
             return new Arc(node, ctx);
         }

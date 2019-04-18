@@ -23,7 +23,6 @@ import com.ait.lienzo.shared.core.types.Color;
 import com.ait.lienzo.shared.core.types.ImageFilterType;
 import com.ait.lienzo.shared.core.types.IColor;
 import com.ait.lienzo.tools.client.StringOps;
-import com.google.gwt.json.client.JSONObject;
 
 import jsinterop.annotations.JsProperty;
 
@@ -64,7 +63,7 @@ public abstract class AbstractRGBImageDataFilter<T extends AbstractRGBImageDataF
         doUpdateColorFromRGB();
     }
 
-    protected AbstractRGBImageDataFilter(final ImageFilterType type, final JSONObject node, final ValidationContext ctx) throws ValidationException
+    protected AbstractRGBImageDataFilter(final ImageFilterType type, final Object node, final ValidationContext ctx) throws ValidationException
     {
         super(type, node, ctx);
 

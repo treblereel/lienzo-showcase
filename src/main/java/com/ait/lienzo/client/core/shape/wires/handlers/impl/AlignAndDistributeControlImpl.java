@@ -7,8 +7,6 @@ import java.util.List;
 import java.util.Set;
 
 import com.ait.lienzo.client.core.Attribute;
-import com.ait.lienzo.client.core.event.AttributesChangedEvent;
-import com.ait.lienzo.client.core.event.AttributesChangedHandler;
 import com.ait.lienzo.client.core.shape.Group;
 import com.ait.lienzo.client.core.shape.IDrawable;
 import com.ait.lienzo.client.core.shape.IPrimitive;
@@ -17,11 +15,10 @@ import com.ait.lienzo.client.core.shape.wires.AlignAndDistribute;
 import com.ait.lienzo.client.core.shape.wires.handlers.AlignAndDistributeControl;
 import com.ait.lienzo.client.core.types.BoundingBox;
 import com.ait.lienzo.client.core.types.Point2D;
+import com.ait.lienzo.tools.client.event.HandlerRegistration;
 import com.ait.lienzo.tools.common.api.flow.Flows;
 import com.ait.lienzo.tools.client.collection.NFastStringSet;
 import com.ait.lienzo.tools.client.event.HandlerRegistrationManager;
-import com.google.gwt.event.shared.HandlerRegistration;
-import com.google.gwt.json.client.JSONObject;
 
 import static com.ait.lienzo.client.core.AttributeOp.any;
 
@@ -120,30 +117,8 @@ public class AlignAndDistributeControlImpl implements AlignAndDistributeControl
             }
             m_bboxOp = any(list);
 
-            addHandlers(m_group, list);
-
             m_tranOp = any(Attribute.ROTATION, Attribute.SCALE, Attribute.SHEAR);
         }
-    }
-
-    protected final AttributesChangedHandler ShapeAttributesChangedHandler = new AttributesChangedHandler()
-    {
-        @Override
-        public void onAttributesChanged(AttributesChangedEvent event)
-        {
-            refresh(event.evaluate(m_tranOp), event.evaluate(m_bboxOp));
-        }
-    };
-
-    private void addHandlers(IDrawable<?> drawable, ArrayList<Attribute> list)
-    {
-        for (Attribute attribute : list)
-        {
-            m_attrHandlerRegs.register(drawable.addAttributesChangedHandler(attribute, ShapeAttributesChangedHandler));
-        }
-        m_attrHandlerRegs.register(drawable.addAttributesChangedHandler(Attribute.ROTATION, ShapeAttributesChangedHandler));
-        m_attrHandlerRegs.register(drawable.addAttributesChangedHandler(Attribute.SCALE, ShapeAttributesChangedHandler));
-        m_attrHandlerRegs.register(drawable.addAttributesChangedHandler(Attribute.SHEAR, ShapeAttributesChangedHandler));
     }
 
     public boolean isIndexed()
@@ -362,7 +337,7 @@ public class AlignAndDistributeControlImpl implements AlignAndDistributeControl
     private final boolean hasComplexTransformAttributes()
     {
         //JSONObject attr = new JSONObject(getAttributes().getJSO());
-        JSONObject attr = new JSONObject();
+        //JSONObject attr = new JSONObject();
         Node       node = m_group.asNode();
 
         if (m_group.asNode().hasComplexTransformAttributes())

@@ -24,7 +24,6 @@ import com.ait.lienzo.client.core.shape.json.validators.ValidationContext;
 import com.ait.lienzo.client.core.shape.json.validators.ValidationException;
 import com.ait.lienzo.client.core.types.BoundingBox;
 import com.ait.lienzo.shared.core.types.ShapeType;
-import com.google.gwt.json.client.JSONObject;
 
 import jsinterop.annotations.JsProperty;
 
@@ -48,7 +47,7 @@ public class Circle extends Shape<Circle>
         setRadius(radius);
     }
 
-    protected Circle(final JSONObject node, final ValidationContext ctx) throws ValidationException
+    protected Circle(final Object node, final ValidationContext ctx) throws ValidationException
     {
         super(ShapeType.CIRCLE, node, ctx);
     }
@@ -129,7 +128,7 @@ public class Circle extends Shape<Circle>
         }
 
         @Override
-        public Circle create(final JSONObject node, final ValidationContext ctx) throws ValidationException
+        public Circle create(final Object node, final ValidationContext ctx) throws ValidationException
         {
             return new Circle(node, ctx);
         }

@@ -44,10 +44,6 @@ import com.ait.lienzo.shared.core.types.NodeType;
 import com.ait.lienzo.tools.client.collection.MetaData;
 import com.ait.lienzo.tools.client.collection.NFastArrayList;
 import com.ait.lienzo.tools.common.api.java.util.function.Predicate;
-import com.google.gwt.core.client.JavaScriptObject;
-import com.google.gwt.json.client.JSONArray;
-import com.google.gwt.json.client.JSONObject;
-import com.google.gwt.json.client.JSONString;
 
 import jsinterop.annotations.JsProperty;
 import jsinterop.annotations.JsType;
@@ -76,7 +72,7 @@ public abstract class GroupOf <T extends IPrimitive<?>, C extends GroupOf<T, C>>
     /**
      * Constructor. Creates an instance of a group.
      */
-    protected GroupOf(final GroupType type, final JSONObject node, final ValidationContext ctx) throws ValidationException
+    protected GroupOf(final GroupType type, final Object node, final ValidationContext ctx) throws ValidationException
     {
         super(NodeType.GROUP, node, ctx);
 
@@ -337,59 +333,61 @@ public abstract class GroupOf <T extends IPrimitive<?>, C extends GroupOf<T, C>>
         }
     }
 
-    /**
-     * Serialize this group as a {@link JSONObject}.
-     * 
-     * @return JSONObject
-     */
-    @Override
-    public JSONObject toJSONObject()
-    {
-        final JSONObject object = new JSONObject();
 
-        object.put("type", new JSONString(getGroupType().getValue()));
-
-        if (hasMetaData())
-        {
-            final MetaData meta = getMetaData();
-
-            if (false == meta.isEmpty())
-            {
-                // @FIXME (mdp)
-                // object.putString("meta", new JSONObject(meta.getJSO()));
-            }
-        }
-        //object.put("attributes", new JSONObject(getAttributes().getJSO()));
-
-        final NFastArrayList<T> list = getChildNodes();
-
-        final JSONArray children = new JSONArray();
-
-        if (list != null)
-        {
-            final int size = list.size();
-
-            for (int i = 0; i < size; i++)
-            {
-                final T prim = list.get(i);
-
-                if (null != prim)
-                {
-                    JSONObject make = prim.toJSONObject();
-
-                    if (null != make)
-                    {
-                        children.set(children.size(), make);
-                    }
-                }
-            }
-        }
-        object.put("children", children);
-
-        object.put("storage", getStorageEngine().toJSONObject());
-
-        return object;
-    }
+// @FIXME serialization (mdp)
+//    /**
+//     * Serialize this group as a {@link JSONObject}.
+//     *
+//     * @return JSONObject
+//     */
+//    @Override
+//    public JSONObject toJSONObject()
+//    {
+//        final JSONObject object = new JSONObject();
+//
+//        object.put("type", new JSONString(getGroupType().getValue()));
+//
+//        if (hasMetaData())
+//        {
+//            final MetaData meta = getMetaData();
+//
+//            if (false == meta.isEmpty())
+//            {
+//                // @FIXME (mdp)
+//                // object.putString("meta", new JSONObject(meta.getJSO()));
+//            }
+//        }
+//        //object.put("attributes", new JSONObject(getAttributes().getJSO()));
+//
+//        final NFastArrayList<T> list = getChildNodes();
+//
+//        final JSONArray children = new JSONArray();
+//
+//        if (list != null)
+//        {
+//            final int size = list.size();
+//
+//            for (int i = 0; i < size; i++)
+//            {
+//                final T prim = list.get(i);
+//
+//                if (null != prim)
+//                {
+//                    JSONObject make = prim.toJSONObject();
+//
+//                    if (null != make)
+//                    {
+//                        children.set(children.size(), make);
+//                    }
+//                }
+//            }
+//        }
+//        object.put("children", children);
+//
+//        object.put("storage", getStorageEngine().toJSONObject());
+//
+//        return object;
+//    }
 
     /**
      * Moves this group's {@link Layer} one level up

@@ -27,7 +27,6 @@ import com.ait.lienzo.client.core.types.PathPartList;
 import com.ait.lienzo.client.core.types.Point2DArray;
 import com.ait.lienzo.client.core.util.Geometry;
 import com.ait.lienzo.shared.core.types.ShapeType;
-import com.google.gwt.json.client.JSONObject;
 
 import jsinterop.annotations.JsProperty;
 
@@ -68,7 +67,7 @@ public class RegularPolygon extends Shape<RegularPolygon>
         setCornerRadius(corner);
     }
 
-    protected RegularPolygon(final JSONObject node, final ValidationContext ctx) throws ValidationException
+    protected RegularPolygon(final Object node, final ValidationContext ctx) throws ValidationException
     {
         super(ShapeType.REGULAR_POLYGON, node, ctx);
     }
@@ -265,7 +264,7 @@ public class RegularPolygon extends Shape<RegularPolygon>
         }
 
         @Override
-        public RegularPolygon create(final JSONObject node, final ValidationContext ctx) throws ValidationException
+        public RegularPolygon create(final Object node, final ValidationContext ctx) throws ValidationException
         {
             return new RegularPolygon(node, ctx);
         }

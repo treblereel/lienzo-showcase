@@ -21,7 +21,6 @@ import com.ait.lienzo.client.core.shape.json.IFactory;
 import com.ait.lienzo.client.core.shape.json.validators.ValidationContext;
 import com.ait.lienzo.client.core.shape.json.validators.ValidationException;
 import com.ait.lienzo.shared.core.types.ImageFilterType;
-import com.google.gwt.json.client.JSONObject;
 
 import jsinterop.annotations.JsProperty;
 import jsinterop.base.Js;
@@ -54,7 +53,7 @@ public class GainImageDataFilter extends AbstractTableImageDataFilter<GainImageD
         setBias(bias);
     }
 
-    protected GainImageDataFilter(JSONObject node, ValidationContext ctx) throws ValidationException
+    protected GainImageDataFilter(Object node, ValidationContext ctx) throws ValidationException
     {
         super(ImageFilterType.GainImageDataFilterType, node, ctx);
     }
@@ -154,7 +153,7 @@ public class GainImageDataFilter extends AbstractTableImageDataFilter<GainImageD
         }
 
         @Override
-        public GainImageDataFilter create(JSONObject node, ValidationContext ctx) throws ValidationException
+        public GainImageDataFilter create(Object node, ValidationContext ctx) throws ValidationException
         {
             return new GainImageDataFilter(node, ctx);
         }

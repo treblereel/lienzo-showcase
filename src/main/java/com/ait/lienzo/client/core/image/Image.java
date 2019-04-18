@@ -13,8 +13,6 @@ import com.ait.lienzo.client.core.shape.json.validators.ValidationException;
 import com.ait.lienzo.client.core.types.BoundingBox;
 import com.ait.lienzo.shared.core.types.ShapeType;
 import com.ait.lienzo.tools.client.collection.MetaData;
-import com.google.gwt.json.client.JSONObject;
-import com.google.gwt.json.client.JSONString;
 
 import jsinterop.annotations.JsProperty;
 
@@ -64,7 +62,7 @@ public class Image
         load(callback);
     }
 
-    private Image(final JSONObject node,
+    private Image(final Object node,
                   final ValidationContext ctx) throws ValidationException {
         super(ShapeType.IMAGE, node, ctx);
     }
@@ -362,28 +360,29 @@ public class Image
         this.url = Picture.toValidURL(url);
     }
 
-    @Override
-    public JSONObject toJSONObject() {
-        //JSONObject attr = new JSONObject(getAttributes().getJSO());
-        JSONObject attr = new JSONObject();
-
-        attr.put("url", new JSONString(getURL()));
-
-        JSONObject object = new JSONObject();
-
-        object.put("type", new JSONString(getShapeType().getValue()));
-
-        if (hasMetaData()) {
-            final MetaData meta = getMetaData();
-
-            if (false == meta.isEmpty()) {
-                // @FIXME (mdp)
-                //object.putString("meta", new JSONObject(meta.getJSO()));
-            }
-        }
-        object.put("attributes", attr);
-        return object;
-    }
+    // @FIXME serialization (mdp)
+//    @Override
+//    public JSONObject toJSONObject() {
+//        //JSONObject attr = new JSONObject(getAttributes().getJSO());
+//        JSONObject attr = new JSONObject();
+//
+//        attr.put("url", new JSONString(getURL()));
+//
+//        JSONObject object = new JSONObject();
+//
+//        object.put("type", new JSONString(getShapeType().getValue()));
+//
+//        if (hasMetaData()) {
+//            final MetaData meta = getMetaData();
+//
+//            if (false == meta.isEmpty()) {
+//                // @FIXME (mdp)
+//                //object.putString("meta", new JSONObject(meta.getJSO()));
+//            }
+//        }
+//        object.put("attributes", attr);
+//        return object;
+//    }
 
     @Override
     public void destroy() {
@@ -405,7 +404,7 @@ public class Image
         }
 
         @Override
-        public Image create(JSONObject node, ValidationContext ctx) throws ValidationException {
+        public Image create(Object node, ValidationContext ctx) throws ValidationException {
             return new Image(node, ctx);
         }
 

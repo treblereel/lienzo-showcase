@@ -21,8 +21,6 @@ import java.util.List;
 
 import com.ait.lienzo.client.core.Attribute;
 import com.ait.lienzo.client.core.Context2D;
-import com.ait.lienzo.client.core.event.AttributesChangedEvent;
-import com.ait.lienzo.client.core.event.AttributesChangedHandler;
 import com.ait.lienzo.client.core.event.NodeDragEndEvent;
 import com.ait.lienzo.client.core.event.NodeDragEndHandler;
 import com.ait.lienzo.client.core.event.NodeDragMoveEvent;
@@ -268,7 +266,7 @@ public class MagnetManager
                 .setDragMode(DragMode.SAME_LAYER);
     }
 
-    public static class Magnets implements AttributesChangedHandler, NodeDragStartHandler, NodeDragMoveHandler, NodeDragEndHandler
+    public static class Magnets implements NodeDragStartHandler, NodeDragMoveHandler, NodeDragEndHandler
     {
         private final IControlHandleList m_list;
 
@@ -287,8 +285,6 @@ public class MagnetManager
             m_wiresShape = wiresShape;
 
             Group shapeGroup = wiresShape.getGroup();
-            m_registrationManager.register(shapeGroup.addAttributesChangedHandler(Attribute.X, this));
-            m_registrationManager.register(shapeGroup.addAttributesChangedHandler(Attribute.Y, this));
             m_registrationManager.register(shapeGroup.addNodeDragStartHandler(this));
             m_registrationManager.register(shapeGroup.addNodeDragMoveHandler(this));
             m_registrationManager.register(shapeGroup.addNodeDragEndHandler(this));
@@ -302,15 +298,6 @@ public class MagnetManager
         public WiresShape getWiresShape()
         {
             return m_wiresShape;
-        }
-
-        @Override
-        public void onAttributesChanged(AttributesChangedEvent event)
-        {
-            if (!m_isDragging && event.any(Attribute.X, Attribute.Y))
-            {
-                getControl().shapeMoved();
-            }
         }
 
         @Override

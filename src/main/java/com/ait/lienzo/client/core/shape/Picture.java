@@ -19,6 +19,8 @@ package com.ait.lienzo.client.core.shape;
 import java.util.Collection;
 import java.util.List;
 
+import org.gwtproject.resources.client.ImageResource;
+
 import com.ait.lienzo.client.core.Attribute;
 import com.ait.lienzo.client.core.Context2D;
 import com.ait.lienzo.client.core.config.LienzoCore;
@@ -38,12 +40,6 @@ import com.ait.lienzo.shared.core.types.ImageSelectionMode;
 import com.ait.lienzo.shared.core.types.ImageSerializationMode;
 import com.ait.lienzo.shared.core.types.ShapeType;
 import com.ait.lienzo.tools.client.collection.MetaData;
-import com.google.gwt.json.client.JSONArray;
-import com.google.gwt.json.client.JSONBoolean;
-import com.google.gwt.json.client.JSONObject;
-import com.google.gwt.json.client.JSONString;
-import com.google.gwt.json.client.JSONValue;
-import com.google.gwt.resources.client.ImageResource;
 
 import jsinterop.annotations.JsProperty;
 
@@ -81,7 +77,7 @@ public class Picture extends AbstractImageShape<Picture> implements ImageDataFil
     @JsProperty
     private int clippedImageDestinationHeight;
 
-    protected Picture(JSONObject node, ValidationContext ctx) throws ValidationException
+    protected Picture(Object node, ValidationContext ctx) throws ValidationException
     {
         super(ShapeType.PICTURE, node, ctx);
     }
@@ -1426,78 +1422,79 @@ public class Picture extends AbstractImageShape<Picture> implements ImageDataFil
         return this;
     }
 
-    /**
-     * Serializes this shape as a {@link JSONObject}
-     * 
-     * @return JSONObject
-     */
-    @Override
-    public JSONObject toJSONObject()
-    {
-        //JSONObject attr = new JSONObject(getAttributes().getJSO());
-        JSONObject attr = new JSONObject();
-
-        if (getImageSerializationMode() == ImageSerializationMode.DATA_URL)
-        {
-            String url = getImageProxy().getImageElementURL();
-
-            if (null == url)
-            {
-                url = getURL();
-            }
-            if (url.startsWith("data:"))
-            {
-                attr.put("url", new JSONString(url));
-            }
-            else
-            {
-                attr.put("url", new JSONString(toDataURL(false)));
-            }
-        }
-        JSONObject object = new JSONObject();
-
-        object.put("type", new JSONString(getShapeType().getValue()));
-
-        if (hasMetaData())
-        {
-            final MetaData meta = getMetaData();
-
-            if (false == meta.isEmpty())
-            {
-                // @FIXME (mdp)
-                // object.putString("meta", new JSONObject(meta.getJSO()));
-            }
-        }
-        object.put("attributes", attr);
-
-        ImageDataFilterChain chain = getImageProxy().getFilterChain();
-
-        if ((null != chain) && (chain.size() > 0))
-        {
-            JSONArray filters = new JSONArray();
-
-            JSONObject filter = new JSONObject();
-
-            filter.put("active", JSONBoolean.getInstance(chain.isActive()));
-
-            for (ImageDataFilter<?> ifilter : chain.getFilters())
-            {
-                if (null != ifilter)
-                {
-                    JSONObject make = ifilter.toJSONObject();
-
-                    if (null != make)
-                    {
-                        filters.set(filters.size(), make);
-                    }
-                }
-            }
-            filter.put("filters", filters);
-
-            object.put("filter", filter);
-        }
-        return object;
-    }
+    // @FIXME serialization (mdp)
+//    /**
+//     * Serializes this shape as a {@link JSONObject}
+//     *
+//     * @return JSONObject
+//     */
+//    @Override
+//    public JSONObject toJSONObject()
+//    {
+//        //JSONObject attr = new JSONObject(getAttributes().getJSO());
+//        JSONObject attr = new JSONObject();
+//
+//        if (getImageSerializationMode() == ImageSerializationMode.DATA_URL)
+//        {
+//            String url = getImageProxy().getImageElementURL();
+//
+//            if (null == url)
+//            {
+//                url = getURL();
+//            }
+//            if (url.startsWith("data:"))
+//            {
+//                attr.put("url", new JSONString(url));
+//            }
+//            else
+//            {
+//                attr.put("url", new JSONString(toDataURL(false)));
+//            }
+//        }
+//        JSONObject object = new JSONObject();
+//
+//        object.put("type", new JSONString(getShapeType().getValue()));
+//
+//        if (hasMetaData())
+//        {
+//            final MetaData meta = getMetaData();
+//
+//            if (false == meta.isEmpty())
+//            {
+//                // @FIXME (mdp)
+//                // object.putString("meta", new JSONObject(meta.getJSO()));
+//            }
+//        }
+//        object.put("attributes", attr);
+//
+//        ImageDataFilterChain chain = getImageProxy().getFilterChain();
+//
+//        if ((null != chain) && (chain.size() > 0))
+//        {
+//            JSONArray filters = new JSONArray();
+//
+//            JSONObject filter = new JSONObject();
+//
+//            filter.put("active", JSONBoolean.getInstance(chain.isActive()));
+//
+//            for (ImageDataFilter<?> ifilter : chain.getFilters())
+//            {
+//                if (null != ifilter)
+//                {
+//                    JSONObject make = ifilter.toJSONObject();
+//
+//                    if (null != make)
+//                    {
+//                        filters.set(filters.size(), make);
+//                    }
+//                }
+//            }
+//            filter.put("filters", filters);
+//
+//            object.put("filter", filter);
+//        }
+//        return object;
+//    }
 
     /**
      * Draws the image on the canvas.
@@ -1762,30 +1759,31 @@ public class Picture extends AbstractImageShape<Picture> implements ImageDataFil
         }
 
         @Override
-        public Picture create(JSONObject node, ValidationContext ctx) throws ValidationException
+        public Picture create(Object node, ValidationContext ctx) throws ValidationException
         {
             Picture picture = new Picture(node, ctx);
 
-            JSONValue jval = node.get("filter");
-
-            if (null != jval)
-            {
-                JSONObject object = jval.isObject();
-
-                if (null != object)
-                {
-                    JSONDeserializer.get().deserializeFilters(picture, object, ctx);
-
-                    jval = object.get("active");
-
-                    JSONBoolean active = jval.isBoolean();
-
-                    if (null != active)
-                    {
-                        picture.setFiltersActive(active.booleanValue());
-                    }
-                }
-            }
+            // @FIXME serialization (mdp)
+//            JSONValue jval = node.get("filter");
+//
+//            if (null != jval)
+//            {
+//                JSONObject object = jval.isObject();
+//
+//                if (null != object)
+//                {
+//                    JSONDeserializer.get().deserializeFilters(picture, object, ctx);
+//
+//                    jval = object.get("active");
+//
+//                    JSONBoolean active = jval.isBoolean();
+//
+//                    if (null != active)
+//                    {
+//                        picture.setFiltersActive(active.booleanValue());
+//                    }
+//                }
+//            }
             return picture;
         }
 

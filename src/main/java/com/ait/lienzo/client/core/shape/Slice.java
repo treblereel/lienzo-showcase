@@ -24,7 +24,6 @@ import com.ait.lienzo.client.core.shape.json.validators.ValidationContext;
 import com.ait.lienzo.client.core.shape.json.validators.ValidationException;
 import com.ait.lienzo.client.core.types.BoundingBox;
 import com.ait.lienzo.shared.core.types.ShapeType;
-import com.google.gwt.json.client.JSONObject;
 
 import jsinterop.annotations.JsProperty;
 
@@ -75,7 +74,7 @@ public class Slice extends Shape<Slice>
         this(radius, startAngle, endAngle, false);
     }
 
-    protected Slice(final JSONObject node, final ValidationContext ctx) throws ValidationException
+    protected Slice(final Object node, final ValidationContext ctx) throws ValidationException
     {
         super(ShapeType.SLICE, node, ctx);
     }
@@ -243,7 +242,7 @@ public class Slice extends Shape<Slice>
         }
 
         @Override
-        public Slice create(final JSONObject node, final ValidationContext ctx) throws ValidationException
+        public Slice create(final Object node, final ValidationContext ctx) throws ValidationException
         {
             return new Slice(node, ctx);
         }

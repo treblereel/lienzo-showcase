@@ -16,8 +16,6 @@
 
 package com.ait.lienzo.client.core.types;
 
-import com.google.gwt.json.client.JSONObject;
-
 import elemental2.core.Global;
 import jsinterop.annotations.JsProperty;
 import jsinterop.annotations.JsType;

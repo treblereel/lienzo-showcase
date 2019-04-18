@@ -29,7 +29,6 @@ import com.ait.lienzo.client.core.types.Point2D;
 import com.ait.lienzo.client.core.types.Point2DArray;
 import com.ait.lienzo.client.core.util.Geometry;
 import com.ait.lienzo.shared.core.types.ShapeType;
-import com.google.gwt.json.client.JSONObject;
 
 import jsinterop.annotations.JsProperty;
 
@@ -90,7 +89,7 @@ public class PolyLine extends AbstractDirectionalMultiPointShape<PolyLine>
         this(Point2DArray.fromArrayOfDouble(array));
     }
 
-    protected PolyLine(final JSONObject node, final ValidationContext ctx) throws ValidationException
+    protected PolyLine(final Object node, final ValidationContext ctx) throws ValidationException
     {
         super(ShapeType.POLYLINE, node, ctx);
     }
@@ -307,7 +306,7 @@ public class PolyLine extends AbstractDirectionalMultiPointShape<PolyLine>
         }
 
         @Override
-        public PolyLine create(final JSONObject node, final ValidationContext ctx) throws ValidationException
+        public PolyLine create(final Object node, final ValidationContext ctx) throws ValidationException
         {
             return new PolyLine(node, ctx);
         }

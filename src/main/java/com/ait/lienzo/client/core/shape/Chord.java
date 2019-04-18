@@ -25,7 +25,6 @@ import com.ait.lienzo.client.core.shape.json.validators.ValidationContext;
 import com.ait.lienzo.client.core.shape.json.validators.ValidationException;
 import com.ait.lienzo.client.core.types.BoundingBox;
 import com.ait.lienzo.shared.core.types.ShapeType;
-import com.google.gwt.json.client.JSONObject;
 
 import jsinterop.annotations.JsProperty;
 
@@ -75,7 +74,7 @@ public class Chord extends Shape<Chord>
         this(radius, startAngle, endAngle, false);
     }
 
-    protected Chord(final JSONObject node, final ValidationContext ctx) throws ValidationException
+    protected Chord(final Object node, final ValidationContext ctx) throws ValidationException
     {
         super(ShapeType.CHORD, node, ctx);
     }
@@ -235,7 +234,7 @@ public class Chord extends Shape<Chord>
         }
 
         @Override
-        public Chord create(final JSONObject node, final ValidationContext ctx) throws ValidationException
+        public Chord create(final Object node, final ValidationContext ctx) throws ValidationException
         {
             return new Chord(node, ctx);
         }

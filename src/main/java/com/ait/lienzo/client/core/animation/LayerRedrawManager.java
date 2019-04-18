@@ -17,8 +17,8 @@ package com.ait.lienzo.client.core.animation;
 
 import com.ait.lienzo.client.core.shape.Layer;
 import com.ait.lienzo.tools.client.collection.NFastArrayList;
-import com.google.gwt.animation.client.AnimationScheduler;
-import com.google.gwt.animation.client.AnimationScheduler.AnimationCallback;
+
+import com.ait.lienzo.client.core.animation.AnimationScheduler.AnimationCallback;
 
 import elemental2.dom.HTMLElement;
 import jsinterop.base.Js;

@@ -24,7 +24,6 @@ import com.ait.lienzo.client.core.shape.json.validators.ValidationContext;
 import com.ait.lienzo.client.core.shape.json.validators.ValidationException;
 import com.ait.lienzo.client.core.types.BoundingBox;
 import com.ait.lienzo.shared.core.types.ShapeType;
-import com.google.gwt.json.client.JSONObject;
 
 import jsinterop.annotations.JsProperty;
 
@@ -70,7 +69,7 @@ public class Rectangle extends Shape<Rectangle>
         setCornerRadius(corner);
     }
 
-    protected Rectangle(final JSONObject node, final ValidationContext ctx) throws ValidationException
+    protected Rectangle(final Object node, final ValidationContext ctx) throws ValidationException
     {
         super(ShapeType.RECTANGLE, node, ctx);
     }
@@ -221,7 +220,7 @@ public class Rectangle extends Shape<Rectangle>
         }
 
         @Override
-        public Rectangle create(final JSONObject node, final ValidationContext ctx) throws ValidationException
+        public Rectangle create(final Object node, final ValidationContext ctx) throws ValidationException
         {
             return new Rectangle(node, ctx);
         }

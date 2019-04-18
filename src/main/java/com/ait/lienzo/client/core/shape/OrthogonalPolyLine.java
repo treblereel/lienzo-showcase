@@ -30,7 +30,6 @@ import com.ait.lienzo.client.core.util.Geometry;
 import com.ait.lienzo.shared.core.types.Direction;
 import com.ait.lienzo.shared.core.types.ShapeType;
 import com.ait.lienzo.tools.client.collection.NFastDoubleArray;
-import com.google.gwt.json.client.JSONObject;
 
 import jsinterop.annotations.JsProperty;
 
@@ -81,7 +80,7 @@ public class OrthogonalPolyLine extends AbstractDirectionalMultiPointShape<Ortho
         setCornerRadius(corner);
     }
 
-    protected OrthogonalPolyLine(final JSONObject node, final ValidationContext ctx) throws ValidationException
+    protected OrthogonalPolyLine(final Object node, final ValidationContext ctx) throws ValidationException
     {
         super(ShapeType.ORTHOGONAL_POLYLINE, node, ctx);
     }
@@ -876,7 +875,7 @@ public class OrthogonalPolyLine extends AbstractDirectionalMultiPointShape<Ortho
         }
 
         @Override
-        public OrthogonalPolyLine create(final JSONObject node, final ValidationContext ctx) throws ValidationException
+        public OrthogonalPolyLine create(final Object node, final ValidationContext ctx) throws ValidationException
         {
             return new OrthogonalPolyLine(node, ctx);
         }

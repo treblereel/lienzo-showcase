@@ -25,7 +25,6 @@ import com.ait.lienzo.client.core.shape.json.validators.ValidationContext;
 import com.ait.lienzo.client.core.shape.json.validators.ValidationException;
 import com.ait.lienzo.client.core.types.BoundingBox;
 import com.ait.lienzo.shared.core.types.ShapeType;
-import com.google.gwt.json.client.JSONObject;
 
 import jsinterop.annotations.JsProperty;
 
@@ -77,7 +76,7 @@ public class Bow extends Shape<Bow>
         this(innerRadius, outerRadius, startAngle, endAngle, false);
     }
 
-    protected Bow(final JSONObject node, final ValidationContext ctx) throws ValidationException
+    protected Bow(final Object node, final ValidationContext ctx) throws ValidationException
     {
         super(ShapeType.BOW, node, ctx);
     }
@@ -266,7 +265,7 @@ public class Bow extends Shape<Bow>
         }
 
         @Override
-        public Bow create(final JSONObject node, final ValidationContext ctx) throws ValidationException
+        public Bow create(final Object node, final ValidationContext ctx) throws ValidationException
         {
             return new Bow(node, ctx);
         }

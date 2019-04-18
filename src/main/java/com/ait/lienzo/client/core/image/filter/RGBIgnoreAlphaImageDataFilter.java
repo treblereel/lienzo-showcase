@@ -23,7 +23,6 @@ import com.ait.lienzo.client.core.types.ImageDataUtil;
 import com.ait.lienzo.shared.core.types.ImageFilterType;
 import com.ait.lienzo.shared.core.types.IColor;
 import com.ait.lienzo.tools.client.Console;
-import com.google.gwt.json.client.JSONObject;
 
 import elemental2.core.JsArray;
 import elemental2.core.Uint8ClampedArray;
@@ -62,7 +61,7 @@ public class RGBIgnoreAlphaImageDataFilter extends AbstractRGBImageDataFilter<RG
         super(ImageFilterType.RGBIgnoreAlphaImageDataFilterType, color);
     }
 
-    protected RGBIgnoreAlphaImageDataFilter(JSONObject node, ValidationContext ctx) throws ValidationException
+    protected RGBIgnoreAlphaImageDataFilter(Object node, ValidationContext ctx) throws ValidationException
     {
         super(ImageFilterType.RGBIgnoreAlphaImageDataFilterType, node, ctx);
     }
@@ -124,7 +123,7 @@ public class RGBIgnoreAlphaImageDataFilter extends AbstractRGBImageDataFilter<RG
         }
 
         @Override
-        public RGBIgnoreAlphaImageDataFilter create(JSONObject node, ValidationContext ctx) throws ValidationException
+        public RGBIgnoreAlphaImageDataFilter create(Object node, ValidationContext ctx) throws ValidationException
         {
             return new RGBIgnoreAlphaImageDataFilter(node, ctx);
         }

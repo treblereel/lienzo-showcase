@@ -23,7 +23,6 @@ import com.ait.lienzo.client.core.shape.json.validators.ValidationException;
 import com.ait.lienzo.client.core.types.ImageDataUtil;
 import com.ait.lienzo.shared.core.types.ImageFilterType;
 import com.ait.lienzo.shared.core.types.IColor;
-import com.google.gwt.json.client.JSONObject;
 
 import elemental2.core.JsArray;
 import elemental2.core.Uint8ClampedArray;
@@ -59,7 +58,7 @@ public class ColorDeltaAlphaImageDataFilter extends AbstractRGBImageDataFilter<C
         setValue(value);
     }
 
-    protected ColorDeltaAlphaImageDataFilter(JSONObject node, ValidationContext ctx) throws ValidationException
+    protected ColorDeltaAlphaImageDataFilter(Object node, ValidationContext ctx) throws ValidationException
     {
         super(ImageFilterType.ColorDeltaAlphaImageDataFilterType, node, ctx);
     }
@@ -138,7 +137,7 @@ public class ColorDeltaAlphaImageDataFilter extends AbstractRGBImageDataFilter<C
         }
 
         @Override
-        public ColorDeltaAlphaImageDataFilter create(JSONObject node, ValidationContext ctx) throws ValidationException
+        public ColorDeltaAlphaImageDataFilter create(Object node, ValidationContext ctx) throws ValidationException
         {
             return new ColorDeltaAlphaImageDataFilter(node, ctx);
         }

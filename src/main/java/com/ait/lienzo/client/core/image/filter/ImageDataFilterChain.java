@@ -25,8 +25,6 @@ import com.ait.lienzo.client.core.shape.json.validators.ValidationException;
 import com.ait.lienzo.client.core.types.ImageDataUtil;
 import com.ait.lienzo.shared.core.types.ImageFilterType;
 import com.ait.lienzo.tools.client.collection.NFastArrayList;
-import com.google.gwt.json.client.JSONArray;
-import com.google.gwt.json.client.JSONObject;
 
 import elemental2.dom.ImageData;
 
@@ -46,34 +44,35 @@ public class ImageDataFilterChain extends AbstractImageDataFilter<ImageDataFilte
         addFilters(filter, filters);
     }
 
-    protected ImageDataFilterChain(JSONObject node, ValidationContext ctx) throws ValidationException
+    protected ImageDataFilterChain(Object node, ValidationContext ctx) throws ValidationException
     {
         super(ImageFilterType.ImageDataFilterChainType, node, ctx);
     }
 
-    @Override
-    public JSONObject toJSONObject()
-    {
-        JSONObject object = super.toJSONObject();
-
-        JSONArray filters = new JSONArray();
-
-        for (ImageDataFilter<?> filter : m_filters.asList())
-        {
-            if (null != filter)
-            {
-                JSONObject make = filter.toJSONObject();
-
-                if (null != make)
-                {
-                    filters.set(filters.size(), make);
-                }
-            }
-        }
-        object.put("filters", filters);
-
-        return object;
-    }
+    // @FIXME serialization (mdp)
+//    @Override
+//    public JSONObject toJSONObject()
+//    {
+//        JSONObject object = super.toJSONObject();
+//
+//        JSONArray filters = new JSONArray();
+//
+//        for (ImageDataFilter<?> filter : m_filters.asList())
+//        {
+//            if (null != filter)
+//            {
+//                JSONObject make = filter.toJSONObject();
+//
+//                if (null != make)
+//                {
+//                    filters.set(filters.size(), make);
+//                }
+//            }
+//        }
+//        object.put("filters", filters);
+//
+//        return object;
+//    }
 
     public int size()
     {
@@ -292,7 +291,7 @@ public class ImageDataFilterChain extends AbstractImageDataFilter<ImageDataFilte
         }
 
         @Override
-        public ImageDataFilterChain create(JSONObject node, ValidationContext ctx) throws ValidationException
+        public ImageDataFilterChain create(Object node, ValidationContext ctx) throws ValidationException
         {
             ImageDataFilterChain chain = new ImageDataFilterChain(node, ctx);
 

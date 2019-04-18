@@ -26,8 +26,6 @@ import com.ait.lienzo.client.core.Attribute;
 import com.ait.lienzo.client.core.animation.AnimationProperties;
 import com.ait.lienzo.client.core.animation.AnimationProperty;
 import com.ait.lienzo.client.core.animation.AnimationTweener;
-import com.ait.lienzo.client.core.event.AttributesChangedEvent;
-import com.ait.lienzo.client.core.event.AttributesChangedHandler;
 import com.ait.lienzo.client.core.event.NodeDragEndEvent;
 import com.ait.lienzo.client.core.event.NodeDragEndHandler;
 import com.ait.lienzo.client.core.event.NodeDragMoveEvent;
@@ -54,7 +52,6 @@ import com.ait.lienzo.shared.core.types.ColorName;
 import com.ait.lienzo.shared.core.types.DragMode;
 import com.ait.lienzo.shared.core.types.ShapeType;
 import com.ait.lienzo.tools.client.event.HandlerRegistrationManager;
-import com.google.gwt.json.client.JSONObject;
 
 import jsinterop.annotations.JsProperty;
 
@@ -70,7 +67,7 @@ public abstract class AbstractMultiPointShape<T extends AbstractMultiPointShape<
         super(type);
     }
 
-    protected AbstractMultiPointShape(final ShapeType type, final JSONObject node, final ValidationContext ctx) throws ValidationException
+    protected AbstractMultiPointShape(final ShapeType type, final Object node, final ValidationContext ctx) throws ValidationException
     {
         super(type, node, ctx);
     }
@@ -272,7 +269,7 @@ public abstract class AbstractMultiPointShape<T extends AbstractMultiPointShape<
         }
     }
 
-    public static class ShapeXorYChanged implements AttributesChangedHandler, NodeDragStartHandler, NodeDragMoveHandler, NodeDragEndHandler
+    public static class ShapeXorYChanged implements NodeDragStartHandler, NodeDragMoveHandler, NodeDragEndHandler
     {
         private IControlHandleList m_handleList;
 
@@ -297,15 +294,6 @@ public abstract class AbstractMultiPointShape<T extends AbstractMultiPointShape<
         public void onNodeDragStart(NodeDragStartEvent event)
         {
             m_dragging = true;
-        }
-
-        @Override
-        public void onAttributesChanged(AttributesChangedEvent event)
-        {
-            if (!m_dragging && event.all(Attribute.X, Attribute.Y))
-            {
-                shapeMoved();
-            }
         }
 
         @Override

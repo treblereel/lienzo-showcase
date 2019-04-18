@@ -20,7 +20,6 @@ import com.ait.lienzo.client.core.shape.json.IFactory;
 import com.ait.lienzo.client.core.shape.json.validators.ValidationContext;
 import com.ait.lienzo.client.core.shape.json.validators.ValidationException;
 import com.ait.lienzo.shared.core.types.ImageFilterType;
-import com.google.gwt.json.client.JSONObject;
 
 import jsinterop.base.Js;
 
@@ -43,7 +42,7 @@ public class SolarizeImageDataFilter extends AbstractTableImageDataFilter<Solari
         super(ImageFilterType.SolarizeImageDataFilterType);
     }
 
-    protected SolarizeImageDataFilter(JSONObject node, ValidationContext ctx) throws ValidationException
+    protected SolarizeImageDataFilter(Object node, ValidationContext ctx) throws ValidationException
     {
         super(ImageFilterType.SolarizeImageDataFilterType, node, ctx);
     }
@@ -68,7 +67,7 @@ public class SolarizeImageDataFilter extends AbstractTableImageDataFilter<Solari
         }
 
         @Override
-        public SolarizeImageDataFilter create(JSONObject node, ValidationContext ctx) throws ValidationException
+        public SolarizeImageDataFilter create(Object node, ValidationContext ctx) throws ValidationException
         {
             return new SolarizeImageDataFilter(node, ctx);
         }

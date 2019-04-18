@@ -28,7 +28,6 @@ import com.ait.lienzo.client.core.types.PathPartEntryJSO;
 import com.ait.lienzo.client.core.types.PathPartList;
 import com.ait.lienzo.shared.core.types.ShapeType;
 import com.ait.lienzo.tools.client.collection.NFastDoubleArray;
-import com.google.gwt.json.client.JSONObject;
 
 import jsinterop.annotations.JsProperty;
 
@@ -48,7 +47,7 @@ public class SVGPath extends Shape<SVGPath>
         setPath(path);
     }
 
-    protected SVGPath(final JSONObject node, final ValidationContext ctx) throws ValidationException
+    protected SVGPath(final Object node, final ValidationContext ctx) throws ValidationException
     {
         super(ShapeType.SVG_PATH, node, ctx);
 
@@ -576,7 +575,7 @@ public class SVGPath extends Shape<SVGPath>
         }
 
         @Override
-        public SVGPath create(final JSONObject node, final ValidationContext ctx) throws ValidationException
+        public SVGPath create(final Object node, final ValidationContext ctx) throws ValidationException
         {
             return new SVGPath(node, ctx);
         }

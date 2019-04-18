@@ -20,7 +20,6 @@ import com.ait.lienzo.client.core.shape.json.IFactory;
 import com.ait.lienzo.client.core.shape.json.validators.ValidationContext;
 import com.ait.lienzo.client.core.shape.json.validators.ValidationException;
 import com.ait.lienzo.shared.core.types.ImageFilterType;
-import com.google.gwt.json.client.JSONObject;
 
 import jsinterop.base.Js;
 
@@ -40,7 +39,7 @@ public class ExposureImageDataFilter extends AbstractValueTableImageDataFilter<E
         super(ImageFilterType.ExposureImageDataFilterType, value);
     }
 
-    protected ExposureImageDataFilter(JSONObject node, ValidationContext ctx) throws ValidationException
+    protected ExposureImageDataFilter(Object node, ValidationContext ctx) throws ValidationException
     {
         super(ImageFilterType.ExposureImageDataFilterType, node, ctx);
     }
@@ -96,7 +95,7 @@ public class ExposureImageDataFilter extends AbstractValueTableImageDataFilter<E
         }
 
         @Override
-        public ExposureImageDataFilter create(JSONObject node, ValidationContext ctx) throws ValidationException
+        public ExposureImageDataFilter create(Object node, ValidationContext ctx) throws ValidationException
         {
             return new ExposureImageDataFilter(node, ctx);
         }

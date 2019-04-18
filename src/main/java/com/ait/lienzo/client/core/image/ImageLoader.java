@@ -16,14 +16,19 @@
 
 package com.ait.lienzo.client.core.image;
 
-import com.ait.lienzo.tools.client.event.HandlerRegistrationManager;
-import com.google.gwt.dom.client.Element;
-import com.google.gwt.dom.client.ImageElement;
-import com.google.gwt.dom.client.Style.Display;
-import com.google.gwt.resources.client.ImageResource;
-import com.google.gwt.user.client.ui.RootPanel;
-import com.google.gwt.user.client.ui.Widget;
+import org.gwtproject.resources.client.ImageResource;
 
+import com.ait.lienzo.client.widget.RootPanel;
+import com.ait.lienzo.tools.client.event.HandlerRegistrationManager;
+//import com.google.gwt.dom.client.Element;
+//import com.google.gwt.dom.client.ImageElement;
+//import com.google.gwt.user.client.ui.RootPanel;
+//import com.google.gwt.user.client.ui.Widget;
+
+import org.gwtproject.dom.style.shared.Display;
+import org.gwtproject.resources.client.impl.ImageResourcePrototype;
+
+import elemental2.dom.CSSProperties;
 import elemental2.dom.HTMLElement;
 import elemental2.dom.HTMLImageElement;
 import elemental2.dom.Image;
@@ -49,7 +54,7 @@ public abstract class ImageLoader
             setCrossOrigin(image, crossOrigin);
         }
 
-        final HandlerRegistrationManager m_HandlerRegManager = new HandlerRegistrationManager();
+        //final HandlerRegistrationManager m_HandlerRegManager = new HandlerRegistrationManager();
 
         image.onload = (e) ->
         {
@@ -68,18 +73,10 @@ public abstract class ImageLoader
             return null;
         };
 
-        RootPanel.get().getElement().appendChild(Js.uncheckedCast(image));
+        RootPanel.get().add(image);
 
         // @FIXME I removed "isValidDataURL(url) && isValidSVG(url)" as it seems with Elemental2 it all end up at .src. But we should double check this (mdp)
         image.src = url;
-    }
-
-    private static class ElementWidget extends Widget
-    {
-
-        ElementWidget(HTMLElement element) {
-            setElement(com.google.gwt.dom.client.Element.as(Js.cast(element)));
-        }
     }
 
     public ImageLoader(final ImageResource resource)
@@ -122,12 +119,25 @@ public abstract class ImageLoader
         };
 
         // @FIXME double check this works, ImageReources can includ clippping information, so I had to case from Elemental2 to GWT (mdp)
-        com.google.gwt.user.client.ui.Image gwtImage = Js.uncheckedCast(image);
 
-        gwtImage.setResource(resource);
+        String urlAsString = resource.getSafeUri().asString();
+        if (resource instanceof ImageResourcePrototype.Bundle) {
+            // lifted from com.google.gwt.user.client.ui.impl.ClippedImageImpl adjust
+            image.style.background = "url(\"" + urlAsString + "\") no-repeat " + (-resource.getLeft() + "px ") + (-resource.getTop() + "px");
+            image.style.width = CSSProperties.WidthUnionType.of(resource.getHeight());
+            image.style.height = CSSProperties.HeightUnionType.of(resource.getHeight());
+        }
+        else
+        {
+            // lifted from com.google.gwt.user.client.ui.Image setResource
+            image.src = urlAsString;
+            image.width = resource.getWidth();
+            image.height = resource.getHeight();
+        }
 
-        RootPanel.get().add(gwtImage);
+        RootPanel.get().add(image);
     }
+
 
     private final void doImageElementLoadAndRetry(final HTMLImageElement image,
                                                   final String orig,
@@ -149,7 +159,7 @@ public abstract class ImageLoader
                 {
                     // it failed, so undo
                     // @FIXME check this cast works (mdp)
-                    RootPanel.get().remove(Js.uncheckedCast(image));
+                    RootPanel.get().remove(image);
                     onImageElementError("Image " + url + " failed to load");
                     image.crossOrigin = orig;
                 }
@@ -166,7 +176,7 @@ public abstract class ImageLoader
                 image.onerror = null;
                 // it failed, so undo
                 // @FIXME check this cast works (mdp)
-                RootPanel.get().remove(Js.uncheckedCast(image));
+                RootPanel.get().remove(image);
                 onImageElementError("Image " + url + " failed to load");
                 image.crossOrigin = orig;
                 return null;

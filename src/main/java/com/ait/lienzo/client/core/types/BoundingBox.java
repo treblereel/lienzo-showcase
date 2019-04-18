@@ -16,9 +16,6 @@
 
 package com.ait.lienzo.client.core.types;
 
-import com.google.gwt.json.client.JSONNumber;
-import com.google.gwt.json.client.JSONObject;
-
 import jsinterop.annotations.JsProperty;
 import jsinterop.annotations.JsType;
 
@@ -294,17 +291,20 @@ public final class BoundingBox
 
     public final String toJSONString()
     {
-        JSONObject object = new JSONObject();
+        // @FIXME (mdp)
+        throw new UnsupportedOperationException();
 
-        object.put("x", new JSONNumber(getX()));
-
-        object.put("y", new JSONNumber(getY()));
-
-        object.put("width", new JSONNumber(getWidth()));
-
-        object.put("height", new JSONNumber(getHeight()));
-
-        return object.toString();
+//        JSONObject object = new JSONObject();
+//
+//        object.put("x", new JSONNumber(getX()));
+//
+//        object.put("y", new JSONNumber(getY()));
+//
+//        object.put("width", new JSONNumber(getWidth()));
+//
+//        object.put("height", new JSONNumber(getHeight()));
+//
+//        return object.toString();
     }
 
     @Override

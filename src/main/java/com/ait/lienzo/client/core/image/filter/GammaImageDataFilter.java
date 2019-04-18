@@ -20,7 +20,6 @@ import com.ait.lienzo.client.core.shape.json.IFactory;
 import com.ait.lienzo.client.core.shape.json.validators.ValidationContext;
 import com.ait.lienzo.client.core.shape.json.validators.ValidationException;
 import com.ait.lienzo.shared.core.types.ImageFilterType;
-import com.google.gwt.json.client.JSONObject;
 
 import jsinterop.base.Js;
 
@@ -40,7 +39,7 @@ public class GammaImageDataFilter extends AbstractValueTableImageDataFilter<Gamm
         super(ImageFilterType.GammaImageDataFilterType, value);
     }
 
-    protected GammaImageDataFilter(JSONObject node, ValidationContext ctx) throws ValidationException
+    protected GammaImageDataFilter(Object node, ValidationContext ctx) throws ValidationException
     {
         super(ImageFilterType.GammaImageDataFilterType, node, ctx);
     }
@@ -96,7 +95,7 @@ public class GammaImageDataFilter extends AbstractValueTableImageDataFilter<Gamm
         }
 
         @Override
-        public GammaImageDataFilter create(JSONObject node, ValidationContext ctx) throws ValidationException
+        public GammaImageDataFilter create(Object node, ValidationContext ctx) throws ValidationException
         {
             return new GammaImageDataFilter(node, ctx);
         }

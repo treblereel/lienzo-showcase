@@ -21,7 +21,6 @@ import com.ait.lienzo.client.core.shape.json.validators.ValidationContext;
 import com.ait.lienzo.client.core.shape.json.validators.ValidationException;
 import com.ait.lienzo.client.core.types.ImageDataUtil;
 import com.ait.lienzo.shared.core.types.ImageFilterType;
-import com.google.gwt.json.client.JSONObject;
 
 import elemental2.core.Uint8ClampedArray;
 import elemental2.dom.ImageData;
@@ -36,7 +35,7 @@ public class LuminosityGrayScaleImageDataFilter extends AbstractImageDataFilter<
         super(ImageFilterType.LuminosityGrayScaleImageDataFilterType);
     }
 
-    protected LuminosityGrayScaleImageDataFilter(JSONObject node, ValidationContext ctx) throws ValidationException
+    protected LuminosityGrayScaleImageDataFilter(Object node, ValidationContext ctx) throws ValidationException
     {
         super(ImageFilterType.LuminosityGrayScaleImageDataFilterType, node, ctx);
     }
@@ -81,7 +80,7 @@ public class LuminosityGrayScaleImageDataFilter extends AbstractImageDataFilter<
         }
 
         @Override
-        public LuminosityGrayScaleImageDataFilter create(JSONObject node, ValidationContext ctx) throws ValidationException
+        public LuminosityGrayScaleImageDataFilter create(Object node, ValidationContext ctx) throws ValidationException
         {
             return new LuminosityGrayScaleImageDataFilter(node, ctx);
         }

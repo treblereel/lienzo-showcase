@@ -22,13 +22,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.ait.lienzo.client.core.Attribute;
 import com.ait.lienzo.client.core.Context2D;
 import com.ait.lienzo.client.core.animation.AnimationProperties;
 import com.ait.lienzo.client.core.animation.AnimationProperty;
 import com.ait.lienzo.client.core.animation.AnimationTweener;
-import com.ait.lienzo.client.core.event.AttributesChangedEvent;
-import com.ait.lienzo.client.core.event.AttributesChangedHandler;
+import com.ait.lienzo.tools.client.event.HandlerRegistration;
 import com.ait.lienzo.client.core.event.NodeDragEndEvent;
 import com.ait.lienzo.client.core.event.NodeDragEndHandler;
 import com.ait.lienzo.client.core.event.NodeDragMoveEvent;
@@ -62,8 +60,6 @@ import com.ait.lienzo.shared.core.types.ShapeType;
 import com.ait.lienzo.tools.client.collection.NFastArrayList;
 import com.ait.lienzo.tools.client.collection.NFastDoubleArray;
 import com.ait.lienzo.tools.client.event.HandlerRegistrationManager;
-import com.google.gwt.event.shared.HandlerRegistration;
-import com.google.gwt.json.client.JSONObject;
 
 import elemental2.core.JsArray;
 import jsinterop.annotations.JsProperty;
@@ -103,7 +99,7 @@ public abstract class AbstractMultiPathPartShape<T extends AbstractMultiPathPart
         super(type);
     }
 
-    protected AbstractMultiPathPartShape(final ShapeType type, final JSONObject node, final ValidationContext ctx) throws ValidationException
+    protected AbstractMultiPathPartShape(final ShapeType type, final Object node, final ValidationContext ctx) throws ValidationException
     {
         super(type, node, ctx);
     }
@@ -340,17 +336,17 @@ public abstract class AbstractMultiPathPartShape<T extends AbstractMultiPathPart
         return new DefaultMultiPathShapeHandleFactory(m_points, this);
     }
 
-    public static class OnDragMoveIControlHandleList implements AttributesChangedHandler, NodeDragStartHandler, NodeDragMoveHandler, NodeDragEndHandler
+    public static class OnDragMoveIControlHandleList implements NodeDragStartHandler, NodeDragMoveHandler, NodeDragEndHandler
     {
-        private final AbstractMultiPathPartShape    m_shape;
+        private final AbstractMultiPathPartShape m_shape;
 
-        private IControlHandleList                  m_chlist;
+        private       IControlHandleList         m_chlist;
 
-        private double[]                            m_startPoints;
+        private       double[]                   m_startPoints;
 
-        private HandlerRegistration                 m_nodeDragStartHandlerReg;
+        private       HandlerRegistration        m_nodeDragStartHandlerReg;
 
-        private HandlerRegistration                 m_nodeDragMoveHandlerReg;
+        private       HandlerRegistration        m_nodeDragMoveHandlerReg;
 
         public OnDragMoveIControlHandleList(final AbstractMultiPathPartShape shape, final IControlHandleList chlist)
         {
@@ -367,12 +363,6 @@ public abstract class AbstractMultiPathPartShape<T extends AbstractMultiPathPart
             regManager.register(m_nodeDragStartHandlerReg);
 
             regManager.register(m_nodeDragMoveHandlerReg);
-        }
-
-        @Override
-        public void onAttributesChanged(AttributesChangedEvent event)
-        {
-            //event.
         }
 
         @Override

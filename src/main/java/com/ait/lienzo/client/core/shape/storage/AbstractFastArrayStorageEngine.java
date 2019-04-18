@@ -21,7 +21,6 @@ import com.ait.lienzo.client.core.shape.json.validators.ValidationContext;
 import com.ait.lienzo.client.core.shape.json.validators.ValidationException;
 import com.ait.lienzo.client.core.types.BoundingBox;
 import com.ait.lienzo.tools.client.collection.NFastArrayList;
-import com.google.gwt.json.client.JSONObject;
 
 public abstract class AbstractFastArrayStorageEngine<M> extends AbstractStorageEngine<M>
 {
@@ -32,7 +31,7 @@ public abstract class AbstractFastArrayStorageEngine<M> extends AbstractStorageE
         super(type);
     }
 
-    protected AbstractFastArrayStorageEngine(final StorageEngineType type, final JSONObject node, final ValidationContext ctx) throws ValidationException
+    protected AbstractFastArrayStorageEngine(final StorageEngineType type, final Object node, final ValidationContext ctx) throws ValidationException
     {
         super(type, node, ctx);
     }

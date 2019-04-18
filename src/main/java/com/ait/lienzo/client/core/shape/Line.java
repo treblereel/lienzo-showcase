@@ -28,8 +28,6 @@ import com.ait.lienzo.client.core.types.DashArray;
 import com.ait.lienzo.client.core.types.Point2D;
 import com.ait.lienzo.client.core.types.Point2DArray;
 import com.ait.lienzo.shared.core.types.ShapeType;
-import com.ait.lienzo.tools.client.NObjectJSO;
-import com.google.gwt.json.client.JSONObject;
 
 import jsinterop.annotations.JsProperty;
 
@@ -73,7 +71,7 @@ public class Line extends AbstractOffsetMultiPointShape<Line>
         setPoints(Point2DArray.fromArrayOfPoint2D(p1, p2));
     }
 
-    protected Line(final JSONObject node, final ValidationContext ctx) throws ValidationException
+    protected Line(final Object node, final ValidationContext ctx) throws ValidationException
     {
         super(ShapeType.LINE, node, ctx);
 
@@ -309,7 +307,7 @@ public class Line extends AbstractOffsetMultiPointShape<Line>
         }
 
         @Override
-        public Line create(final JSONObject node, final ValidationContext ctx) throws ValidationException
+        public Line create(final Object node, final ValidationContext ctx) throws ValidationException
         {
             return new Line(node, ctx);
         }

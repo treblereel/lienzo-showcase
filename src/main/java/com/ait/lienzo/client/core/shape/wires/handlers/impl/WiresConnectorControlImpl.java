@@ -3,9 +3,8 @@ package com.ait.lienzo.client.core.shape.wires.handlers.impl;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import com.ait.lienzo.client.core.animation.AnimationProperties;
-import com.ait.lienzo.client.core.animation.AnimationProperty;
-import com.ait.lienzo.client.core.animation.AnimationTweener;
+import com.ait.lienzo.tools.client.Timer;
+import com.ait.lienzo.tools.client.event.HandlerRegistration;
 import com.ait.lienzo.client.core.event.NodeDragEndEvent;
 import com.ait.lienzo.client.core.event.NodeDragEndHandler;
 import com.ait.lienzo.client.core.event.NodeDragStartEvent;
@@ -37,11 +36,8 @@ import com.ait.lienzo.client.widget.DragContext;
 import com.ait.lienzo.tools.common.api.java.util.function.Consumer;
 import com.ait.lienzo.tools.client.collection.NFastDoubleArray;
 import com.ait.lienzo.tools.client.event.HandlerRegistrationManager;
-import com.google.gwt.event.shared.HandlerRegistration;
-import com.google.gwt.user.client.Timer;
 
 import static com.ait.lienzo.client.core.shape.AbstractMultiPointShape.DefaultMultiPointShapeHandleFactory.R0;
-import static com.ait.lienzo.client.core.shape.AbstractMultiPointShape.DefaultMultiPointShapeHandleFactory.R1;
 import static com.ait.lienzo.client.core.shape.AbstractMultiPointShape.DefaultMultiPointShapeHandleFactory.SELECTION_OFFSET;
 
 /**
@@ -58,18 +54,18 @@ import static com.ait.lienzo.client.core.shape.AbstractMultiPointShape.DefaultMu
  */
 public class WiresConnectorControlImpl implements WiresConnectorControl {
 
-    private final WiresConnector m_connector;
-    private final WiresManager m_wiresManager;
+    private final WiresConnector                  m_connector;
+    private final WiresManager                    m_wiresManager;
 
-    private NFastDoubleArray m_startPointHandles;
-    private HandlerRegistrationManager m_HandlerRegistrationManager;
-    private Point2DArray m_startLinePoints;
-    private WiresConnectionControl m_headConnectionControl;
-    private WiresConnectionControl m_tailConnectionControl;
-    private PointHandleDecorator m_pointHandleDecorator;
-    private Shape<?> transientControlHandle;
+    private NFastDoubleArray                      m_startPointHandles;
+    private HandlerRegistrationManager            m_HandlerRegistrationManager;
+    private Point2DArray                          m_startLinePoints;
+    private WiresConnectionControl                m_headConnectionControl;
+    private WiresConnectionControl                m_tailConnectionControl;
+    private PointHandleDecorator                  m_pointHandleDecorator;
+    private Shape<?>                              transientControlHandle;
     private final Collection<HandlerRegistration> transientControlHandleRegistrations;
-    private AddControlPointTimer addControlPointTimer;
+    private AddControlPointTimer                  addControlPointTimer;
 
     public WiresConnectorControlImpl(final WiresConnector connector,
                                      final WiresManager wiresManager) {
@@ -461,7 +457,8 @@ public class WiresConnectorControlImpl implements WiresConnectorControl {
      * control point. Besides that the delay is necessary to preserve the selection on connector
      * when there is only a click, in this case this time should be cancelled.
      */
-    protected class AddControlPointTimer extends Timer {
+    protected class AddControlPointTimer extends Timer
+    {
 
         Consumer<Point2D> addControlHandleConsumer;
         Point2D point;

@@ -21,7 +21,6 @@ import com.ait.lienzo.client.core.shape.json.validators.ValidationContext;
 import com.ait.lienzo.client.core.shape.json.validators.ValidationException;
 import com.ait.lienzo.client.core.types.ImageDataUtil;
 import com.ait.lienzo.shared.core.types.ImageFilterType;
-import com.google.gwt.json.client.JSONObject;
 
 import elemental2.core.Uint8ClampedArray;
 import elemental2.dom.ImageData;
@@ -33,7 +32,7 @@ public abstract class AbstractValueTableImageDataFilter<T extends AbstractValueT
         super(type, value);
     }
 
-    protected AbstractValueTableImageDataFilter(final ImageFilterType type, final JSONObject node, final ValidationContext ctx) throws ValidationException
+    protected AbstractValueTableImageDataFilter(final ImageFilterType type, final Object node, final ValidationContext ctx) throws ValidationException
     {
         super(type, node, ctx);
     }

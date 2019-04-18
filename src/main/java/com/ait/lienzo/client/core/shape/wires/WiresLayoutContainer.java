@@ -19,16 +19,13 @@ package com.ait.lienzo.client.core.shape.wires;
 import java.util.HashMap;
 
 import com.ait.lienzo.client.core.Attribute;
-import com.ait.lienzo.client.core.event.AttributesChangedEvent;
-import com.ait.lienzo.client.core.event.AttributesChangedHandler;
 import com.ait.lienzo.client.core.shape.Group;
 import com.ait.lienzo.client.core.shape.IPrimitive;
 import com.ait.lienzo.client.core.types.BoundingBox;
 import com.ait.lienzo.client.core.types.Point2D;
+import com.ait.lienzo.tools.client.event.HandlerRegistration;
 import com.ait.lienzo.tools.common.api.java.util.UUID;
 import com.ait.lienzo.tools.client.collection.NFastArrayList;
-import com.ait.lienzo.tools.client.event.HandlerRegistrationManager;
-import com.google.gwt.event.shared.HandlerRegistration;
 
 /**
  * Basic layout container implementation.
@@ -39,36 +36,25 @@ public class WiresLayoutContainer implements LayoutContainer
 {
     private static final LayoutBuilder       CENTER_LAYOUT = new CenterLayoutBuilder();
 
-    private static final LayoutBuilder       TOP_LAYOUT    = new TopLayoutBuilder();
+    private static final LayoutBuilder                          TOP_LAYOUT    = new TopLayoutBuilder();
 
-    private static final LayoutBuilder       BOTTOM_LAYOUT = new BottomLayoutBuilder();
+    private static final LayoutBuilder                          BOTTOM_LAYOUT = new BottomLayoutBuilder();
 
-    private static final LayoutBuilder       LEFT_LAYOUT   = new LeftLayoutBuilder();
+    private static final LayoutBuilder                          LEFT_LAYOUT   = new LeftLayoutBuilder();
 
-    private static final LayoutBuilder       RIGHT_LAYOUT  = new RightLayoutBuilder();
+    private static final LayoutBuilder                          RIGHT_LAYOUT  = new RightLayoutBuilder();
 
-    private final Group                      group;
+    private final Group                                         group;
 
-    private final NFastArrayList<ChildEntry> children;
-
-    private final HandlerRegistrationManager attrHandlerRegs = new HandlerRegistrationManager();
+    private final NFastArrayList<ChildEntry>                    children;
 
     private final HashMap<ObjectAttribute, HandlerRegistration> registrations = new HashMap<>();
 
-    private final AttributesChangedHandler shapeAttributesChangedHandler = new AttributesChangedHandler()
-    {
-        @Override
-        public void onAttributesChanged(AttributesChangedEvent event)
-        {
-            refresh();
-        }
-    };
+    private Point2D                                             offset;
 
-    private Point2D                          offset;
+    private double                                              width;
 
-    private double                           width;
-
-    private double                           height;
+    private double                                              height;
 
     public WiresLayoutContainer()
     {
@@ -165,11 +151,6 @@ public class WiresLayoutContainer implements LayoutContainer
         if (null != entry)
         {
             children.remove(entry);
-
-            for (Attribute attribute : child.getTransformingAttributes()) {
-                ObjectAttribute key = new ObjectAttribute(child,attribute);
-                attrHandlerRegs.deregister(registrations.remove(key));
-            }
         }
 
         group.remove(child);
@@ -214,7 +195,6 @@ public class WiresLayoutContainer implements LayoutContainer
             registration.removeHandler();
         }
         registrations.clear();
-        attrHandlerRegs.destroy();
         children.clear();
         group.removeAll();
         group.removeFromParent();

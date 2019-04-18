@@ -23,7 +23,6 @@ import com.ait.lienzo.client.core.Context2D;
 import com.ait.lienzo.client.core.shape.json.validators.ValidationContext;
 import com.ait.lienzo.client.core.shape.json.validators.ValidationException;
 import com.ait.lienzo.shared.core.types.ShapeType;
-import com.google.gwt.json.client.JSONObject;
 
 import jsinterop.annotations.JsProperty;
 
@@ -40,7 +39,7 @@ public abstract class AbstractOffsetMultiPointShape<T extends AbstractOffsetMult
         super(type);
     }
 
-    protected AbstractOffsetMultiPointShape(final ShapeType type, final JSONObject node, final ValidationContext ctx) throws ValidationException
+    protected AbstractOffsetMultiPointShape(final ShapeType type, final Object node, final ValidationContext ctx) throws ValidationException
     {
         super(type, node, ctx);
     }

@@ -14,17 +14,33 @@
    limitations under the License.
  */
 
-package com.ait.lienzo.client.core.event;
+package com.ait.lienzo.tools.client.event;
 
-import com.google.gwt.event.shared.GwtEvent;
+import com.ait.lienzo.client.core.shape.Node;
 
-public interface INodeEvent
+import elemental2.dom.Event;
+import elemental2.dom.HTMLElement;
+
+public interface INodeEvent<H, S>
 {
-    public boolean isAlive();
+    boolean isAlive();
 
-    public void preventDefault();
+    void preventDefault();
 
-    public void stopPropagation();
+    void stopPropagation();
 
-    public GwtEvent<?> getNodeEvent();
+//    public Event getNodeEvent();
+
+    void dispatch(final H handler);
+
+    S getSource();
+
+    Event getNativeEvent();
+
+    HTMLElement getRelativeElement();
+
+    Type<H> getAssociatedType();
+
+    static class Type<H>  {
+    }
 }

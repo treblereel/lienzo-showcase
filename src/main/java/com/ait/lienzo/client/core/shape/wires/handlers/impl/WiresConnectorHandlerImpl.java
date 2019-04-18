@@ -18,20 +18,20 @@ import com.ait.lienzo.client.core.types.BoundingPoints;
 import com.ait.lienzo.client.core.types.Point2D;
 import com.ait.lienzo.client.core.types.Point2DArray;
 import com.ait.lienzo.client.core.util.Geometry;
+import com.ait.lienzo.tools.client.Timer;
 import com.ait.lienzo.tools.common.api.java.util.function.Consumer;
-import com.google.gwt.user.client.Timer;
 
 import static com.ait.lienzo.client.core.shape.AbstractMultiPointShape.DefaultMultiPointShapeHandleFactory.R1;
 
 public class WiresConnectorHandlerImpl implements WiresConnectorHandler {
 
-    private final WiresConnector m_connector;
-    private final WiresManager m_wiresManager;
-    private final Consumer<Event> clickEventConsumer;
-    private final Consumer<Event> mouseDownEventConsumer;
-    private Timer clickTimer;
-    private Event event;
-    private boolean ownToken;
+    private final  WiresConnector       m_connector;
+    private final  WiresManager         m_wiresManager;
+    private final  Consumer<Event>      clickEventConsumer;
+    private final  Consumer<Event>      mouseDownEventConsumer;
+    private        Timer                clickTimer;
+    private        Event                event;
+    private        boolean              ownToken;
 
     //Token to control the concurrency between connectors when creating transient control handle
     private static Map<String, Boolean> transientControlHandleTokenMap = new HashMap<>();

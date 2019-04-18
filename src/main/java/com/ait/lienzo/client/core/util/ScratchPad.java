@@ -19,11 +19,9 @@ package com.ait.lienzo.client.core.util;
 import com.ait.lienzo.client.core.Context2D;
 import com.ait.lienzo.client.core.config.LienzoCore;
 import com.ait.lienzo.shared.core.types.DataURLType;
-import com.google.gwt.dom.client.Document;
 
 import elemental2.dom.DomGlobal;
 import elemental2.dom.HTMLCanvasElement;
-import elemental2.dom.HTMLDivElement;
 import elemental2.dom.HTMLImageElement;
 
 public final class ScratchPad

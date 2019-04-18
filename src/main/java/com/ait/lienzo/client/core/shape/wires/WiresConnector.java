@@ -20,6 +20,8 @@ package com.ait.lienzo.client.core.shape.wires;
 import java.util.Objects;
 
 import com.ait.lienzo.client.core.Context2D;
+import com.ait.lienzo.tools.client.event.HandlerManager;
+import com.ait.lienzo.tools.client.event.HandlerRegistration;
 import com.ait.lienzo.client.core.shape.Group;
 import com.ait.lienzo.client.core.shape.IDirectionalMultiPointShape;
 import com.ait.lienzo.client.core.shape.IPrimitive;
@@ -41,9 +43,8 @@ import com.ait.lienzo.shared.core.types.ArrowEnd;
 import com.ait.lienzo.shared.core.types.Direction;
 import com.ait.lienzo.shared.core.types.EventPropagationMode;
 import com.ait.lienzo.tools.client.collection.NFastStringMap;
-import com.google.gwt.event.shared.HandlerManager;
-import com.google.gwt.event.shared.HandlerRegistration;
 
+import elemental2.dom.HTMLElement;
 import elemental2.dom.ImageData;
 
 import static com.ait.lienzo.client.core.shape.wires.IControlHandle.ControlHandleStandardType.POINT;
@@ -69,6 +70,8 @@ public class WiresConnector
     private       WiresConnectorControl          m_connectorControl;
 
     private final HandlerManager                 m_events = new HandlerManager(this);
+
+    private final WiresConnectorPointsChangedEvent wiresConnectorPointsChangedEvent;
 
     public WiresConnector(IDirectionalMultiPointShape<?> line, MultiPathDecorator headDecorator, MultiPathDecorator tailDecorator)
     {
@@ -103,6 +106,9 @@ public class WiresConnector
 
         // The Line is only draggable if both Connections are unconnected
         setDraggable();
+
+        HTMLElement relativeDiv = m_group.getLayer().getViewport().getElement();
+        wiresConnectorPointsChangedEvent = new WiresConnectorPointsChangedEvent(relativeDiv);
     }
 
     public WiresConnector(WiresMagnet headMagnet, WiresMagnet tailMagnet, IDirectionalMultiPointShape<?> line, MultiPathDecorator headDecorator, MultiPathDecorator tailDecorator)
@@ -725,8 +731,13 @@ public class WiresConnector
         firePointsUpdated();
     }
 
+
+
     public void firePointsUpdated() {
-        m_events.fireEvent(new WiresConnectorPointsChangedEvent(this));
+        wiresConnectorPointsChangedEvent.revive();
+        wiresConnectorPointsChangedEvent.override(this);
+        m_events.fireEvent(wiresConnectorPointsChangedEvent);
+        wiresConnectorPointsChangedEvent.kill();
     }
 
     private IPrimitive<?> getControlPoint(final int index) {

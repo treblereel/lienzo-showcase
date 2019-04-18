@@ -28,7 +28,6 @@ import com.ait.lienzo.client.core.types.Point2D;
 import com.ait.lienzo.client.core.types.Point2DArray;
 import com.ait.lienzo.client.core.util.Geometry;
 import com.ait.lienzo.shared.core.types.ShapeType;
-import com.google.gwt.json.client.JSONObject;
 
 import jsinterop.annotations.JsProperty;
 
@@ -67,7 +66,7 @@ public class Triangle extends AbstractMultiPointShape<Triangle>
         setCornerRadius(corner);
     }
 
-    protected Triangle(final JSONObject node, final ValidationContext ctx) throws ValidationException
+    protected Triangle(final Object node, final ValidationContext ctx) throws ValidationException
     {
         super(ShapeType.TRIANGLE, node, ctx);
     }
@@ -202,7 +201,7 @@ public class Triangle extends AbstractMultiPointShape<Triangle>
         }
 
         @Override
-        public Triangle create(final JSONObject node, final ValidationContext ctx) throws ValidationException
+        public Triangle create(final Object node, final ValidationContext ctx) throws ValidationException
         {
             return new Triangle(node, ctx);
         }

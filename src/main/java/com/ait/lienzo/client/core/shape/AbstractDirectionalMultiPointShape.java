@@ -27,7 +27,6 @@ import com.ait.lienzo.client.core.shape.json.validators.ValidationException;
 import com.ait.lienzo.client.core.types.Point2D;
 import com.ait.lienzo.shared.core.types.Direction;
 import com.ait.lienzo.shared.core.types.ShapeType;
-import com.google.gwt.json.client.JSONObject;
 
 import jsinterop.annotations.JsProperty;
 
@@ -47,7 +46,7 @@ public abstract class AbstractDirectionalMultiPointShape<T extends AbstractDirec
         super(type);
     }
 
-    protected AbstractDirectionalMultiPointShape(final ShapeType type, final JSONObject node, final ValidationContext ctx) throws ValidationException
+    protected AbstractDirectionalMultiPointShape(final ShapeType type, final Object node, final ValidationContext ctx) throws ValidationException
     {
         super(type, node, ctx);
     }

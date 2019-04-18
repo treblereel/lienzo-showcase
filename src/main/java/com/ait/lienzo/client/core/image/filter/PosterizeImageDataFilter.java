@@ -20,7 +20,6 @@ import com.ait.lienzo.client.core.shape.json.IFactory;
 import com.ait.lienzo.client.core.shape.json.validators.ValidationContext;
 import com.ait.lienzo.client.core.shape.json.validators.ValidationException;
 import com.ait.lienzo.shared.core.types.ImageFilterType;
-import com.google.gwt.json.client.JSONObject;
 
 import jsinterop.base.Js;
 
@@ -40,7 +39,7 @@ public class PosterizeImageDataFilter extends AbstractValueTableImageDataFilter<
         super(ImageFilterType.PosterizeImageDataFilterType, value);
     }
 
-    protected PosterizeImageDataFilter(JSONObject node, ValidationContext ctx) throws ValidationException
+    protected PosterizeImageDataFilter(Object node, ValidationContext ctx) throws ValidationException
     {
         super(ImageFilterType.PosterizeImageDataFilterType, node, ctx);
     }
@@ -98,7 +97,7 @@ public class PosterizeImageDataFilter extends AbstractValueTableImageDataFilter<
         }
 
         @Override
-        public PosterizeImageDataFilter create(JSONObject node, ValidationContext ctx) throws ValidationException
+        public PosterizeImageDataFilter create(Object node, ValidationContext ctx) throws ValidationException
         {
             return new PosterizeImageDataFilter(node, ctx);
         }

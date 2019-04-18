@@ -35,13 +35,11 @@ import com.ait.lienzo.shared.core.types.LineCap;
 import com.ait.lienzo.tools.client.Console;
 import com.ait.lienzo.tools.client.StringOps;
 import com.ait.lienzo.tools.common.api.types.IStringValued;
-import com.google.gwt.canvas.client.Canvas;
-import com.google.gwt.dom.client.Style.Cursor;
-import com.google.gwt.event.shared.UmbrellaException;
-import com.google.gwt.user.client.Window;
-import com.google.gwt.user.client.ui.RootPanel;
+import org.gwtproject.dom.style.shared.Cursor;
 
+import elemental2.dom.Document;
 import elemental2.dom.DomGlobal;
+import elemental2.dom.HTMLCanvasElement;
 import elemental2.dom.ImageData;
 import jsinterop.base.Js;
 import jsinterop.base.JsPropertyMap;
@@ -65,7 +63,7 @@ public final class LienzoCore
 
     public static final String             DEFAULT_FONT_FAMILY              = "Helvetica";
 
-    public static final boolean            IS_CANVAS_SUPPORTED              = Canvas.isSupported();
+    public static final boolean            IS_CANVAS_SUPPORTED              = isCanvasSupported();
 
     private double                         m_deviceScale                    = 0;
 
@@ -101,9 +99,20 @@ public final class LienzoCore
 
     private final ArrayList<ILienzoPlugin> m_plugins                        = new ArrayList<ILienzoPlugin>();
 
+
+
+    private static boolean isCanvasSupported()
+    {
+
+        HTMLCanvasElement canvas = Js.uncheckedCast(DomGlobal.document.createElement("canvas"));
+        return ( canvas != null && Js.asPropertyMap(canvas).has("getContext"));
+
+    }
+
     private LienzoCore()
     {
-        RootPanel.get().getElement().getStyle().setProperty("webkitTapHighlightColor", "rgba(0,0,0,0)");
+        // @FIXME need to figure out how to get the root DIV
+        //RootPanel.get().getElement().getStyle().setProperty("webkitTapHighlightColor", "rgba(0,0,0,0)");
     }
 
     public static final LienzoCore get()
@@ -223,16 +232,17 @@ public final class LienzoCore
 
     public final void stack(final String message, final Throwable e)
     {
-        if (e instanceof UmbrellaException)
-        {
-            final UmbrellaException u = ((UmbrellaException) e);
-
-            for (Throwable t : u.getCauses())
-            {
-                stack(message, t);
-            }
-            return;
-        }
+        // @FIXME mdp
+//        if (e instanceof UmbrellaException)
+//        {
+//            final UmbrellaException u = ((UmbrellaException) e);
+//
+//            for (Throwable t : u.getCauses())
+//            {
+//                stack(message, t);
+//            }
+//            return;
+//        }
         Console.get().error(message, e);
 
         for (StackTraceElement s : e.getStackTrace())
@@ -243,7 +253,7 @@ public final class LienzoCore
 
     public final String getUserAgent()
     {
-        return Window.Navigator.getUserAgent();
+        return DomGlobal.window.navigator.userAgent;
     }
 
     public final boolean isSafari()

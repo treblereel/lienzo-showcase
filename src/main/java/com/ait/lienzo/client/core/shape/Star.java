@@ -27,7 +27,6 @@ import com.ait.lienzo.client.core.types.PathPartList;
 import com.ait.lienzo.client.core.types.Point2DArray;
 import com.ait.lienzo.client.core.util.Geometry;
 import com.ait.lienzo.shared.core.types.ShapeType;
-import com.google.gwt.json.client.JSONObject;
 
 import jsinterop.annotations.JsProperty;
 
@@ -75,7 +74,7 @@ public class Star extends Shape<Star>
         setCornerRadius(corner);
     }
 
-    protected Star(final JSONObject node, final ValidationContext ctx) throws ValidationException
+    protected Star(final Object node, final ValidationContext ctx) throws ValidationException
     {
         super(ShapeType.STAR, node, ctx);
     }
@@ -295,7 +294,7 @@ public class Star extends Shape<Star>
         }
 
         @Override
-        public Star create(final JSONObject node, final ValidationContext ctx) throws ValidationException
+        public Star create(final Object node, final ValidationContext ctx) throws ValidationException
         {
             return new Star(node, ctx);
         }

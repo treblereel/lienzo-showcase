@@ -20,7 +20,6 @@ import com.ait.lienzo.client.core.shape.json.IFactory;
 import com.ait.lienzo.client.core.shape.json.validators.ValidationContext;
 import com.ait.lienzo.client.core.shape.json.validators.ValidationException;
 import com.ait.lienzo.shared.core.types.ImageFilterType;
-import com.google.gwt.json.client.JSONObject;
 
 import jsinterop.base.Js;
 
@@ -36,7 +35,7 @@ public class DiffusionImageDataFilter extends AbstractValueTransformImageDataFil
         super(ImageFilterType.DiffusionImageDataFilterType, value);
     }
 
-    protected DiffusionImageDataFilter(JSONObject node, ValidationContext ctx) throws ValidationException
+    protected DiffusionImageDataFilter(Object node, ValidationContext ctx) throws ValidationException
     {
         super(ImageFilterType.DiffusionImageDataFilterType, node, ctx);
     }
@@ -109,7 +108,7 @@ public class DiffusionImageDataFilter extends AbstractValueTransformImageDataFil
         }
 
         @Override
-        public DiffusionImageDataFilter create(JSONObject node, ValidationContext ctx) throws ValidationException
+        public DiffusionImageDataFilter create(Object node, ValidationContext ctx) throws ValidationException
         {
             return new DiffusionImageDataFilter(node, ctx);
         }

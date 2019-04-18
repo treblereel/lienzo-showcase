@@ -32,8 +32,10 @@ import com.ait.lienzo.client.core.animation.IAnimationCallback;
 import com.ait.lienzo.client.core.animation.IAnimationHandle;
 import com.ait.lienzo.client.core.animation.TweeningAnimation;
 import com.ait.lienzo.client.core.config.LienzoCore;
-import com.ait.lienzo.client.core.event.AttributesChangedHandler;
-import com.ait.lienzo.client.core.event.IAttributesChangedBatcher;
+import com.ait.lienzo.tools.client.event.HandlerManager;
+import com.ait.lienzo.tools.client.event.HandlerRegistration;
+import com.ait.lienzo.tools.client.event.INodeEvent;
+import com.ait.lienzo.tools.client.event.INodeEvent.Type;
 import com.ait.lienzo.client.core.event.NodeDragEndEvent;
 import com.ait.lienzo.client.core.event.NodeDragEndHandler;
 import com.ait.lienzo.client.core.event.NodeDragMoveEvent;
@@ -84,16 +86,7 @@ import com.ait.lienzo.client.core.shape.json.validators.ValidationException;
 import com.ait.lienzo.client.core.types.BoundingBox;
 import com.ait.lienzo.client.core.types.BoundingPoints;
 import com.ait.lienzo.client.core.types.DragBounds;
-import com.ait.lienzo.client.core.types.DragBounds.DragBoundsJSO;
-import com.ait.lienzo.client.core.types.FillGradient;
-import com.ait.lienzo.client.core.types.FillGradient.GradientJSO;
-import com.ait.lienzo.client.core.types.LinearGradient;
-import com.ait.lienzo.client.core.types.LinearGradient.LinearGradientJSO;
-import com.ait.lienzo.client.core.types.PatternGradient;
-import com.ait.lienzo.client.core.types.PatternGradient.PatternGradientJSO;
 import com.ait.lienzo.client.core.types.Point2D;
-import com.ait.lienzo.client.core.types.RadialGradient;
-import com.ait.lienzo.client.core.types.RadialGradient.RadialGradientJSO;
 import com.ait.lienzo.client.core.types.Transform;
 import com.ait.lienzo.client.core.util.Geometry;
 import com.ait.lienzo.client.core.util.ScratchPad;
@@ -101,17 +94,9 @@ import com.ait.lienzo.shared.core.types.DragConstraint;
 import com.ait.lienzo.shared.core.types.DragMode;
 import com.ait.lienzo.shared.core.types.EventPropagationMode;
 import com.ait.lienzo.shared.core.types.NodeType;
-import com.ait.lienzo.tools.client.StringOps;
 import com.ait.lienzo.tools.common.api.java.util.UUID;
 import com.ait.lienzo.tools.client.collection.MetaData;
-import com.google.gwt.core.client.JavaScriptObject;
-import com.google.gwt.event.shared.EventHandler;
-import com.google.gwt.event.shared.GwtEvent;
-import com.google.gwt.event.shared.GwtEvent.Type;
-import com.google.gwt.event.shared.HandlerManager;
-import com.google.gwt.event.shared.HandlerRegistration;
-import com.google.gwt.json.client.JSONObject;
-import com.google.gwt.json.client.JSONValue;
+import com.gwtlienzo.event.shared.EventHandler;
 
 import jsinterop.annotations.JsProperty;
 import jsinterop.annotations.JsType;
@@ -136,16 +121,16 @@ public abstract class Node<T extends Node<T>> implements IDrawable<T>
     private Node<?>                       m_parent;
 
     @JsProperty
-    private       double                    x;
+    private       double                  x;
 
     @JsProperty
-    private       double                    y;
+    private       double                  y;
 
     @JsProperty
-    private       double                    rotation;
+    private       double                  rotation;
 
     @JsProperty
-    private       Point2D                   scale;
+    private       Point2D                 scale;
 
     @JsProperty
     private       Point2D                   shear;
@@ -249,63 +234,64 @@ public abstract class Node<T extends Node<T>> implements IDrawable<T>
      * @param type
      * @param node
      */
-    protected Node(final NodeType type, final JSONObject node, final ValidationContext ctx) throws ValidationException
+    protected Node(final NodeType type, final Object node, final ValidationContext ctx) throws ValidationException
     {
         m_type = type;
 
         // @FIXME attr removal(mdp)
-        if (null == node)
-        {
-            // m_attr = new Attributes(this);
-
-            return;
-        }
-        final JSONValue aval = node.get("attributes");
-
-        if (null == aval)
-        {
-            // m_attr = new Attributes(this);
-        }
-        else
-        {
-            final JSONObject aobj = aval.isObject();
-
-            if (null == aobj)
-            {
-                // m_attr = new Attributes(this);
-            }
-            else
-            {
-                final JavaScriptObject ajso = aobj.getJavaScriptObject();
-
-                if (null == ajso)
-                {
-                    // m_attr = new Attributes(this);
-                }
-                else
-                {
-                    // m_attr = new Attributes(ajso, this);
-                }
-            }
-        }
-        final JSONValue mval = node.get("meta");
-
-        if (null != mval)
-        {
-            final JSONObject mobj = mval.isObject();
-
-            if (null != mobj)
-            {
-                final JavaScriptObject mjso = mobj.getJavaScriptObject();
-
-                if (null != mjso)
-                {
-                    // @FIXME (mdp)
-                    // final NObjectJSO jso = mjso.cast();
-                    // m_opts.setMetaData(new MetaData(jso));
-                }
-            }
-        }
+        // @FIXME serialization(mdp)
+//        if (null == node)
+//        {
+//            // m_attr = new Attributes(this);
+//
+//            return;
+//        }
+//        final JSONValue aval = node.get("attributes");
+//
+//        if (null == aval)
+//        {
+//            // m_attr = new Attributes(this);
+//        }
+//        else
+//        {
+//            final JSONObject aobj = aval.isObject();
+//
+//            if (null == aobj)
+//            {
+//                // m_attr = new Attributes(this);
+//            }
+//            else
+//            {
+//                final JavaScriptObject ajso = aobj.getJavaScriptObject();
+//
+//                if (null == ajso)
+//                {
+//                    // m_attr = new Attributes(this);
+//                }
+//                else
+//                {
+//                    // m_attr = new Attributes(ajso, this);
+//                }
+//            }
+//        }
+//        final JSONValue mval = node.get("meta");
+//
+//        if (null != mval)
+//        {
+//            final JSONObject mobj = mval.isObject();
+//
+//            if (null != mobj)
+//            {
+//                final JavaScriptObject mjso = mobj.getJavaScriptObject();
+//
+//                if (null != mjso)
+//                {
+//                    // @FIXME (mdp)
+//                    // final NObjectJSO jso = mjso.cast();
+//                    // m_opts.setMetaData(new MetaData(jso));
+//                }
+//            }
+//        }
     }
 
     @Override
@@ -624,12 +610,13 @@ public abstract class Node<T extends Node<T>> implements IDrawable<T>
     @Override
     public String toJSONString()
     {
-        final JSONObject object = toJSONObject();
-
-        if (null != object)
-        {
-            return object.toString();
-        }
+        // @FIXME serialisaion (mdp)
+//        final JSONObject object = toJSONObject();
+//
+//        if (null != object)
+//        {
+//            return object.toString();
+//        }
         return null;
     }
 
@@ -1235,7 +1222,7 @@ public abstract class Node<T extends Node<T>> implements IDrawable<T>
     }
 
     @Override
-    public boolean isEventHandled(final Type<?> type)
+    public <H extends EventHandler> boolean isEventHandled(final Type<H> type)
     {
         final HandlerManager hand = m_opts.getHandlerManager();
 
@@ -1257,7 +1244,7 @@ public abstract class Node<T extends Node<T>> implements IDrawable<T>
     }
 
     @Override
-    public void fireEvent(final GwtEvent<?> event)
+    public <H extends EventHandler, S> void fireEvent(final INodeEvent<H, S> event)
     {
         if (isEventHandled(event.getAssociatedType()))
         {
@@ -1282,20 +1269,6 @@ public abstract class Node<T extends Node<T>> implements IDrawable<T>
         ALL_EVENTS.add(type);
 
         return hand.addHandler(type, handler);
-    }
-
-    @Override
-    public final T setAttributesChangedBatcher(final IAttributesChangedBatcher batcher)
-    {
-        //m_attr.setAttributesChangedBatcher(batcher);
-
-        return cast();
-    }
-
-    @Override
-    public final HandlerRegistration addAttributesChangedHandler(final Attribute attribute, final AttributesChangedHandler handler)
-    {
-        return  null; //m_attr.addAttributesChangedHandler(attribute, handler);
     }
 
     @Override

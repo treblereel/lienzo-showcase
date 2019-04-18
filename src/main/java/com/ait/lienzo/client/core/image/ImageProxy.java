@@ -18,6 +18,8 @@ package com.ait.lienzo.client.core.image;
 
 import java.util.Collection;
 
+import org.gwtproject.resources.client.ImageResource;
+
 import com.ait.lienzo.client.core.Context2D;
 import com.ait.lienzo.client.core.image.filter.ImageDataFilter;
 import com.ait.lienzo.client.core.image.filter.ImageDataFilterChain;
@@ -28,16 +30,13 @@ import com.ait.lienzo.client.core.shape.Layer;
 import com.ait.lienzo.client.core.shape.json.IFactory;
 import com.ait.lienzo.client.core.types.BoundingBox;
 import com.ait.lienzo.client.core.util.ScratchPad;
+import com.ait.lienzo.client.widget.RootPanel;
 import com.ait.lienzo.shared.core.types.ImageFilterType;
 import com.ait.lienzo.shared.core.types.ImageSelectionMode;
-import com.google.gwt.json.client.JSONObject;
-import com.google.gwt.resources.client.ImageResource;
-import com.google.gwt.user.client.ui.RootPanel;
 
 import elemental2.dom.HTMLImageElement;
 import elemental2.dom.ImageData;
 import elemental2.dom.Image;
-import jsinterop.base.Js;
 
 /**
  * ImageProxy is used by {@link AbstractImageShape} to load and draw the image.
@@ -705,7 +704,7 @@ public class ImageProxy<T extends AbstractImageShape<T>> implements ImageDataFil
     void destroy(final Image image)
     {
         // @TODO check this works (mdp)
-        RootPanel.get().remove(Js.uncheckedCast(image));
+        RootPanel.get().remove(image);
         image.parentNode.removeChild(image);
         m_image.removeFromParent();
         m_normalImage.clear();
@@ -725,11 +724,12 @@ public class ImageProxy<T extends AbstractImageShape<T>> implements ImageDataFil
             return null;
         }
 
-        @Override
-        public JSONObject toJSONObject()
-        {
-            return null;
-        }
+        // @FIXME serialization (mdp)
+//        @Override
+//        public JSONObject toJSONObject()
+//        {
+//            return null;
+//        }
 
         @Override
         public IFactory<?> getFactory()

@@ -21,7 +21,6 @@ import com.ait.lienzo.client.core.shape.json.validators.ValidationContext;
 import com.ait.lienzo.client.core.shape.json.validators.ValidationException;
 import com.ait.lienzo.client.core.types.ImageDataUtil;
 import com.ait.lienzo.shared.core.types.ImageFilterType;
-import com.google.gwt.json.client.JSONObject;
 
 import elemental2.core.JsArray;
 import elemental2.core.Uint8ClampedArray;
@@ -39,7 +38,7 @@ public class AverageGrayScaleImageDataFilter extends AbstractImageDataFilter<Ave
         super(ImageFilterType.AverageGrayScaleImageDataFilterType);
     }
 
-    protected AverageGrayScaleImageDataFilter(JSONObject node, ValidationContext ctx) throws ValidationException
+    protected AverageGrayScaleImageDataFilter(Object node, ValidationContext ctx) throws ValidationException
     {
         super(ImageFilterType.AverageGrayScaleImageDataFilterType, node, ctx);
     }
@@ -95,7 +94,7 @@ public class AverageGrayScaleImageDataFilter extends AbstractImageDataFilter<Ave
         }
 
         @Override
-        public AverageGrayScaleImageDataFilter create(JSONObject node, ValidationContext ctx) throws ValidationException
+        public AverageGrayScaleImageDataFilter create(Object node, ValidationContext ctx) throws ValidationException
         {
             return new AverageGrayScaleImageDataFilter(node, ctx);
         }

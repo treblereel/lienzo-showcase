@@ -21,7 +21,6 @@ import com.ait.lienzo.client.core.shape.json.validators.ValidationContext;
 import com.ait.lienzo.client.core.shape.json.validators.ValidationException;
 import com.ait.lienzo.client.core.types.ImageDataUtil;
 import com.ait.lienzo.shared.core.types.ImageFilterType;
-import com.google.gwt.json.client.JSONObject;
 
 import elemental2.core.JsArray;
 import elemental2.core.Uint8ClampedArray;
@@ -39,7 +38,7 @@ public class InvertColorImageDataFilter extends AbstractImageDataFilter<InvertCo
         super(ImageFilterType.InvertColorImageDataFilterType);
     }
 
-    protected InvertColorImageDataFilter(JSONObject node, ValidationContext ctx) throws ValidationException
+    protected InvertColorImageDataFilter(Object node, ValidationContext ctx) throws ValidationException
     {
         super(ImageFilterType.InvertColorImageDataFilterType, node, ctx);
     }
@@ -95,7 +94,7 @@ public class InvertColorImageDataFilter extends AbstractImageDataFilter<InvertCo
         }
 
         @Override
-        public InvertColorImageDataFilter create(JSONObject node, ValidationContext ctx) throws ValidationException
+        public InvertColorImageDataFilter create(Object node, ValidationContext ctx) throws ValidationException
         {
             return new InvertColorImageDataFilter(node, ctx);
         }

@@ -28,7 +28,6 @@ import com.ait.lienzo.client.core.types.Point2D;
 import com.ait.lienzo.client.core.types.Point2DArray;
 import com.ait.lienzo.shared.core.types.ShapeType;
 import com.ait.lienzo.tools.client.collection.NFastArrayList;
-import com.google.gwt.json.client.JSONObject;
 
 import jsinterop.annotations.JsProperty;
 
@@ -57,7 +56,7 @@ public class Spline extends AbstractMultiPointShape<Spline>
         setControlPoints(points);
     }
 
-    protected Spline(final JSONObject node, final ValidationContext ctx) throws ValidationException
+    protected Spline(final Object node, final ValidationContext ctx) throws ValidationException
     {
         super(ShapeType.SPLINE, node, ctx);
     }
@@ -364,7 +363,7 @@ public class Spline extends AbstractMultiPointShape<Spline>
         }
 
         @Override
-        public Spline create(final JSONObject node, final ValidationContext ctx) throws ValidationException
+        public Spline create(final Object node, final ValidationContext ctx) throws ValidationException
         {
             return new Spline(node, ctx);
         }

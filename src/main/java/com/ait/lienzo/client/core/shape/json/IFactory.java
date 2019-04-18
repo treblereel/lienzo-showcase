@@ -22,7 +22,7 @@ import com.ait.lienzo.client.core.Attribute;
 import com.ait.lienzo.client.core.AttributeType;
 import com.ait.lienzo.client.core.shape.json.validators.ValidationContext;
 import com.ait.lienzo.client.core.shape.json.validators.ValidationException;
-import com.google.gwt.json.client.JSONObject;
+//import com.google.gwt.json.client.JSONObject;
 
 /**
  * IFactory provides meta information for serialization support.
@@ -58,7 +58,8 @@ public interface IFactory<T extends IJSONSerializable<T>>
      * @return T
      * @throws ValidationException
      */
-    public T create(JSONObject node, ValidationContext ctx) throws ValidationException;
+    // @FIXME serialisation (mdp)
+    public T create(Object node, ValidationContext ctx) throws ValidationException;
 
     /**
      * Returns a collection of all the attributes that this type supports.

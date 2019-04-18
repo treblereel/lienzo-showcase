@@ -39,26 +39,15 @@ import com.ait.lienzo.client.core.types.FillGradient;
 import com.ait.lienzo.client.core.types.LinearGradient;
 import com.ait.lienzo.client.core.types.PathPartList;
 import com.ait.lienzo.client.core.types.PatternGradient;
-import com.ait.lienzo.client.core.types.Point2D;
 import com.ait.lienzo.client.core.types.RadialGradient;
 import com.ait.lienzo.client.core.types.Shadow;
 import com.ait.lienzo.client.widget.DefaultDragConstraintEnforcer;
 import com.ait.lienzo.client.widget.DragConstraintEnforcer;
-import com.ait.lienzo.shared.core.types.DragConstraint;
-import com.ait.lienzo.shared.core.types.DragMode;
-import com.ait.lienzo.shared.core.types.EventPropagationMode;
 import com.ait.lienzo.shared.core.types.IColor;
 import com.ait.lienzo.shared.core.types.LineCap;
 import com.ait.lienzo.shared.core.types.LineJoin;
 import com.ait.lienzo.shared.core.types.NodeType;
 import com.ait.lienzo.shared.core.types.ShapeType;
-import com.ait.lienzo.tools.client.NObjectJSO;
-import com.ait.lienzo.tools.client.collection.MetaData;
-import com.ait.lienzo.tools.client.collection.NFastDoubleArray;
-import com.google.gwt.core.client.JavaScriptObject;
-import com.google.gwt.dom.client.ImageElement;
-import com.google.gwt.json.client.JSONObject;
-import com.google.gwt.json.client.JSONString;
 
 import elemental2.dom.HTMLImageElement;
 import elemental2.dom.Path2D;
@@ -133,7 +122,7 @@ public abstract class Shape<T extends Shape<T>> extends Node<T> implements IPrim
         m_type = type;
     }
 
-    public Shape(final ShapeType type, final JSONObject node, final ValidationContext ctx) throws ValidationException
+    public Shape(final ShapeType type, final Object node, final ValidationContext ctx) throws ValidationException
     {
         super(NodeType.SHAPE, node, ctx);
 
@@ -1242,32 +1231,33 @@ public abstract class Shape<T extends Shape<T>> extends Node<T> implements IPrim
         }
     }
 
-    /**
-     * Serializes this shape as a {@link JSONObject}
-     * 
-     * @return JSONObject
-     */
-    @Override
-    public JSONObject toJSONObject()
-    {
-        final JSONObject object = new JSONObject();
-
-        object.put("type", new JSONString(getShapeType().getValue()));
-
-        if (hasMetaData())
-        {
-            final MetaData meta = getMetaData();
-
-            if (false == meta.isEmpty())
-            {
-                // @FIXME (mdp)
-                //object.putString("meta", new JSONObject(meta.getJSO()));
-            }
-        }
-        //object.put("attributes", new JSONObject(getAttributes().getJSO()));
-
-        return object;
-    }
+    // @FIXME serialization (mdp)
+//    /**
+//     * Serializes this shape as a {@link JSONObject}
+//     *
+//     * @return JSONObject
+//     */
+//    @Override
+//    public JSONObject toJSONObject()
+//    {
+//        final JSONObject object = new JSONObject();
+//
+//        object.put("type", new JSONString(getShapeType().getValue()));
+//
+//        if (hasMetaData())
+//        {
+//            final MetaData meta = getMetaData();
+//
+//            if (false == meta.isEmpty())
+//            {
+//                // @FIXME (mdp)
+//                //object.putString("meta", new JSONObject(meta.getJSO()));
+//            }
+//        }
+//        //object.put("attributes", new JSONObject(getAttributes().getJSO()));
+//
+//        return object;
+//    }
 
     @Override
     public DragConstraintEnforcer getDragConstraints()
